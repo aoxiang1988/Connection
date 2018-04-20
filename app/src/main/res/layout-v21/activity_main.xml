@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/round"
+    android:id="@+id/activity_main"
+    android:transitionName="sharedView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/musicname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@string/music_name"
+                    android:textColor="#771177"
+                    android:textSize="30sp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/current_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/current_status"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="15sp"
+                    />
+            </LinearLayout>
+            <SeekBar
+                android:id="@+id/playBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/scrubber_control_selector_holo"
+                android:progressDrawable="@drawable/custom_progress" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/currenttime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/_00_00" />
+
+                <TextView
+                    android:id="@+id/alltime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/_00_00" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:clickable="true" />
+
+                <Button
+                    android:id="@+id/pre"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/previous_button_ripple"
+                    />
+
+                <Button
+                    android:id="@+id/start"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/start_button_ripple"/>
+
+                <Button
+                    android:id="@+id/stop"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/stop_pause_button_ripple"/>
+
+                <Button
+                    android:id="@+id/pause"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/pause"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/next"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/next_button_ripple"/>
+                <ImageView
+                    android:id="@+id/lrc_on_off"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:clickable="true" />
+
+            </LinearLayout>
+            <com.sec.connection.view.LrcView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:divider="@null"
+            android:visibility="gone" >
+
+        </ListView>
+
+        <!--android:background="@drawable/back"
+        android:layout_marginLeft="27.2dp"
+                android:layout_marginTop="42dp"-->
+        <LinearLayout
+            android:id="@+id/fling_view_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical" >
+
+            <com.sec.connection.view.FlingView
+                android:id="@+id/fling_view"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:clickable="false" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end|bottom"
+                app:srcCompat="@drawable/info_image"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/test_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/new_seekbar"
+            android:layout_marginStart="61dp"
+            android:layout_marginTop="20dp"
+            android:text="Button"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Local>
+    <item position = "北京">
+        <station tag = "0" name = "新闻广播" channel="10060"/>
+        <station tag = "0" name = "故事广播" channel="8910"/>
+        <station tag = "0" name = "体育广播" channel="10250"/>
+        <station tag = "0" name = "音乐广播" channel="9740"/>
+        <station tag = "0" name = "文艺广播" channel="8760"/>
+        <station tag = "0" name = "交通广播" channel="10390"/>
+    </item>
+</Local>

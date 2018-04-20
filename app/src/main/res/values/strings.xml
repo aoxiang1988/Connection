@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">play</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">设置</string>
+    <string name="FM">调频FM</string>
+    <string name="status">播放状态</string>
+    <string name="network_search">网络搜索</string>
+    <string name="music_name">music name</string>
+    <string name="title_activity_start">SelfMusic</string>
+    <string name="no_connect_net">没有连接网络，请连接后重新搜索</string>
+    <string name="current_status">current status</string>
+    <string name="_00_00">00:00</string>
+    <string name="pre">pre</string>
+    <string name="start">Start</string>
+    <string name="stop">stop</string>
+    <string name="pause">pause</string>
+    <string name="next">next</string>
+    <string name="signal_round">单曲循环</string>
+    <string name="all_round">全部循环</string>
+    <string name="order_play">顺序播放</string>
+    <string name="random">随机播放</string>
+    <string name="delete">删除</string>
+    <string name="exit">退出</string>
+    <string name="back">返回</string>
+    <string name="change_to">跳转</string>
+    <string name="ok">确定</string>
+    <string name="play">播放</string>
+    <string name="down_load">下载</string>
+    <string name="choice">请选择</string>
+    <string name="unknown">未知歌手</string>
+    <string name="filter">筛选</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="artist">artist</string>
+    <string name="change">切换</string>
+    <string name="title_activity_list_view">ListView</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="all_musics">all musics</string>
+    <string name="album">album</string>
+    <string name="filter_list">filter</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_fminfo_on_line">FMInfoOnLineActivity</string>
+
+</resources>

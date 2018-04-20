@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.test.musictest.setting.FMProgremActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="4">
+
+            <ImageView
+                android:id="@+id/station_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/station_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="天津相声广播"
+                    android:gravity="center"
+                    android:textSize="30dp"/>
+
+                <TextView
+                    android:id="@+id/station_freq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="92.1MHz"
+                    android:gravity="center"
+                    android:textSize="20dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/progrem_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

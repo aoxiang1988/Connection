@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@android:id/background"
+        android:height="6dp"
+        android:gravity="bottom">
+        <shape>
+            <corners
+                android:topLeftRadius="50dp"
+                android:topRightRadius="50dp"/>
+            <gradient
+                android:startColor="@android:color/holo_orange_light"
+                android:type="radial"
+                android:gradientRadius="60dp"/>
+        </shape>
+    </item>
+</layer-list>

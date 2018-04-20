@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/close_float_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/close_float"
+        android:visibility="gone"/>
+
+    <com.sec.connection.view.LrcView
+        android:id="@+id/float_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"/>
+</LinearLayout>
