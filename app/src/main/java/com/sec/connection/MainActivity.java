@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 	private static final int PLAY_NEXT_VIEW = 5;
 
 	private ActionMode mActionMode = null;
-	private boolean mIsActionMode = false;
+	boolean mIsActionMode = false;
 	private RotateAnimation mRotateAnimation = null;
 
 	@SuppressLint("HandlerLeak")
