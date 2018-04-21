@@ -8,7 +8,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.AudioAttributes;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -16,21 +15,26 @@ import com.sec.connection.data.Audio;
 
 public class PlayerNotificationManager {
 
-	public static final String NOTIFIC_CHANNEL_ID = "channel_1";
-	public static final String NOTIFIC_CHANNEL_NAME = "channel_name_1";
+	private static String TAG = "PlayerNotificationManager";
+	public static final String NOTIFY_CHANNEL_ID = "channel_1";
+	public static final String NOTIFY_CHANNEL_NAME = "channel_name_1";
 	private Context mContext = null;
-	private static PlayerNotificationManager minstance = new PlayerNotificationManager();
+	private static PlayerNotificationManager mInstance = null;
 	private Notification mNotification;
 	private RemoteViews views ;
-	private boolean isNottify = false;
+	private boolean isNotify = false;
+
 	public static PlayerNotificationManager instance(){
-		return minstance;
+		if(mInstance == null) {
+			mInstance = new PlayerNotificationManager();
+		}
+		return mInstance;
 	}
 
 	public void removenotification(Context context){
 		mContext = context.getApplicationContext();
 		((NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(0);
-		isNottify = false;
+		isNotify = false;
 	}
 
 	public void initialize(Context context) {
@@ -45,15 +49,16 @@ public class PlayerNotificationManager {
 
 		assert notificationManager != null;
 		if (android.os.Build.VERSION.SDK_INT >= 26) {
-			NotificationChannel mNotificationChannel = new NotificationChannel(NOTIFIC_CHANNEL_ID, NOTIFIC_CHANNEL_NAME,
+			NotificationChannel mNotificationChannel = new NotificationChannel(NOTIFY_CHANNEL_ID, NOTIFY_CHANNEL_NAME,
 					NotificationManager.IMPORTANCE_HIGH);
 			notificationManager.createNotificationChannel(mNotificationChannel);
-			mNotification = new Notification.Builder(mContext, NOTIFIC_CHANNEL_ID).
+			mNotification = new Notification.Builder(mContext, NOTIFY_CHANNEL_ID).
 					setOnlyAlertOnce(true).
 					setSmallIcon(R.mipmap.ic_launcher_round).
 					setContentIntent(pendingIntent).
 					setOngoing(false).
 					setCustomBigContentView(views).
+					setOnlyAlertOnce(true).
 					build();
 		} else {
 			mNotification = new Notification.Builder(mContext).
@@ -66,7 +71,7 @@ public class PlayerNotificationManager {
 	}
 	public void shownotification(Audio audio) {
 		// TODO Auto-generated method stub
-		isNottify = true;
+		isNotify = true;
 		updatecurrentname(audio);
 
 		mNotification.flags = Notification.FLAG_NO_CLEAR;
@@ -94,7 +99,7 @@ public class PlayerNotificationManager {
 		((NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, mNotification);
 	}
 //	public void updatecurrenttime(int time){
-//		if(isNottify){
+//		if(isNotify){
 //			int min = (time/1000)/60;
 //			int sec = (time/1000)%60;
 //			views.setTextViewText(R.id.notif_current_time,text(min)+":"+text(sec));
@@ -102,7 +107,7 @@ public class PlayerNotificationManager {
 //		}
 //	}
 	public void updatecurrentname(Audio audio){
-		if(isNottify){
+		if(isNotify){
 			int min = ((audio.getDuration())/1000)/60;
 			int sec = ((audio.getDuration())/1000)%60;
 			views.setTextViewText(R.id.notif_all_time, String.format("%s:%s",text(min),text(sec)));
