@@ -135,11 +135,11 @@ public class MainService extends Service{
 	public void initLrc(String path){
 		LrcProcess lrcProcess = new LrcProcess();
 		lrcProcess.readLRC(path);
-		if(lrcProcess.readLRC(path) == null){
+		lrcContents = lrcProcess.getLrcList();
+		if(lrcContents.isEmpty()){
 			Toast.makeText(MainActivity._inActivity, "no LRC", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		lrcContents = lrcProcess.getLrcList();
 		MainActivity.mLrcView.setmLrcList(lrcContents);
 
 		float_lrcView.setmLrcList(lrcContents);
