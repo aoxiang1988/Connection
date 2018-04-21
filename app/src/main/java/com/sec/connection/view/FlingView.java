@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.sec.connection.R;
 import com.sec.connection.MainService;
 
+import java.util.logging.Handler;
+
 @SuppressLint("InflateParams")
 public class FlingView extends ViewGroup {
 
@@ -69,24 +71,30 @@ public class FlingView extends ViewGroup {
 		mTouchSlop = configuration.getScaledTouchSlop();
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		try {
-			int listmax = MainService.list.size();
-			for(int i = 0; i < listmax; i++){
-				LayoutInflater inflater = LayoutInflater.from(getContext());
-				View view = inflater.inflate(R.layout.change_layout, null);
-				imageView = (NewImageView) view.findViewById(R.id.imageView_change);
-				if(MainService.list.get(i).getBitmap() != null){
-					imageView.setImageBitmap(MainService.list.get(i).getBitmap());
-				}else{
-					imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic));
-				}
+			Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					int listmax = MainService.list.size();
+					for(int i = 0; i < listmax; i++){
+						LayoutInflater inflater = LayoutInflater.from(getContext());
+						View view = inflater.inflate(R.layout.change_layout, null);
+						imageView = (NewImageView) view.findViewById(R.id.imageView_change);
+						if(MainService.list.get(i).getBitmap() != null){
+							imageView.setImageBitmap(MainService.list.get(i).getBitmap());
+						}else{
+							imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic));
+						}
 
-				imageView.setShapeType(1);
-				imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
-				imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
-				imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
-				imageView.setPressColor(getResources().getColor(R.color.flingview_press));
-				addView(view);
-			}
+						imageView.setShapeType(1);
+						imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
+						imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
+						imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
+						imageView.setPressColor(getResources().getColor(R.color.flingview_press));
+						addView(view);
+					}
+				}
+			});
+			t.start();
 		} catch (NullPointerException e) {
 			Toast.makeText(getContext(),"list null",Toast.LENGTH_SHORT);
 		}
