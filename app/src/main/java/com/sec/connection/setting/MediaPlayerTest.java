@@ -2,6 +2,7 @@ package com.sec.connection.setting;
 
 /**
  * Created by SRC-TJ-MM-BinYang on 2017/10/9.
+ * media effect test
  */
 import android.app.Activity;
 import android.content.Context;
@@ -82,7 +83,7 @@ public class MediaPlayerTest extends Activity
         // 创建MediaPlayer对象,并添加音频
         // 音频路径为  res/raw/beautiful.mp3
 
-        mPlayer = MainService.myservice.mediaPlayer;
+        mPlayer = MainService.myService.mediaPlayer;
         // 初始化示波器
         setupVisualizer();
         // 初始化均衡控制器

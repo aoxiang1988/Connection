@@ -1,16 +1,19 @@
 package com.sec.connection;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ActionMode;
@@ -334,6 +337,11 @@ public class MainActivity extends AppCompatActivity {
 
 		if(!mService.isAdded){
 			try {
+				if(ActivityCompat.checkSelfPermission(getApplicationContext(),
+						Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED ) {
+					ActivityCompat.requestPermissions(this,
+							new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, 0);
+				}
 				mService.createFloatView();
 				mLrcOnOff.setBackground(getResources().getDrawable(R.drawable.lrc_on));
 			}catch (SecurityException s){

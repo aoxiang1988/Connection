@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -21,6 +22,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,7 +47,7 @@ import java.util.Timer;
 
 public class MainService extends Service{
 	public MediaPlayer mediaPlayer = null;
-	public static MainService myservice;
+	public static MainService myService;
 	private int duration;
 	private int c_duration;
 	public static List<Audio> list = null;
@@ -87,7 +89,7 @@ public class MainService extends Service{
 		}
 		void getService() {
 			// TODO Auto-generated method stub
-			myservice = mService;
+			myService = mService;
 		}
 	}
 	@Override
@@ -137,12 +139,10 @@ public class MainService extends Service{
 		lrcProcess.readLRC(path);
 		lrcContents = lrcProcess.getLrcList();
 		if(lrcContents.isEmpty()){
-			Toast.makeText(MainActivity._inActivity, "no LRC", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		MainActivity.mLrcView.setmLrcList(lrcContents);
-
-		float_lrcView.setmLrcList(lrcContents);
+		MainActivity.mLrcView.setLrcList(lrcContents);
+		float_lrcView.setLrcList(lrcContents);
 		handler.post(mRunnable);
 	}
 	Runnable mRunnable = new Runnable() {
@@ -606,7 +606,7 @@ public class MainService extends Service{
 		try {
 			wm.addView(child, params);
 		}catch (WindowManager.BadTokenException b){
-			Toast.makeText(this,"check the WindowManager Premission",Toast.LENGTH_SHORT);
+			Toast.makeText(this,"check the WindowManager Premission",Toast.LENGTH_SHORT).show();
 		};
 		isAdded = true;
 	}
@@ -637,14 +637,17 @@ public class MainService extends Service{
 				Cursor c1 = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 						new String[]{MediaStore.Audio.Media._ID},
 						null, null, null);
+				assert c1 != null;
 				count1 = c1.getCount();
 				System.out.println("count:"+count);
 				Log.d("bin1111.yang","正在扫描存储卡...");
+				c1.close();
 			}else if(Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)){
 				Cursor c2 = context.getContentResolver()
 						.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 								new String[]{MediaStore.Audio.Media._ID},
 								null, null, null);
+				assert c2 != null;
 				count2 = c2.getCount();
 				count = count2-count1;
 				if (count!=0){
@@ -660,6 +663,7 @@ public class MainService extends Service{
 					intent1.putExtra("current_music",c_music);
 					sendBroadcast(intent1);
 				}
+				c2.close();
 			}
 		}
 	}

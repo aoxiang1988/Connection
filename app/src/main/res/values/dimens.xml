@@ -5,8 +5,8 @@
     <dimen name="activity_vertical_margin">4dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="image_shapetype">1dp</dimen>
-    <dimen name="image_borderwidth">5dp</dimen>
-    <dimen name="image_strokewidth">100dp</dimen>
+    <dimen name="image_borderwidth">3dp</dimen>
+    <dimen name="image_strokewidth">50dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
 </resources>

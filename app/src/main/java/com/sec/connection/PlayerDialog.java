@@ -1,5 +1,6 @@
 package com.sec.connection;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -29,7 +30,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.sec.connection.data.Audio;
-import com.sec.connection.network.FMInfoOnLineActivity;
 import com.sec.connection.network.SearchOnNetWork;
 import com.sec.connection.setting.FilterSettings;
 
@@ -103,7 +103,7 @@ public class PlayerDialog extends DialogFragment {
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					((MainActivity)getActivity()).stop();
-					((MainActivity)getActivity()).finish();
+					getActivity().finish();
 					notificationManager.removenotification(getActivity());
 				}
 			}).setNegativeButton(R.string.back,null).setTitle(R.string.exit).create();
@@ -137,13 +137,13 @@ public class PlayerDialog extends DialogFragment {
 			SerializableMap1 s1 = (SerializableMap1) getArguments().getSerializable(KEY_MAP);
 			Map<String, List<Audio>> mPathMapForDialog = null;
 			if (s1 != null) {
-				mPathMapForDialog = s1.getMap();
+				mPathMapForDialog = SerializableMap1.getMap();
 			}
 
 			SerializableMap2 s2 = (SerializableMap2) getArguments().getSerializable(KEY_SELECT_MAP);
 			Map<String, Boolean> mPathSelected = null;
 			if (s2 != null) {
-				mPathSelected = s2.getMap();
+				mPathSelected = SerializableMap2.getMap();
 			}
 
 			List<String> mPathListForDialog = getArguments().getStringArrayList(KEY_LIST);
@@ -183,7 +183,7 @@ public class PlayerDialog extends DialogFragment {
 			//横屏
 		}else if(ori == Configuration.ORIENTATION_PORTRAIT){
 			p.height = (int) (d.getHeight()*0.5); // 高度设置为屏幕的0.5
-			p.width = (int) (d.getWidth()); // 宽度设置为屏幕宽
+			p.width = d.getWidth(); // 宽度设置为屏幕宽
 			//竖屏
 		}
 
@@ -307,8 +307,8 @@ public class PlayerDialog extends DialogFragment {
 		public static Map<String, List<Audio>> getMap() {
 			return map;
 		}
-		void SerializableMap1(Map<String, List<Audio>> map) {
-			this.map = map;
+		SerializableMap1(Map<String, List<Audio>> map) {
+			SerializableMap1.map = map;
 		}
 	}
 	private static class SerializableMap2 implements Serializable {
@@ -316,8 +316,8 @@ public class PlayerDialog extends DialogFragment {
 		public static Map<String, Boolean> getMap() {
 			return map;
 		}
-		void SerializableMap2(Map<String, Boolean> map) {
-			this.map = map;
+		SerializableMap2(Map<String, Boolean> map) {
+			SerializableMap2.map = map;
 		}
 	}
 
@@ -326,6 +326,7 @@ public class PlayerDialog extends DialogFragment {
 		private Context mContext;
 		private Map<String, List<Audio>> mPathMapForDialog;
 		private List<String> mPathListForDialog;
+        private View convertView = null;
 
 		private FolderPathAdapter(Context mContext,
 								  List<String> mPathListForDialog){
@@ -348,27 +349,31 @@ public class PlayerDialog extends DialogFragment {
 			return position;
 		}
 
-		@Override
+		@SuppressLint("SetTextI18n")
+        @Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.folder_path_item, null);
-			TextView foldername = convertView.findViewById(R.id.folder_name);
+		    if(this.convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.folder_path_item, null);
+                this.convertView = convertView;
+		    }
+			TextView folder_name = convertView.findViewById(R.id.folder_name);
 
-			TextView musicno = convertView.findViewById(R.id.folder_music_no);
+			TextView music_num = convertView.findViewById(R.id.folder_music_no);
 
-			TextView folderpath = convertView.findViewById(R.id.folder_path);
-			folderpath.setText(mPathListForDialog.get(position));
+			TextView folder_path = convertView.findViewById(R.id.folder_path);
+			folder_path.setText(mPathListForDialog.get(position));
 
-			CheckBox foldercheckBox = convertView.findViewById(R.id.folder_path_checkBox);
+			CheckBox folder_check_box = convertView.findViewById(R.id.folder_path_checkBox);
 
 			String new_path = mPathListForDialog.get(position).replace("0", "@");
-			String splitpath[] = new_path.split("@");
-			foldername.setText(splitpath[1]+":");
-			musicno.setText(FilterSettings.mFolderPathData.getlistlangth(position)+"首歌 ：");
+			String split_path[] = new_path.split("@");
+			folder_name.setText(split_path[1]+":");
+			music_num.setText(FilterSettings.mFolderPathData.getlistlangth(position)+"首歌 ：");
 
 			if(FilterSettings.mFolderPathData.isPathSelected(position)){
-				foldercheckBox.setChecked(true);
+				folder_check_box.setChecked(true);
 			} else {
-				foldercheckBox.setChecked(false);
+				folder_check_box.setChecked(false);
 			}
 
 			return convertView;

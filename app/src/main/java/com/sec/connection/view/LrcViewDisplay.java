@@ -44,7 +44,7 @@ public class LrcViewDisplay {
         }
         //??????????????
         lrcContents = lrcProcess.getLrcList();
-        lrcView.setmLrcList(lrcContents);
+        lrcView.setLrcList(lrcContents);
         handler.post(mRunnable);
     }
     Runnable mRunnable = new Runnable() {

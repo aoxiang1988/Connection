@@ -64,10 +64,13 @@ public class StartActivity extends Activity implements ServiceConnection {
 		if(ActivityCompat.checkSelfPermission(getApplicationContext(),
 				Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 				&& ActivityCompat.checkSelfPermission(getApplicationContext(),
-				Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+				Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+				&& ActivityCompat.checkSelfPermission(getApplicationContext(),
+				Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ) {
 			ActivityCompat.requestPermissions(StartActivity.this,
 					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-							Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+							Manifest.permission.READ_EXTERNAL_STORAGE,
+							Manifest.permission.RECORD_AUDIO }, 0);
 		} else {
 			t = new Thread(new Runnable() {
 				@Override

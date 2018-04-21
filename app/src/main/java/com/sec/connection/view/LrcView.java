@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class LrcView extends android.support.v7.widget.AppCompatTextView {
 
     private List<LrcContent> mLrcList = new ArrayList<LrcContent>();
 
-    public void setmLrcList(List<LrcContent> mLrcList) {  
+    public void setLrcList(List<LrcContent> mLrcList) {
         this.mLrcList = mLrcList;  
     }  
 
@@ -48,13 +49,19 @@ public class LrcView extends android.support.v7.widget.AppCompatTextView {
         currentPaint = new Paint();
         currentPaint.setAntiAlias(true);    //设置抗锯齿，让文字美观饱满  
         currentPaint.setTextAlign(Paint.Align.CENTER);//设置文本对齐方式
-        currentPaint.setShadowLayer(1,3,3,getResources().getColor(android.R.color.darker_gray, null));
 
         //非高亮部分  
         notCurrentPaint = new Paint();
         notCurrentPaint.setAntiAlias(true);  
         notCurrentPaint.setTextAlign(Paint.Align.CENTER);
-        notCurrentPaint.setShadowLayer(1,3,3,getResources().getColor(android.R.color.darker_gray, null));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            currentPaint.setShadowLayer(1, 3, 3, getResources().getColor(android.R.color.darker_gray, null));
+            notCurrentPaint.setShadowLayer(1,3,3,getResources().getColor(android.R.color.darker_gray, null));
+        } else {
+            currentPaint.setShadowLayer(1, 3, 3, getResources().getColor(android.R.color.darker_gray));
+            notCurrentPaint.setShadowLayer(1,3,3,getResources().getColor(android.R.color.darker_gray));
+        }
+
     }  
 
     /** 
