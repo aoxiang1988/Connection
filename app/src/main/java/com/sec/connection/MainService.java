@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -22,7 +21,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +31,6 @@ import android.widget.Toast;
 
 import com.sec.connection.aspectcode.PermissionCheck;
 import com.sec.connection.data.Audio;
-import com.sec.connection.data.FolderPathData;
 import com.sec.connection.data.MediaUtile;
 import com.sec.connection.view.LrcContent;
 import com.sec.connection.view.LrcProcess;
@@ -79,7 +76,6 @@ public class MainService extends Service{
 	private static final int UPDATE_CURRENT_TIME = 1;
 	private static final int STOP_CURRENT_TIME = 2;
 	public static final String COLLECTION_VIEW_ACTION = "com.example.play.COLLECTION_VIEW_ACTION";
-	public static FolderPathData mFolderPathData;
 
 	class ServiceBinder extends Binder{
 		private MainService mService = null;
@@ -188,11 +184,10 @@ public class MainService extends Service{
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		list = MusicApplication.list;
+		list = BaseListInfo.getInstance().getList();
 		MainActivity.initservice(this);
 		scanSdCard();
 		mediaPlayer = new MediaPlayer();
-		mFolderPathData = new FolderPathData(list);
 		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
 		Widget_Receiver widget_Receiver = new Widget_Receiver();
@@ -200,14 +195,14 @@ public class MainService extends Service{
 		widget_filter.addAction(COLLECTION_VIEW_ACTION);
 		registerReceiver(widget_Receiver, widget_filter);
 
-		Notify_Receiver notifyreceiver = new Notify_Receiver();
+		Notify_Receiver mNotifyReceiver = new Notify_Receiver();
 		IntentFilter notify_filter = new IntentFilter();
 		notify_filter.addAction(NOTIFY_NEXT);
 		notify_filter.addAction(NOTIFY_PLAY);
 		notify_filter.addAction(NOTIFY_STOP);
 		notify_filter.addAction(NOTIFY_PRE);
 		notify_filter.addAction(NOTIFY_REMOVE);
-		registerReceiver(notifyreceiver, notify_filter);
+		registerReceiver(mNotifyReceiver, notify_filter);
 
 		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 			@Override

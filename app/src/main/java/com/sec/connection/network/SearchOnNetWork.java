@@ -232,7 +232,7 @@ public class SearchOnNetWork extends Activity {
 				String searchmusic = "http://music.baidu.com/search?key="+ getsearchmusicname +"&start=" + start + "&size=20&third_type=0";
 				if(!find){
 					document = Jsoup.connect(searchmusic).data("query", "Java").timeout(5000).get();
-		            Elements songTitles = document.select("span.song-title");
+					Elements songTitles = document.select("span.song-title");
 					Elements songArtisters = document.select("span.singer");
 		            Elements songInfos;
 		            System.out.println(" " + songTitles);

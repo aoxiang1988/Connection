@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.sec.connection.view.FragmentViewPager.BlankFragment2">
+             tools:context="com.sec.connection.vpview.FragmentViewPager.ArtistMusicListFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout2"

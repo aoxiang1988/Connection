@@ -24,7 +24,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 	private int resource;
 	private Context context;
 	private List<Audio> objects;
-	private boolean updatepostion = false;
+	private boolean update_position = false;
 	private int which = 0;
 
 	public UserAdapter(Context context, int resource, List<Audio> objects) {
@@ -63,17 +63,13 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		CheckBox checkBox = (CheckBox) linearLayout.findViewById(R.id.checkBox1);
 
 		Bitmap bitmap = null;
-		if (audio != null) {
-			bitmap = audio.getBitmap();
-		}
+		bitmap = audio.getBitmap();
 		if(bitmap != null){
 			imageView.setImageBitmap(bitmap);
 		}
 		if(which == 1){
-			if (audio != null) {
-				title.setText(audio.getNetTitle());
-				artist.setText(audio.getNetArtist());
-			}
+			title.setText(audio.getNetTitle());
+			artist.setText(audio.getNetArtist());
 			time.setVisibility(View.GONE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				title.setTextColor(context.getResources().getColor(R.color.noplaycolor, null));
@@ -84,26 +80,24 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 			}
 
 		}else{
-			if (audio != null) {
-				title.setText(audio.getTitle());
-				artist.setText(audio.getArtist());
+			title.setText(audio.getTitle());
+			artist.setText(audio.getArtist());
 
-				int min = (audio.getDuration() / 1000) / 60;
-				int sec = (audio.getDuration() / 1000) % 60;
-				String stringmin;
-				String stringsec;
-				if (min < 10) {
-					stringmin = String.format("0%s", min);
-				} else {
-					stringmin = String.format("%s", min);
-				}
-				if (sec < 10) {
-					stringsec = String.format("0%s", sec);
-				} else {
-					stringsec = String.format("%s", sec);
-				}
-				time.setText(String.format("%s:%s", stringmin, stringsec));
-			}
+			int min = (audio.getDuration() / 1000) / 60;
+			int sec = (audio.getDuration() / 1000) % 60;
+			String string_min;
+			String string_sec;
+			if (min < 10) {
+                string_min = String.format("0%s", min);
+            } else {
+                string_min = String.format("%s", min);
+            }
+			if (sec < 10) {
+                string_sec = String.format("0%s", sec);
+            } else {
+                string_sec = String.format("%s", sec);
+            }
+			time.setText(String.format("%s:%s", string_min, string_sec));
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				if(MainService.isPlay && position == MainActivity.getcurrentposition()){
 					title.setTextColor(context.getResources().getColor(R.color.playingcolor, null));
@@ -140,17 +134,17 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		}
 		return linearLayout;
 	}
-	public void addItems(List<Audio> list ,boolean updatepostion){
+	void addItems(List<Audio> list, boolean update_position){
 		this.objects.clear();
 		this.objects.addAll(list);
-		setupdatepostion(updatepostion);
+		setupdatepostion(update_position);
 		notifyDataSetChanged();
 	}
 
-	public void setupdatepostion(boolean updatepostion) {
-		this.updatepostion = updatepostion;
+	private void setupdatepostion(boolean update_position) {
+		this.update_position = update_position;
 	}
 	public boolean getupdatepostion(){
-		return updatepostion;
+		return update_position;
 	}
 }

@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.data.FolderPathData;
 import com.sec.connection.MainService;
@@ -90,7 +91,7 @@ public class FilterSettings extends Activity {
             }
         });
 
-        mFolderPathData = MainService.mFolderPathData ;
+        mFolderPathData = new FolderPathData(BaseListInfo.getInstance().getList());
 
         initview();
         setSwitchSelectOn();

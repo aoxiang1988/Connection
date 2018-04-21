@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
 import com.sec.connection.MainActivity;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 
 public class MusicInformationActivity extends Activity {
-    List<Audio> music = MusicApplication.list;
+    List<Audio> music = BaseListInfo.getInstance().getList();
     CharSequence[] info;
     List<String> l = new ArrayList<>();
     @Override

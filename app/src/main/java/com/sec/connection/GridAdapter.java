@@ -25,7 +25,6 @@ public class GridAdapter extends BaseAdapter {
     private List<String> alumblist;
     private Context mContext;
     private Map<String, List<Audio>> map_alumb = null;
-    private View convertView = null;
 
     public GridAdapter(Context context,List<String> alumblist,Map<String, List<Audio>> map_alumb){
         this.mContext = context;
@@ -53,7 +52,7 @@ public class GridAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.grid_item_layout, null);
-            this.convertView = convertView;
+            View convertView1 = convertView;
         }
         ImageView alumb_image = (ImageView)convertView.findViewById(R.id.alumb_imageView);
         if(map_alumb.get(alumblist.get(position)).get(0).getBitmap() != null){

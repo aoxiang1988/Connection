@@ -1,4 +1,4 @@
-package com.sec.connection.view.FragmentViewPager;
+package com.sec.connection.vpview.FragmentViewPager;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
+import com.sec.connection.data.Audio;
 import com.sec.connection.data.CharacterParser;
 import com.sec.connection.data.SortModel;
 import com.sec.connection.MainActivity;
@@ -25,12 +27,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment.OnFragmentInteractionListener} interface
+ * {@link AllListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment#newInstance} factory method to
+ * Use the {@link AllListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment extends BaseFragment {
+public class AllListFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,12 +40,12 @@ public class BlankFragment extends BaseFragment {
 
     private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
     private Context mContext;
-
+    private List<Audio> mList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private String[] musicname = new String[MusicApplication.list.size()];
+    private String[] mMusicName;
     private ListView talmudic1;
     private SideBar sidebar;
     private SortAdapter tablespace;
@@ -51,7 +53,7 @@ public class BlankFragment extends BaseFragment {
     private List<SortModel> SourceDateList;
     private PinyinComparator pinyinComparator;
 
-    public BlankFragment() {
+    public AllListFragment() {
         // Required empty public constructor
     }
 
@@ -61,11 +63,11 @@ public class BlankFragment extends BaseFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
+     * @return A new instance of fragment AllListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(String param1, String param2) {
-        BlankFragment fragment = new BlankFragment();
+    public static AllListFragment newInstance(String param1, String param2) {
+        AllListFragment fragment = new AllListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,17 +82,19 @@ public class BlankFragment extends BaseFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mList = BaseListInfo.getInstance().getList();
+        mMusicName = new String[mList.size()];
 
         List<String> artists1 = new ArrayList<>();
-        for (int a = 0; a < MusicApplication.list.size(); a++) {
-            artists1.add( MusicApplication.list.get(a).getArtist());
-            musicname[a] = MusicApplication.list.get(a).getTitle();
+        for (int a = 0; a < mList.size(); a++) {
+            artists1.add( mList.get(a).getArtist());
+            mMusicName[a] = mList.get(a).getTitle();
         }
 
         //实例化汉字转拼音类
         characterParser = CharacterParser.getInstance();
         pinyinComparator = new PinyinComparator();
-        SourceDateList = filledData(musicname);
+        SourceDateList = filledData(mMusicName);
         Collections.sort(SourceDateList, pinyinComparator);
     }
 
@@ -142,7 +146,7 @@ public class BlankFragment extends BaseFragment {
         for(int i=0; i<date.length; i++){
             SortModel sortModel = new SortModel();
             sortModel.setName(date[i]);
-            sortModel.setAudio(MusicApplication.list.get(i));
+            sortModel.setAudio(mList.get(i));
             //汉字转换成拼音
             String pinyin = characterParser.getSelling(date[i]);
             String sortString = pinyin.substring(0, 1).toUpperCase();

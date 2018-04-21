@@ -1,4 +1,4 @@
-package com.sec.connection.view.FragmentViewPager;
+package com.sec.connection.vpview.FragmentViewPager;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
@@ -36,12 +37,12 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment3.OnFragmentInteractionListener} interface
+ * {@link AlbumListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment3#newInstance} factory method to
+ * Use the {@link AlbumListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment3 extends BaseFragment implements View.OnTouchListener {
+public class AlbumListFragment extends BaseFragment implements View.OnTouchListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,7 +51,7 @@ public class BlankFragment3 extends BaseFragment implements View.OnTouchListener
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    public BlankFragment3() {
+    public AlbumListFragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +72,11 @@ public class BlankFragment3 extends BaseFragment implements View.OnTouchListener
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment3.
+     * @return A new instance of fragment AlbumListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment3 newInstance(String param1, String param2) {
-        BlankFragment3 fragment = new BlankFragment3();
+    public static AlbumListFragment newInstance(String param1, String param2) {
+        AlbumListFragment fragment = new AlbumListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -90,19 +91,20 @@ public class BlankFragment3 extends BaseFragment implements View.OnTouchListener
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        List<Audio> mList = BaseListInfo.getInstance().getList();
         map_alumb = new HashMap<>();
         List<String> alumblist1 = new ArrayList<>();
-        for (int a = 0; a < MusicApplication.list.size(); a++) {
-            alumblist1.add( MusicApplication.list.get(a).getAlbum());
+        for (int a = 0; a < mList.size(); a++) {
+            alumblist1.add( mList.get(a).getAlbum());
         }
         alumblist = removeDuplicate(alumblist1);
         /*add the music name to alumb list*/
         for (int b = 0; b < alumblist.size(); b++) {
             int m = 0;
             misname_alumb = new ArrayList<>();
-            for (int a = 0; a < MusicApplication.list.size(); a++) {
-                if (Objects.equals(alumblist.get(b), MusicApplication.list.get(a).getAlbum())) {
-                    misname_alumb.add(m, MusicApplication.list.get(a));
+            for (int a = 0; a < mList.size(); a++) {
+                if (Objects.equals(alumblist.get(b), mList.get(a).getAlbum())) {
+                    misname_alumb.add(m, mList.get(a));
                     m = m+1;
                 }
             }

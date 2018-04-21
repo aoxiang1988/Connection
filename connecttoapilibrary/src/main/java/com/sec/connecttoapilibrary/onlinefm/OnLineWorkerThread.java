@@ -5,7 +5,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.sec.connecttoapilibrary.RequestCallBack;
+
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -37,8 +41,14 @@ public class OnLineWorkerThread {
     private static final TimeUnit mUnit = TimeUnit.SECONDS; // can set as second, minute, hour, day...
     private ExecutorService mExecutorService;
 
+    private RequestCallBack mCallBack;
+    private int mChannelID;
+
     OnLineWorkerThread(final Context context){
         BlockingQueue<Runnable> mBlockingQueue = new LinkedBlockingQueue<>();//when the queue empty , it cann't get any runnable, after add new runnable, the queue will be wake up and can be got runnable to to work
+
+//        mCallBackQueue = new ConcurrentLinkedQueue<>();
+//        mCallBackQueue.add(mCallBack);
         ThreadFactory mFactory = new ThreadFactory() {
 
             private final AtomicInteger mCount = new AtomicInteger(1);
@@ -62,11 +72,21 @@ public class OnLineWorkerThread {
     void SendNewRunnable(int type) {
         mExecutorService.execute(new OnLineWorkerRunnable(type));
     }
-    void SendNewRunnable(int type, final int localId) {
+    public synchronized void SendNewRunnable(int type, RequestCallBack callBack) {
+        mCallBack = callBack;
+        mExecutorService.execute(new OnLineWorkerRunnable(type));
+    }
+
+    public void SendNewRunnable(int type, final int localId) {
         mExecutorService.execute(new OnLineWorkerRunnable(type, localId));
     }
     void SendNewRunnable(int type, String keyword, String string_type, int current_page) {
         mExecutorService.execute(new OnLineWorkerRunnable(type, keyword, string_type, current_page));
+    }
+
+    public synchronized void SendNewRunnable(int type, RequestCallBack requestCallBack, int channelID) {
+        mCallBack = requestCallBack;
+        mExecutorService.execute(new OnLineWorkerRunnable(type, channelID));
     }
 
     private class OnLineWorkerRunnable implements Runnable {

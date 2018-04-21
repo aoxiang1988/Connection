@@ -75,11 +75,10 @@ public class StartActivity extends Activity implements ServiceConnection {
 			t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					MusicApplication.list = MediaUtile.getAudioList(getApplicationContext());
+					BaseListInfo.getInstance().setList(MediaUtile.getAudioList(getApplicationContext()));
 					startMainService();
 					bindMainService();
-					Log.d("bin1111.yang", "MusicApplication.list " + MusicApplication.list.size());
-					if(!MusicApplication.list.isEmpty()) {
+					if(!BaseListInfo.getInstance().getList().isEmpty()) {
 						Intent intent = new Intent();
 						intent.setClass(getBaseContext(), MainActivity.class);
 						startActivity(intent);

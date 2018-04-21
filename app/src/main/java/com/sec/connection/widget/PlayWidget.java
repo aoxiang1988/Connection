@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.StartActivity;
 import com.sec.connection.data.Audio;
@@ -29,7 +30,7 @@ public class PlayWidget extends AppWidgetProvider {
 	private Bitmap bitmap = null;
 	private int listitem = 0;
 	private String TAG = "PlayWidget";
-	List<Audio> list = MusicApplication.list;
+	List<Audio> list = BaseListInfo.getInstance().getList();
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

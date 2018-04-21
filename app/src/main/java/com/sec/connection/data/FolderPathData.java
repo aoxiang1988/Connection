@@ -18,17 +18,20 @@ public class FolderPathData {
     private List<String> mPathList;
     private Map<String, List<Audio>> mPathMap;
     private Map<String, Boolean> mPathSelected;
+    private static FolderPathData mPathData;
 
     public FolderPathData (List<Audio> mAllList){
         this.mAllList = new ArrayList<>();
         this.mAllList = mAllList; //将要处理的list先期传入
-
+        mPathData = this;
         mPathList = setPathList();
         mPathMap = setPathMap();
         mPathSelected = init();
     }
 
-
+    public static FolderPathData getInstance() {
+        return mPathData;
+    }
 
     /**获取路径的list**/
     private List<String> setPathList(){

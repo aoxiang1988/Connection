@@ -22,14 +22,13 @@ import com.sec.connection.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class PlayWebActivity extends AppCompatActivity {
     private static String ACTION_START_WEB_PLAY = "com.example.action.ACTION_START_WEB_PLAY";
     private static String current_url = null;
 //    private WebView playweb;
-    private ImageView webmusicpicture;
+    private ImageView mWebMusicPic;
     private Bitmap bitmap = null;
     private static final int SET_MAIN_VIEW = 1;
 
@@ -38,7 +37,7 @@ public class PlayWebActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             switch(msg.what){
                 case SET_MAIN_VIEW:
-                    webmusicpicture.setImageBitmap(bitmap);
+                    mWebMusicPic.setImageBitmap(bitmap);
                     break;
             }
         }
@@ -69,7 +68,7 @@ public class PlayWebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_web);
 
-        webmusicpicture = (ImageView)findViewById(R.id.web_music_image_View);
+        mWebMusicPic = (ImageView)findViewById(R.id.web_music_image_View);
 
         Intent intent = getIntent();
         if(Objects.equals(intent.getAction(), ACTION_START_WEB_PLAY)){

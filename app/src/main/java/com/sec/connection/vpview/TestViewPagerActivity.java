@@ -19,14 +19,15 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MainService;
 import com.sec.connection.R;
 import com.sec.connection.MainActivity;
 import com.sec.connection.MusicApplication;
-import com.sec.connection.view.FragmentViewPager.BlankFragment;
-import com.sec.connection.view.FragmentViewPager.BlankFragment2;
-import com.sec.connection.view.FragmentViewPager.BlankFragment3;
-import com.sec.connection.view.FragmentViewPager.BlankFragment4;
+import com.sec.connection.vpview.FragmentViewPager.AlbumListFragment;
+import com.sec.connection.vpview.FragmentViewPager.AllListFragment;
+import com.sec.connection.vpview.FragmentViewPager.ArtistMusicListFragment;
+import com.sec.connection.vpview.FragmentViewPager.FilterListFragment;
 import com.sec.connection.view.NewImageView;
 
 import java.util.ArrayList;
@@ -88,13 +89,13 @@ public class TestViewPagerActivity extends AppCompatActivity {
         actionBar = findViewById(R.id.action_bar);
         actionBar.setBackgroundColor(getResources().getColor(R.color.playingcolor));
         actionBar.setVisibility(View.GONE);
-        initViewPagerContainter();
+        initViewPagerContainer();
         _activity = this;
         count = 0;
         initcontrollerview();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        initViewPagerContainter();  //初始viewPager
+//        initViewPagerContainer();  //初始viewPager
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), viewContainter);//);
         //设置adapter的适配器
         viewPager.setAdapter(viewPagerAdapter);
@@ -204,12 +205,12 @@ public class TestViewPagerActivity extends AppCompatActivity {
     }
 
     //初始化viewPager
-    public void initViewPagerContainter(){
+    public void initViewPagerContainer(){
         //加入ViewPage的容器
-        f1 = new BlankFragment();
-        f2 = new BlankFragment2();
-        f3 = new BlankFragment3();
-        f4 = new BlankFragment4();
+        f1 = AllListFragment.newInstance("All_List_Fragment", "new_Instance");
+        f2 = ArtistMusicListFragment.newInstance("Artist_Music_List_Fragment", "new_Instance");
+        f3 = AlbumListFragment.newInstance("Album_List_Fragment", "new_Instance");
+        f4 = FilterListFragment.newInstance("Filter_Fragment", "new_Instance");
 
         viewContainter.add(f1);
         viewContainter.add(f2);
@@ -219,21 +220,21 @@ public class TestViewPagerActivity extends AppCompatActivity {
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
 
-        List<Fragment> viewContainter;
-        public ViewPagerAdapter(FragmentManager fm, List<Fragment> viewContainter) {
+        List<Fragment> viewContainer;
+        ViewPagerAdapter(FragmentManager fm, List<Fragment> viewContainer) {
             super(fm);
-            this.viewContainter = viewContainter;
+            this.viewContainer = viewContainer;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return viewContainter.get(position);
+            return viewContainer.get(position);
         }
 
         //该方法 决定 并 返回 viewpager中组件的数量
         @Override
         public int getCount() {
-            return viewContainter.size();
+            return viewContainer.size();
         }
 
         @Override
@@ -290,21 +291,21 @@ public class TestViewPagerActivity extends AppCompatActivity {
 
                         break;
                     case R.id.st_ac_start :
-                        PlayMusicUIUpdata(MainActivity.getcurrentposition());
+                        PlayMusicUIUpdate(MainActivity.getcurrentposition());
                         break;
                     case R.id.st_ac_stop :
-                        PlayMusicUIUpdata(MainActivity.getcurrentposition());
+                        PlayMusicUIUpdate(MainActivity.getcurrentposition());
                         break;
                 }
             }
         };
     }
 
-    private void PlayMusicUIUpdata(int position) {
+    private void PlayMusicUIUpdate(int position) {
         // TODO Auto-generated method stub
         liststart.setVisibility(View.GONE);
         liststop.setVisibility(View.VISIBLE);
-        listmusicname.setText(MusicApplication.list.get(position).getTitle());
+        listmusicname.setText(BaseListInfo.getInstance().getList().get(position).getTitle());
 
         if(position == 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -320,7 +321,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
                 listpre.setBackgroundDrawable(getResources().getDrawable(R.drawable.previous_button_ripple));
             }
         }
-        if(position+1 == MusicApplication.list.size()) {
+        if(position+1 == BaseListInfo.getInstance().getList().size()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 listnext.setBackground(getResources().getDrawable(R.drawable.disable_next, null));
             } else {
@@ -352,13 +353,13 @@ public class TestViewPagerActivity extends AppCompatActivity {
             }
             if (action.equals(UPDATE_LIST_ACTIVITY_ACTION)) {
                 listPosition = intent.getIntExtra("current_music", 0);
-                PlayMusicUIUpdata(listPosition);
+                PlayMusicUIUpdate(listPosition);
             }
             if (action.equals(UPDATE_ACTION)) {
                 listPosition = intent.getIntExtra("current_music", -1);
                 String title = MainService.list.get(listPosition).getTitle();
                 listmusicname.setText(title);
-                PlayMusicUIUpdata(listPosition);
+                PlayMusicUIUpdate(listPosition);
             }
             if (action.equals(CURRENT_ID)) {
                 listPosition = intent.getIntExtra("current_id", -1);

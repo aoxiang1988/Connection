@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
 import com.sec.connection.MainActivity;
@@ -25,7 +26,7 @@ public class MyRemoteViewsFactory implements RemoteViewsFactory {
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
-		list = MusicApplication.list;
+		list = BaseListInfo.getInstance().getList();
 	}
 
 	@Override

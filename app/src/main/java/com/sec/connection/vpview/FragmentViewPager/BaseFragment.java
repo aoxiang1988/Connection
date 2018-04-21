@@ -1,4 +1,4 @@
-package com.sec.connection.view.FragmentViewPager;
+package com.sec.connection.vpview.FragmentViewPager;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;

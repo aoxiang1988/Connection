@@ -1,6 +1,7 @@
-package com.sec.connection.view.FragmentViewPager;
+package com.sec.connection.vpview.FragmentViewPager;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
@@ -28,19 +30,20 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment2.OnFragmentInteractionListener} interface
+ * {@link ArtistMusicListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment2#newInstance} factory method to
+ * Use the {@link ArtistMusicListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment2 extends BaseFragment {
+public class ArtistMusicListFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
-    private String[] musicname = new String[MusicApplication.list.size()];
+    private List<Audio> mList;
+    private String[] mMusicName;
     private int n_groupPosition;
     private int n_childPosition;
     private boolean isgroupopen = false;
@@ -56,7 +59,7 @@ public class BlankFragment2 extends BaseFragment {
 
     private LocalList locallist;
 
-    public BlankFragment2() {
+    public ArtistMusicListFragment() {
         // Required empty public constructor
     }
 
@@ -66,11 +69,11 @@ public class BlankFragment2 extends BaseFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment2.
+     * @return A new instance of fragment ArtistMusicListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment2 newInstance(String param1, String param2) {
-        BlankFragment2 fragment = new BlankFragment2();
+    public static ArtistMusicListFragment newInstance(String param1, String param2) {
+        ArtistMusicListFragment fragment = new ArtistMusicListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,6 +89,8 @@ public class BlankFragment2 extends BaseFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         getartist_map();
+        mList = BaseListInfo.getInstance().getList();
+        mMusicName = new String[mList.size()];
     }
 
     @Override
@@ -191,11 +196,15 @@ public class BlankFragment2 extends BaseFragment {
             else
                 childlistmusicpicture.setImageResource(R.drawable.ic);
             if(MainService.isPlay && n_groupPosition == groupPosition && n_childPosition == childPosition){
-                childmusicname.setTextColor(getResources().getColor(R.color.playingcolor, null));
-                textView.setTextColor(getResources().getColor(R.color.playingcolor, null));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    childmusicname.setTextColor(getResources().getColor(R.color.playingcolor, null));
+                    textView.setTextColor(getResources().getColor(R.color.playingcolor, null));
+                }
             } else {
-                childmusicname.setTextColor(getResources().getColor(R.color.noplaycolor, null));
-                textView.setTextColor(getResources().getColor(R.color.noplaycolor, null));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    childmusicname.setTextColor(getResources().getColor(R.color.noplaycolor, null));
+                    textView.setTextColor(getResources().getColor(R.color.noplaycolor, null));
+                }
             }
             return convertView;
         }
@@ -247,18 +256,18 @@ public class BlankFragment2 extends BaseFragment {
         /*get the list we need like get the artist->title**/
         map_artist = new HashMap<>();
         List<String> artists1 = new ArrayList<>();
-        for (int a = 0; a < MusicApplication.list.size(); a++) {
-            artists1.add( MusicApplication.list.get(a).getArtist());
-            musicname[a] = MusicApplication.list.get(a).getTitle();
+        for (int a = 0; a < mList.size(); a++) {
+            artists1.add(mList.get(a).getArtist());
+            mMusicName[a] = mList.get(a).getTitle();
         }
         artists = removeDuplicate(artists1);
         /*add the music name to artist list*/
         for (int b = 0; b < artists.size(); b++) {
             int m = 0;
             misname_artist = new ArrayList<>();
-            for (int a = 0; a < MusicApplication.list.size(); a++) {
-                if (Objects.equals(artists.get(b), MusicApplication.list.get(a).getArtist())) {
-                    misname_artist.add(m, MusicApplication.list.get(a));
+            for (int a = 0; a < mList.size(); a++) {
+                if (Objects.equals(artists.get(b), mList.get(a).getArtist())) {
+                    misname_artist.add(m, mList.get(a));
                     m = m+1;
                 }
             }
@@ -284,7 +293,7 @@ public class BlankFragment2 extends BaseFragment {
     }
 //    private void updateAllMusiclist(){
 //        for(int a = 0; a < SourceDateList.size(); a++){
-//            if(Objects.equals(SourceDateList.get(a).getName(), musicname[MainActivity.getcurrentposition()])){
+//            if(Objects.equals(SourceDateList.get(a).getName(), mMusicName[MainActivity.getcurrentposition()])){
 //                tablespace.setPlayingPosition(a);
 //                tablespace.notifyDataSetChanged();
 //                talmudic1.setSelection(a);

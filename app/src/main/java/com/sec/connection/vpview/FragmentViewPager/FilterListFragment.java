@@ -1,4 +1,4 @@
-package com.sec.connection.view.FragmentViewPager;
+package com.sec.connection.vpview.FragmentViewPager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
-import com.sec.connection.MainService;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.UserAdapter;
+import com.sec.connection.data.FolderPathData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment4.OnFragmentInteractionListener} interface
+ * {@link FilterListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment4#newInstance} factory method to
+ * Use the {@link FilterListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment4 extends BaseFragment {
+public class FilterListFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,7 +55,7 @@ public class BlankFragment4 extends BaseFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    public BlankFragment4() {
+    public FilterListFragment() {
         // Required empty public constructor
     }
 
@@ -64,11 +65,11 @@ public class BlankFragment4 extends BaseFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment4.
+     * @return A new instance of fragment FilterListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment4 newInstance(String param1, String param2) {
-        BlankFragment4 fragment = new BlankFragment4();
+    public static FilterListFragment newInstance(String param1, String param2) {
+        FilterListFragment fragment = new FilterListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -136,18 +137,18 @@ public class BlankFragment4 extends BaseFragment {
     }
 
     private void filterlistshow(View view){
-        List<Audio> filterlist = new ArrayList<>();
+        List<Audio> mFilterList;
         if(isSetFilterFolder){
-            filterlist = MainService.mFolderPathData.getfilterlist();
+            mFilterList = FolderPathData.getInstance().getfilterlist();
         } else
-            filterlist = MusicApplication.list;
+            mFilterList = BaseListInfo.getInstance().getList();
         if(isSetSizeValue) {
-            for(int i = 0; i<filterlist.size(); i++){
-                if(filterlist.get(i).getSize() >= mSetSizeValue)
-                    filterSizelist.add(filterlist.get(i));
+            for(int i = 0; i< mFilterList.size(); i++){
+                if(mFilterList.get(i).getSize() >= mSetSizeValue)
+                    filterSizelist.add(mFilterList.get(i));
             }
         } else
-            filterSizelist = filterlist;
+            filterSizelist = mFilterList;
         if(isSetDurationValue) {
             for(int i = 0; i<filterSizelist.size(); i++)
                 if(filterSizelist.get(i).getDuration() >= mSetDurationValue)

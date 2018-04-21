@@ -8,15 +8,15 @@ import com.sec.connecttoapilibrary.ConnectMainManager;
 import java.util.List;
 
 public class MusicApplication extends Application {
-	public static List<Audio> list ;
 	public static String PREF_NAME = "CURRENT_MUSIC"; // .xml
 	private ConnectMainManager mMainManager;
-
+	private BaseListInfo mInfo;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		mMainManager = new ConnectMainManager(getApplicationContext());
 		PlayerNotificationManager mNotifyManger = PlayerNotificationManager.instance();
+		mInfo = new BaseListInfo();
 		mNotifyManger.initialize(this);
 		super.onCreate();
 	}
@@ -25,5 +25,6 @@ public class MusicApplication extends Application {
 	public void onTerminate() {
 		super.onTerminate();
 		mMainManager = null;
+		mInfo = null;
 	}
 }

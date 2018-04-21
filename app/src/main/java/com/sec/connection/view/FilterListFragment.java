@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
@@ -36,13 +37,7 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
     private static String SET_SIZE_VALUE = "set size value";
     private static String SET_DURATION_VALUE = "set duration value";
 
-    private static boolean isSetSizeValue = false;
-    private static boolean isSetDurationValue = false;
-    private static int mSetSizeValue = 0;
-    private static int mSetDurationValue = 0;
-
-    private List<Audio> filterSizelist;
-    private List<Audio> filterDurationlist;
+    private List<Audio> filterDurationList;
 
     public static String TAG = "FilterListFragment";
 
@@ -54,8 +49,10 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param mSetDurationValue Parameter 1.
+     * @param mSetSizeValue Parameter 2.
+     * @param isSetDurationValue Parameter 3.
+     * @param isSetSizeValue Parameter 4.
      * @return A new instance of fragment FilterListFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -73,29 +70,29 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        filterSizelist = new ArrayList<>();
-        filterDurationlist = new ArrayList<>();
+        List<Audio> filterSizeList = new ArrayList<>();
+        filterDurationList = new ArrayList<>();
         if (getArguments() != null) {
-            isSetSizeValue = getArguments().getBoolean(IS_SET_SIZE_VALUE);
-            isSetDurationValue = getArguments().getBoolean(IS_SET_DURATION_VALUE);
-            mSetSizeValue = getArguments().getInt(SET_SIZE_VALUE);
-            mSetDurationValue = getArguments().getInt(SET_DURATION_VALUE);
-
-            Log.d(TAG,"set value : "+isSetSizeValue+" "+isSetDurationValue+" "+mSetSizeValue+" "+mSetDurationValue);
+            boolean isSetSizeValue = getArguments().getBoolean(IS_SET_SIZE_VALUE);
+            boolean isSetDurationValue = getArguments().getBoolean(IS_SET_DURATION_VALUE);
+            int mSetSizeValue = getArguments().getInt(SET_SIZE_VALUE);
+            int mSetDurationValue = getArguments().getInt(SET_DURATION_VALUE);
+            List<Audio> mList = BaseListInfo.getInstance().getList();
+            Log.d(TAG,"set value : "+ isSetSizeValue +" "+ isSetDurationValue +" "+ mSetSizeValue +" "+ mSetDurationValue);
 
             if(isSetSizeValue) {
-                for(int i = 0; i< MusicApplication.list.size(); i++){
-                    if(MusicApplication.list.get(i).getSize() >= mSetSizeValue)
-                        filterSizelist.add(MusicApplication.list.get(i));
+                for(int i = 0; i< mList.size(); i++){
+                    if(mList.get(i).getSize() >= mSetSizeValue)
+                        filterSizeList.add(mList.get(i));
                 }
             } else
-                filterSizelist = MusicApplication.list;
+                filterSizeList = mList;
             if(isSetDurationValue) {
-                for(int i = 0; i<filterSizelist.size(); i++)
-                    if(filterSizelist.get(i).getDuration() >= mSetDurationValue)
-                        filterDurationlist.add(filterSizelist.get(i));
+                for(int i = 0; i< filterSizeList.size(); i++)
+                    if(filterSizeList.get(i).getDuration() >= mSetDurationValue)
+                        filterDurationList.add(filterSizeList.get(i));
             } else
-                filterDurationlist = filterSizelist;
+                filterDurationList = filterSizeList;
         }
     }
 
@@ -104,13 +101,13 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter_list, container, false);
         LinearLayout scrollView = view.findViewById(R.id.filter_scroll_view);
-        for(int i = 0; i<filterDurationlist.size(); i++){
-            Log.d(TAG,""+filterDurationlist.get(i).getTitle());
+        for(int i = 0; i< filterDurationList.size(); i++){
+            Log.d(TAG,""+ filterDurationList.get(i).getTitle());
         }
-        for(int i = 0; i<filterDurationlist.size(); i++){
+        for(int i = 0; i< filterDurationList.size(); i++){
             View view_1 = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,null);
             TextView infomusictitle = view_1.findViewById(android.R.id.text1);
-            infomusictitle.setText(filterDurationlist.get(i).getTitle());
+            infomusictitle.setText(filterDurationList.get(i).getTitle());
             scrollView.addView(view_1);
         }
         view.invalidate();
