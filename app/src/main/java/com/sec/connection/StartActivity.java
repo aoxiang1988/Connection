@@ -12,9 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ import com.sec.connection.widget.RemoteViewService;
 public class StartActivity extends Activity implements ServiceConnection {
 
 	ProgressBar progressBar;
-	Handler handler ;
+	Handler mHandler ;
 	ImageView imageView;
 	Thread t;
 
@@ -47,22 +49,18 @@ public class StartActivity extends Activity implements ServiceConnection {
 		AnimationDrawable animationDrawable = (AnimationDrawable)imageView.getBackground();
 		animationDrawable.start();
 
-//		mHandler = new Handler(){
-//			private int progress = 0;
-//
-//			@Override
-//			public void handleMessage(Message msg) {
-//				// TODO Auto-generated method stub
-//				if(msg.what == 1){
-//					if(progress < progressBar.getMax())
-//						progress = progress + 10;
-//					else
-//						progress = 0;
-//					progressBar.setProgress(progress);
-//				}
-//				mHandler.sendEmptyMessageDelayed(1, 10);
-//			}
-//		};
+		mHandler = new Handler(){
+			private int progress = 0;
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				if(msg.what == 1){
+					Toast.makeText(getBaseContext(),"no music",Toast.LENGTH_LONG).show();
+					updateFace();
+				}
+			}
+		};
 		if(ActivityCompat.checkSelfPermission(getApplicationContext(),
 				Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
 				&& ActivityCompat.checkSelfPermission(getApplicationContext(),
@@ -78,14 +76,23 @@ public class StartActivity extends Activity implements ServiceConnection {
 					startMainService();
 					bindMainService();
 					Log.d("bin1111.yang", "MusicApplication.list " + MusicApplication.list.size());
-					Intent intent = new Intent();
-					intent.setClass(getBaseContext(), MainActivity.class);
-					startActivity(intent);
-					finish();
+					if(!MusicApplication.list.isEmpty()) {
+						Intent intent = new Intent();
+						intent.setClass(getBaseContext(), MainActivity.class);
+						startActivity(intent);
+						finish();
+					} else {
+						mHandler.sendEmptyMessage(1);
+					}
 				}
 			});
 			t.start();
 		}
+	}
+
+	private void updateFace() {
+		progressBar.setVisibility(View.GONE);
+		imageView.setVisibility(View.GONE);
 	}
 
 	@Override
