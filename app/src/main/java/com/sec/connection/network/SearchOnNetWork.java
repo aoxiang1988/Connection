@@ -60,7 +60,7 @@ public class SearchOnNetWork extends Activity {
 	 * http://www.2cto.com/kf/201605/504920.html   ***************/
 
 	private ListView mSearchResult = null;
-	private static AutoCompleteTextView mTextViewMusicName;
+	private AutoCompleteTextView mTextViewMusicName;
 	private static String ACTION_START_WEB_PLAY = "com.example.action.ACTION_START_WEB_PLAY";
 	private static Thread thread;
 	private static final int DRAW_LIST = 1;
@@ -128,14 +128,14 @@ public class SearchOnNetWork extends Activity {
 		/*
 		* */
 		LocationManager locationManager;
-		String context = Context.LOCATION_SERVICE;
-		locationManager = (LocationManager) getSystemService(context);
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setAltitudeRequired(false);
 		criteria.setBearingRequired(false);
 		criteria.setCostAllowed(false);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
+		assert locationManager != null;
 		String provider = locationManager.getBestProvider(criteria,
 				true);
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -153,29 +153,28 @@ public class SearchOnNetWork extends Activity {
 		updateWithNewLocation(location);
 
 
-		Button mSearchButton = (Button) findViewById(R.id.search);
-		mSearchResult = (ListView)findViewById(R.id.serachresult);
-		mTextViewMusicName = (AutoCompleteTextView)findViewById(R.id.getsearchmusicname);
+		Button mSearchButton = findViewById(R.id.search);
+		mSearchResult = findViewById(R.id.serachresult);
+		mTextViewMusicName = findViewById(R.id.getsearchmusicname);
 		mSearchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				assert inputMethodManager != null;
 				inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-
 				try {
 					mSearchMusicName = URLEncoder.encode(mTextViewMusicName.getText().toString(), "utf8");
+					if(!Objects.equals(mPreSearchMusic, mSearchMusicName)){
+						start = 0;
+						if(list != null)
+							list.clear();
+						mPreSearchMusic = mSearchMusicName;
+						searchmusic();
+					} else
+						searchmusic();
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				if(!Objects.equals(mPreSearchMusic, mSearchMusicName)){
-					start = 0;
-					if(list != null)
-						list.clear();
-					mPreSearchMusic = mSearchMusicName;
-					searchmusic();
-				} else
-					searchmusic();
 			}
 		});
 	}
@@ -187,7 +186,7 @@ public class SearchOnNetWork extends Activity {
 	
 	protected void searchmusic() {
 		// TODO Auto-generated method stub
-		thread = new Thread(dosearchmusic);
+		thread = new Thread(DoSearchMusic);
 		thread.start();
 	}
 
@@ -229,12 +228,12 @@ public class SearchOnNetWork extends Activity {
 				+ addressStr);
 	}
 
-	Runnable dosearchmusic = new Runnable() {
+	Runnable DoSearchMusic = new Runnable() {
 		Document document = null;
 		public void run() {
 			// TODO Auto-generated method stub
+			find = false;
 			try {
-				find = false;
 				String search_music = "http://music.baidu.com/search?key="+ mSearchMusicName +"&start=" + start + "&size=20&third_type=0";
 				if(!find){
 					document = Jsoup.connect(search_music).data("query", "Java").timeout(5000).get();

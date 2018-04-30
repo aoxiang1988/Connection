@@ -30,7 +30,6 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ArtistMusicListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link ArtistMusicListFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -88,9 +87,9 @@ public class ArtistMusicListFragment extends BaseFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        getartist_map();
         mList = BaseListInfo.getInstance().getList();
         mMusicName = new String[mList.size()];
+        getartist_map();
     }
 
     @Override

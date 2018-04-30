@@ -356,14 +356,14 @@ public class PlayerDialog extends DialogFragment {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.folder_path_item, null);
                 this.convertView = convertView;
 		    }
-			TextView folder_name = convertView.findViewById(R.id.folder_name);
+			TextView folder_name = this.convertView.findViewById(R.id.folder_name);
 
-			TextView music_num = convertView.findViewById(R.id.folder_music_no);
+			TextView music_num = this.convertView.findViewById(R.id.folder_music_no);
 
-			TextView folder_path = convertView.findViewById(R.id.folder_path);
+			TextView folder_path = this.convertView.findViewById(R.id.folder_path);
 			folder_path.setText(mPathListForDialog.get(position));
 
-			CheckBox folder_check_box = convertView.findViewById(R.id.folder_path_checkBox);
+			CheckBox folder_check_box = this.convertView.findViewById(R.id.folder_path_checkBox);
 
 			String new_path = mPathListForDialog.get(position).replace("0", "@");
 			String split_path[] = new_path.split("@");
@@ -376,7 +376,7 @@ public class PlayerDialog extends DialogFragment {
 				folder_check_box.setChecked(false);
 			}
 
-			return convertView;
+			return this.convertView;
 		}
 	}
 
