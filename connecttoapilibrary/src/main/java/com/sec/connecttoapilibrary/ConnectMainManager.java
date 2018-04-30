@@ -3,17 +3,16 @@ package com.sec.connecttoapilibrary;
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/4/10.
  */
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
-import com.sec.connecttoapilibrary.onlinefm.FMListData;
-import com.sec.connecttoapilibrary.onlinefm.MainOnLineInfoManager;
-import com.sec.connecttoapilibrary.onlinefm.NewFMListData;
-import com.sec.connecttoapilibrary.onlinefm.abstructObserver.AbsTractOnLineLiveRadioInfo;
-import com.sec.connecttoapilibrary.onlinefm.liveRadioData.OnLineRadioPattern;
-import com.sec.connecttoapilibrary.onlinefm.liveRadioData.Station;
-import com.sec.connecttoapilibrary.onlinefm.liveRadioData.StationProgram;
+import com.sec.connecttoapilibrary.qtapitest.FMListData;
+import com.sec.connecttoapilibrary.qtapitest.MainOnLineInfoManager;
+import com.sec.connecttoapilibrary.qtapitest.NewFMListData;
+import com.sec.connecttoapilibrary.qtapitest.abstructObserver.AbsTractOnLineLiveRadioInfo;
+import com.sec.connecttoapilibrary.qtapitest.liveRadioData.OnLineRadioPattern;
+import com.sec.connecttoapilibrary.qtapitest.liveRadioData.Station;
+import com.sec.connecttoapilibrary.qtapitest.liveRadioData.StationProgram;
 
 import java.util.List;
 import java.util.Map;

@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -16,7 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -39,8 +40,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +59,14 @@ public class SearchOnNetWork extends Activity {
 	 * http://blog.csdn.net/kieven2008/article/details/8210737 maybe need
 	 * http://www.2cto.com/kf/201605/504920.html   ***************/
 
-	private ListView searchresult = null;
-	private static AutoCompleteTextView textviewmusicname;
+	private ListView mSearchResult = null;
+	private static AutoCompleteTextView mTextViewMusicName;
 	private static String ACTION_START_WEB_PLAY = "com.example.action.ACTION_START_WEB_PLAY";
 	private static Thread thread;
 	private static final int DRAW_LIST = 1;
 	private int start = 0;//伪翻页
-	private String presearchmusci = null;
-	private String getsearchmusicname = null;
+	private String mPreSearchMusic = null;
+	private String mSearchMusicName = null;
 
 	public static MainService mService = null;
 
@@ -68,7 +74,7 @@ public class SearchOnNetWork extends Activity {
 		mService = service;
 	}
 
-	int netpostiton;
+	int mNetPosition;
 	String url;
 	List<Audio> list = new ArrayList<>();
 	Bundle bundle = new Bundle();
@@ -83,16 +89,16 @@ public class SearchOnNetWork extends Activity {
 					UserAdapter adapter = new UserAdapter(getApplicationContext(), R.layout.listitem, list, 1);
 					adapter.notifyDataSetChanged();
 					start = start + 20;
-					searchresult.setAdapter(adapter);
-					searchresult.setOnItemClickListener(new OnItemClickListener() {
+					mSearchResult.setAdapter(adapter);
+					mSearchResult.setOnItemClickListener(new OnItemClickListener() {
 
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1,
 												int arg2, long arg3) {
 							// TODO Auto-generated method stub
 							Intent intent = new Intent(ACTION_START_WEB_PLAY);
-							netpostiton = arg2;
-							url = list.get(netpostiton).getNetUrl();
+							mNetPosition = arg2;
+							url = list.get(mNetPosition).getNetUrl();
 							intent.putExtra("music_url", url);
 							intent.setClass(SearchOnNetWork.this, PlayWebActivity.class);
 							startActivity(intent);
@@ -147,10 +153,10 @@ public class SearchOnNetWork extends Activity {
 		updateWithNewLocation(location);
 
 
-		Button searchbutton = (Button) findViewById(R.id.search);
-		searchresult = (ListView)findViewById(R.id.serachresult);
-		textviewmusicname = (AutoCompleteTextView)findViewById(R.id.getsearchmusicname);
-		searchbutton.setOnClickListener(new OnClickListener() {
+		Button mSearchButton = (Button) findViewById(R.id.search);
+		mSearchResult = (ListView)findViewById(R.id.serachresult);
+		mTextViewMusicName = (AutoCompleteTextView)findViewById(R.id.getsearchmusicname);
+		mSearchButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -158,15 +164,15 @@ public class SearchOnNetWork extends Activity {
 
 
 				try {
-					getsearchmusicname = URLEncoder.encode(textviewmusicname.getText().toString(), "utf8");
+					mSearchMusicName = URLEncoder.encode(mTextViewMusicName.getText().toString(), "utf8");
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				if(!Objects.equals(presearchmusci, getsearchmusicname)){
+				if(!Objects.equals(mPreSearchMusic, mSearchMusicName)){
 					start = 0;
 					if(list != null)
 						list.clear();
-					presearchmusci = getsearchmusicname;
+					mPreSearchMusic = mSearchMusicName;
 					searchmusic();
 				} else
 					searchmusic();
@@ -229,9 +235,9 @@ public class SearchOnNetWork extends Activity {
 			// TODO Auto-generated method stub
 			try {
 				find = false;
-				String searchmusic = "http://music.baidu.com/search?key="+ getsearchmusicname +"&start=" + start + "&size=20&third_type=0";
+				String search_music = "http://music.baidu.com/search?key="+ mSearchMusicName +"&start=" + start + "&size=20&third_type=0";
 				if(!find){
-					document = Jsoup.connect(searchmusic).data("query", "Java").timeout(5000).get();
+					document = Jsoup.connect(search_music).data("query", "Java").timeout(5000).get();
 					Elements songTitles = document.select("span.song-title");
 					Elements songArtisters = document.select("span.singer");
 		            Elements songInfos;
@@ -259,4 +265,28 @@ public class SearchOnNetWork extends Activity {
 			}
 		}
 	};
+
+	/**url 转 bitmap**/
+	private Bitmap getBitmap(String url) {
+		Bitmap bm = null;
+		try {
+			URL iconUrl = new URL(url);
+			URLConnection conn = iconUrl.openConnection();
+			HttpURLConnection http = (HttpURLConnection) conn;
+
+			int length = http.getContentLength();
+
+			conn.connect();
+			// 获得图像的字符流
+			InputStream is = conn.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is, length);
+			bm = BitmapFactory.decodeStream(bis);
+			bis.close();
+			is.close();// 关闭流
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bm;
+	}
 }

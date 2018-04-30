@@ -38,6 +38,8 @@ public class PlayWebActivity extends AppCompatActivity {
             switch(msg.what){
                 case SET_MAIN_VIEW:
                     mWebMusicPic.setImageBitmap(bitmap);
+                    thread.interrupt();
+                    thread = null;
                     break;
             }
         }
@@ -62,7 +64,7 @@ public class PlayWebActivity extends AppCompatActivity {
             }
         }
     };
-
+    private Thread thread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class PlayWebActivity extends AppCompatActivity {
 //        settings.setJavaScriptEnabled(true);
 //        playweb.loadUrl(current_url);
 
-        Thread thread = new Thread(dosearchmusic);
+        thread = new Thread(dosearchmusic);
         thread.start();
     }
 

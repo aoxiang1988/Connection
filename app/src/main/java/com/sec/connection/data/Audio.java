@@ -7,7 +7,9 @@ import android.provider.MediaStore;
 
 import com.sec.connection.view.MusicImageResource;
 
-public class Audio {
+import java.io.Serializable;
+
+public class Audio implements Serializable {
 
     public String[] info = new String[6];
 	private String mTitle , 
