@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Local>
+    <item position = "广东">
+        <station tag = "0" name = "广播电视台股市广播" channel="9530"/>
+        <station tag = "0" name = "珠江经济电台" channel="9740"/>
+        <station tag = "0" name = "广播电视台文体广播" channel="10770"/>
+        <station tag = "0" name = "广州新闻资讯广播" channel="9620"/>
+        <station tag = "0" name = "羊城交通台" channel="10520"/>
+        <station tag = "0" name = "新闻广播" channel="9140"/>
+        <station tag = "0" name = "中山电台快乐888" channel="8880"/>
+        <station tag = "0" name = "广州交通广播" channel="10610"/>
+        <station tag = "0" name = "佛山电台真爱946" channel="9060"/>
+        <station tag = "0" name = "东莞电台畅享1075" channel="10750"/>
+        <station tag = "0" name = "鹤山电台" channel="10470"/>
+        <station tag = "0" name = "潮州戏曲广播" channel="10750"/>
+        <station tag = "0" name = "东莞电台阳光1008" channel="10080"/>
+        <station tag = "0" name = "东莞电台声动104" channel="1040"/>
+        <station tag = "0" name = "广州汽车音乐电台" channel="10270"/>
+        <station tag = "0" name = "城市之声" channel="10380"/>
+        <station tag = "0" name = "深圳先锋898" channel="8980"/>
+        <station tag = "0" name = "电台优悦广播" channel="10570"/>
+        <station tag = "0" name = "广州MYFM 88.0" channel="8800"/>
+        <station tag = "0" name = "电台优悦广播" channel="10570"/>
+        <station tag = "0" name = "电台优悦广播" channel="10570"/>
+        <station tag = "0" name = "电台优悦广播" channel="10570"/>
+    </item>
+</Local>

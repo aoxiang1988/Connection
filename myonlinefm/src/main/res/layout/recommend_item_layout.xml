@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/navigate"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bg_pressed"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/recmmend_name"
+                style="@style/RobotoCondensedRegularFontStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:text="精品"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/navigate_bar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                app:srcCompat="@drawable/filter_button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/rLay1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:gravity="start"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_pressed"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/recmmend1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="icon"
+                    android:src="@drawable/hybrid_radio_dns_img" />
+
+                <TextView
+                    android:id="@+id/recmmend1_text"
+                    style="@style/RobotoCondensedRegularFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="推荐1"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rLay2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_pressed"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/recmmend2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="icon"
+                    android:layout_gravity="center"
+                    android:src="@drawable/hybrid_radio_dns_img" />
+
+                <TextView
+                    android:id="@+id/recmmend2_text"
+                    style="@style/RobotoCondensedRegularFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="推荐2"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rLay3"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_pressed"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/recmmend3"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="icon"
+                    android:layout_gravity="center"
+                    android:src="@drawable/hybrid_radio_dns_img" />
+
+                <TextView
+                    android:id="@+id/recmmend3_text"
+                    style="@style/RobotoCondensedRegularFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="推荐3"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/black_40" />
+
+</android.support.constraint.ConstraintLayout>

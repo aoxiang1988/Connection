@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tab_controller_tab_top_divider_height">1px</dimen>
+    <dimen name="about_radio_badge_margin_start">24dp</dimen>
+    <dimen name="multi_window_min_height">280dp</dimen>
+    <dimen name="multi_window_min_width">280dp</dimen>
+    <dimen name="about_app_info_btn_radius">15dp</dimen>
+    <dimen name="list_player_controller_height">136dp</dimen>
+    <dimen name="list_player_progressbar_layout_height">28dp</dimen>
+    <dimen name="list_player_PlayerPlayTimeTextView_height">16dp</dimen>
+    <dimen name="list_player_PlayerPlayTimeTextView_size">12sp</dimen>
+    <dimen name="list_player_controller_play_pause_btn_margin_bottom">18dp</dimen>
+    <dimen name="list_player_progrssbar_margin_top">6dp</dimen>
+    <dimen name="list_player_controller_prev_next_btn_height">40dp</dimen>
+    <dimen name="list_player_controller_prev_next_btn_width">40dp</dimen>
+    <dimen name="list_player_controller_play_pause_btn_margin_right">17dp</dimen>
+    <dimen name="list_player_controller_play_pause_btn_height">56dp</dimen>
+    <dimen name="list_player_controller_play_pause_btn_width">56dp</dimen>
+    <dimen name="list_player_controller_play_pause_btn_margin_left">17</dimen>
+    <dimen name="tab_controller_tab_bottom_divider_height">0.75dp</dimen>
+    <dimen name="list_player_PlayerPlayTimeTextView_margin_start">28.5dp</dimen>
+    <dimen name="dialog_body_progress_margin_start">16dp</dimen>
+    <dimen name="stations_list_row_min_height">67dp</dimen>
+    <dimen name="stations_txtChanFreq_text_size">17sp</dimen>
+    <dimen name="tab_controller_layout_elevation">2dp</dimen>
+    <dimen name="no_scroll_bar_item_height">40dp</dimen>
+    <dimen name="top_bar_recording_controller_width">165dp</dimen>
+    <dimen name="top_bar_recording_controller_height">32dp</dimen>
+    <dimen name="top_bar_recording_controller_button_width">55dp</dimen>
+</resources>

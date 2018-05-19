@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@android:id/background"
+        android:height="4dp"
+        android:gravity="bottom">
+        <shape>
+            <corners
+                android:radius="50dp"/>
+            <gradient
+                android:startColor="@color/net_fm_back_b"
+                android:type="radial"
+                android:gradientRadius="30dp"/>
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/about_radio_badge_margin_start"
+    android:paddingRight="@dimen/about_radio_badge_margin_start">
+
+    <TextView
+        android:id="@+id/simple_spinner_text"
+        android:layout_width="match_parent"
+        android:layout_height="29.25dp"
+        android:text="TextView"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_controller_tab_bottom_divider_height"
+        android:background="@color/bottom_line_color" />
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Local>
+    <item position = "北京">
+        <station tag = "0" name = "交通广播" channel="10390"/>
+        <station tag = "0" name = "体育广播" channel="10250"/>
+        <station tag = "0" name = "音乐广播" channel="9740"/>
+        <station tag = "0" name = "文艺广播" channel="8760"/>
+        <station tag = "0" name = "外语广播" channel="9230"/>
+        <station tag = "0" name = "城市广播" channel="10730"/>
+        <station tag = "0" name = "青年广播" channel="9820"/>
+        <station tag = "0" name = "好音乐959" channel="9590"/>
+        <station tag = "0" name = "阳光调频FM98.6" channel="9860"/>
+    </item>
+</Local>

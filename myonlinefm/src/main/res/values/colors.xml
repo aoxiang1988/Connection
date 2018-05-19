@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="color1">#ffffffff</color>
+    <color name="no_color">#00000000</color>
+    <!-- Net FM color-->
+    <color name="net_fm_back_b">#ff8c69</color>
+    <color name="net_fm_back_a">#87CEFA</color>
+    <color name="net_fm_back_c">#00FF7F</color>
+    <color name="net_fm_back_d">#FFFF00</color>
+    <color name="net_fm_back_e">#0feef0</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="action_overlay">#26ffffff</color>
+    <color name="tab_lucency_bg_color">#33F5FFFA</color>
+    <color name="channel_name_text">#838688</color>
+
+    <color name="playingcolor">#0bbfe6</color>
+    <color name="noplaycolor">#86898b</color>
+    <color name="widget_no_play">#ffffff</color>
+    <color name="group_item_defult">#7aa5ff62</color>
+    <color name="windowBackground">#eaffbb33</color>
+    <color name="radiotext">#0bbfd6</color>
+    <color name="c_start">#d9FFEBCD</color>
+    <color name="c_center">#d9FFDEAD</color>
+    <color name="c_end">#d9FFEBCD</color>
+    <color name="lrc_back">#760000ff</color>
+    <color name="black">#aa000000</color>
+    <color name="flingview_borad">#8A2BE2</color>
+    <color name="flingview_press">#00ffffff</color>
+    <color name="app_back_ground">#00ffffff</color>
+    <color name="recodings_controller_bg">#3386a6</color>
+    <color name="white_tint_color">#ffffff</color>
+    <color name="bottom_line_color">#e6e6e6</color>
+    <color name="black_75">#75000000</color>
+    <color name="black_60">#60000000</color>
+    <color name="channel_frequency_text">#fefefe</color>
+    <color name="tab_unselected">#969696</color>
+    <color name="main_bg_color">#fafafa</color>
+    <color name="details_title">#252525</color>
+    <color name="black_40">#40000000</color>
+    <color name="progress_thumb_ripple_color">#29000000</color>
+    <color name="tab_selected">#48b2e5</color>
+</resources>

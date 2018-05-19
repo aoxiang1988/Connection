@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/tab_boutique_head"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:clickable="true">
+        <TextView
+            android:id="@+id/tab_boutique_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="classify"
+            android:focusable="false"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="15sp"/>
+        <ImageView
+            android:id="@+id/tab_boutique_title_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:focusable="false"
+            android:src="@drawable/drop_down"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

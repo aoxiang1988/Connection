@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    tools:context="com.sec.myonlinefm.classificationprogram.InfoContextActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40.75dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+            <include
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                layout="@layout/tab_classify_dialog_layout" />
+            <View
+                android:layout_width="@dimen/tab_controller_tab_bottom_divider_height"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/bottom_line_color" />
+            <include
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                layout="@layout/tab_boutique_dialog_layout"
+                android:visibility="gone"/>
+            <View
+                android:layout_width="@dimen/tab_controller_tab_bottom_divider_height"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/bottom_line_color"
+                android:visibility="gone"/>
+            <include
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                layout="@layout/tab_select_dialog_layout"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_controller_tab_bottom_divider_height"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/bottom_line_color" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/classify_main_context"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="15dp">
+        <com.sec.myonlinefm.defineview.RefreshListView
+            android:id="@+id/classify_context_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"/>
+        <View
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_controller_tab_bottom_divider_height"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/bottom_line_color" />
+    </FrameLayout>
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/classify_main_context"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:includeFontPadding="false"
+            android:gravity="center"
+            android:text="顶部下拉上一页"
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
+        <View
+            android:layout_width="@dimen/tab_controller_tab_bottom_divider_height"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/bottom_line_color" />
+        <TextView
+            android:id="@+id/page_num_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:includeFontPadding="false"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="page num"
+            android:textColor="@color/black"/>
+        <View
+            android:layout_width="@dimen/tab_controller_tab_bottom_divider_height"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/bottom_line_color" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:includeFontPadding="false"
+            android:gravity="center"
+            android:text="底部上拉下一页"
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

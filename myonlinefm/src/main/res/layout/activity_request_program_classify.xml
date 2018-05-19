@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sec.myonlinefm.classificationprogram.RequestProgramClassifyActivity">
+    <FrameLayout
+        android:id="@+id/content"
+        android:paddingTop="?android:attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp">
+        <fragment
+            android:id="@+id/main_online_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.sec.myonlinefm.classificationprogram.mainfacefragment.OnLineHomeFragment"
+            tools:layout="@layout/fragment_on_line_home" />
+    </FrameLayout>
+    <!--<ImageView-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_marginBottom="60dp"-->
+        <!--android:elevation="2px"-->
+        <!--android:background="@color/black_75"/>-->
+    <include
+        layout="@layout/player_controller_layout"/>
+</merge>

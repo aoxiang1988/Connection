@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:id="@+id/group_icon"
+        android:layout_width="30dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center|left"
+        android:src="@drawable/hybrid_radio_on_star" />
+
+    <TextView
+        android:id="@+id/group_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:ellipsize="marquee"
+        android:gravity="center|left"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:singleLine="true"
+        android:text="@string/tags_music_title"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:textColor="@color/details_title"/>
+    <ImageView
+        android:id="@+id/group_down"
+        android:layout_width="30dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center|right"
+        android:src="@drawable/drop_down" />
+</FrameLayout>

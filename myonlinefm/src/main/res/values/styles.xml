@@ -1,0 +1,84 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="take_photo_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
+    </style>
+
+    <style name="CreatDialog" parent="Base.ThemeOverlay.AppCompat.Dark">
+        <item name="android:windowBackground">@color/color1</item>
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:backgroundDimEnabled">true</item><!-- 模糊 -->
+    </style>
+
+    <style name="NetFMThem" parent="Base.Theme.AppCompat.Light">
+        <item name="android:colorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:tabWidgetStyle">@style/tab_widget_style</item>
+        <!--<item name="android:actionModeCloseButtonStyle">@style/ActionbarIconDisable</item>-->
+        <!--<item name="android:actionBarStyle">@style/HybridRadioActionBar</item>-->
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="android:actionMenuTextColor">@color/radiotext</item>
+        <item name="android:actionBarSize">40dp</item>
+        <item name="actionBarDivider">@drawable/tab_widget_divider</item>
+        <item name="colorControlActivated">?android:colorControlActivated</item>
+        <!--<item name="editTextStyle">@style/EditTextSamsungStyle</item>-->
+        <item name="android:actionOverflowButtonStyle">@style/Overflow</item>
+        <!--<item name="android:tabWidgetStyle">@style/TabWidgetBackground</item>-->
+    </style>
+    <style name="tab_widget_style" parent="android:Widget.DeviceDefault.Light.TabWidget">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="Overflow" parent="Base.Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.ActionBarStyle" parent="android:Widget.ActionBar">
+        <!-- 半透明背景，需要开启actionbar悬浮 -->
+        <item name="android:contentInsetStart">0dp</item>
+        <item name="android:contentInsetEnd">0dp</item>
+        <item name="android:background">@drawable/titlebar_bg</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:height">40dp</item>
+    </style>
+
+    <style name="RobotoCondensedRegularFontStyle">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="player_seekbar">
+        <item name="android:gravity">center</item>
+        <item name="android:progressBackgroundTint">@color/net_fm_back_c</item>
+        <item name="android:progressTint">@color/net_fm_back_c</item>
+        <item name="android:secondaryProgressTint">@color/net_fm_back_b</item>
+        <item name="android:thumbTint">@color/net_fm_back_b</item>
+    </style>
+
+    <style name="search_view_style" parent="Widget.AppCompat.Light.SearchView">
+    </style>
+
+    <!--自定义MLImageView的属性 加上了自己的前缀，防止和其他自定义控件冲突-->
+    <declare-styleable name="MLImageView">
+        <attr name="ml_border_color" format="color" />
+        <attr name="ml_border_width" format="dimension" />
+        <attr name="ml_press_alpha" format="integer" />
+        <attr name="ml_press_color" format="color" />
+        <attr name="ml_radius" format="dimension" />
+        <attr name="ml_shape_type" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

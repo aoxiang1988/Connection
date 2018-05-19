@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MyOnLineFM</string>
+    <string name="tts_previous_button">previous button</string>
+    <string name="tts_Next_button">next button</string>
+    <string name="tts_play_button">play button</string>
+    <string name="item_thumb">item thumb</string>
+    <string name="desc_add_favorite">desc add favorite</string>
+    <string name="dialog_scan">scan</string>
+    <string name="tags_music_title">music title</string>
+    <string name="cancel">cancel</string>
+    <string name="ok">ok</string>
+    <string name="about">about</string>
+    <string name="desc_stop">stop</string>
+    <string name="desc_cancel">cancel</string>
+    <string name="classify_tab">classify</string>
+    <string name="recommend_tab">recommend</string>
+    <string name="boutique_tab">boutique</string>
+    <string name="radio_live_tab">radio live</string>
+    <string name="desc_pause">pause</string>
+    <string name="scan">Scan</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

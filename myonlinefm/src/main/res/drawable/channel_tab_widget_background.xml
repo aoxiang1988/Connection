@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:height="@dimen/tab_controller_tab_top_divider_height"
+        android:drawable="@drawable/tab_widget_divider"
+        android:gravity="bottom">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/net_fm_back_b" />
+        </shape>
+    </item>
+</layer-list>

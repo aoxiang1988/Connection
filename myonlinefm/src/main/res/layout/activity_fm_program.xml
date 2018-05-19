@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="?android:attr/actionBarSize">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/station_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/about_radio_badge_margin_start"
+            android:layout_marginEnd="@dimen/about_radio_badge_margin_start">
+
+            <ImageView
+                android:id="@+id/station_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/hybrid_radio_dns_img"/>
+
+            <LinearLayout
+                android:id="@+id/playe_station"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center"
+                style="@style/RobotoCondensedRegularFontStyle"
+                android:background="@drawable/about_app_info_background"
+                android:minHeight="23dp"
+                android:paddingBottom="2dp"
+                android:paddingEnd="18dp"
+                android:paddingStart="18dp"
+                android:paddingTop="2dp">
+                <TextView
+                    android:id="@+id/station_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="天津相声广播"
+                    android:gravity="center"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/station_freq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="92.1MHz"
+                    android:gravity="center"
+                    android:textSize="20dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/program_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/voice_list_clip_panel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_player_controller_height"
+            android:background="@color/recodings_controller_bg"
+            android:translationZ="20dp"
+            android:visibility="gone">
+
+            <!-- player & trim seekbar -->
+            <SeekBar
+                android:id="@+id/progressbar"
+                style="@style/player_seekbar"
+                android:layout_width="match_parent"
+                android:layout_gravity="top"
+                android:layout_height="@dimen/list_player_progressbar_layout_height"
+                android:paddingStart="@dimen/list_player_PlayerPlayTimeTextView_margin_start"
+                android:paddingEnd="@dimen/list_player_PlayerPlayTimeTextView_margin_start"
+                android:focusable="true"/>
+            <!-- Player State Control Buttons -->
+            <FrameLayout
+                android:id="@+id/idle_playerController"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/list_player_PlayerPlayTimeTextView_margin_start"
+                android:paddingEnd="@dimen/list_player_PlayerPlayTimeTextView_margin_start"
+                app:layout_constraintTop_toBottomOf="@id/progressbar"
+                >
+
+                <!-- Current Played Time -->
+                <TextView
+                    android:id="@+id/PlayerPlayTimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/list_player_PlayerPlayTimeTextView_height"
+                    android:layout_gravity="start"
+                    android:shadowColor="@android:color/black"
+                    android:text="00:00"
+                    android:shadowDy="2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/list_player_PlayerPlayTimeTextView_size" />
+
+                <!-- Full Time -->
+                <TextView
+                    android:id="@+id/PlayerFullTimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/list_player_PlayerPlayTimeTextView_height"
+                    android:layout_gravity="end"
+                    android:shadowDy="2"
+                    android:text="00:00"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/list_player_PlayerPlayTimeTextView_size" />
+            </FrameLayout>
+            <LinearLayout
+                android:id="@+id/relative_play_pause_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/list_player_controller_play_pause_btn_margin_bottom"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/idle_playerController"
+                android:layout_marginTop="@dimen/list_player_progrssbar_margin_top">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/online_station_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Station Name"
+                        android:textColor="@color/white"
+                        android:singleLine="true"
+                        android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/online_program_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Current Program"
+                        android:textColor="@color/white"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+                <ImageButton
+                    android:id="@+id/prev_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/tts_previous_button"
+                    android:focusable="true"
+                    android:src="@drawable/privious_button" />
+
+                <ImageButton
+                    android:id="@+id/play_pause_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:contentDescription="@string/tts_play_button"
+                    android:focusable="true"
+                    android:src="@drawable/listplayer_control_play_btn"
+                    android:visibility="visible" />
+                <ImageButton
+                    android:id="@+id/next_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/tts_Next_button"
+                    android:focusable="true"
+                    android:src="@drawable/next_button" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>

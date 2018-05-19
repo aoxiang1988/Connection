@@ -3,6 +3,7 @@ package com.sec.connection;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -850,6 +851,12 @@ public class MainActivity extends AppCompatActivity {
 			startActivity(intent);
 		}
 		if(id == R.id.test){
+
+			ComponentName componentName = new ComponentName("com.sec.myonlinefm", "com.sec.myonlinefm.MainActivity");
+			Intent i = new Intent();
+			i.setComponent(componentName);
+			startActivity(i);
+
 			try {
 				InputStream is = getAssets().open("TianJin.xml");
 				PullLocalInfoParser parser = new PullLocalInfoParser();
