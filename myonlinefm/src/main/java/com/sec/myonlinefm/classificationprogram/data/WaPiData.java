@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 
 public class WaPiData {
     private int category_id; //分类id
-    private Bitmap cover; //专辑头像
+    private String cover; //专辑头像
     private int id; //专辑id
     private int rank; //排名
     private String update_time; //更新时间
@@ -27,7 +27,7 @@ public class WaPiData {
         this.id = id;
     }
 
-    public void setCover(Bitmap cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
@@ -55,7 +55,7 @@ public class WaPiData {
         return rank;
     }
 
-    public Bitmap getCover() {
+    public String getCover() {
         return cover;
     }
 

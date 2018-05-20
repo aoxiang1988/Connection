@@ -14,7 +14,7 @@ public class SearchType {
         private String freqs;	//调频，暂时不用
         private String category_name;	//所属分类名字
         private int category_id;	//所属分类id
-        private Bitmap cover;	//配图
+        private String cover;	//配图
         private String keywords;	//搜索关键字
 
         public void setChannelLiveId(int id){
@@ -59,10 +59,10 @@ public class SearchType {
             return category_id;
         }
 
-        public void setChannelLiveCover(Bitmap cover){
+        public void setChannelLiveCover(String cover){
             this.cover = cover;
         }
-        public Bitmap getChannelLiveCover(){
+        public String getChannelLiveCover(){
             return cover;
         }
 
@@ -81,7 +81,7 @@ public class SearchType {
         private String category_name;	//所属分类名字
         private int category_id;	//所属分类id
         private String type;	//类型
-        private Bitmap cover;	//配图
+        private String cover;	//配图
 
         public void setProgramLiveId(int id){
             this.id = id;
@@ -125,10 +125,10 @@ public class SearchType {
             return category_id;
         }
 
-        public void setProgramLiveCover(Bitmap cover){
+        public void setProgramLiveCover(String cover){
             this.cover = cover;
         }
-        public Bitmap getProgramLiveCover(){
+        public String getProgramLiveCover(){
             return cover;
         }
 

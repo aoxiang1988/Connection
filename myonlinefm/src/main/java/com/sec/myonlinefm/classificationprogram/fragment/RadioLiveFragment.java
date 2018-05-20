@@ -1,7 +1,10 @@
 package com.sec.myonlinefm.classificationprogram.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.OnLineStationsActivity;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
 import com.sec.myonlinefm.classificationprogram.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.RecommendsData;
@@ -81,7 +85,8 @@ public class RadioLiveFragment extends Fragment implements View.OnClickListener 
                     for(int i = 0; i < mWaPiDataList.size(); i++) {
                         View view = LayoutInflater.from(mContext).inflate(R.layout.demand_channel_item, null);
                         ImageView imageView = view.findViewById(R.id.demand_channel_pic);
-                        imageView.setImageBitmap(mWaPiDataList.get(i).getCover());
+                        UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(imageView, mPlayer, 60, 60);
+                        asyncTask.execute(mWaPiDataList.get(i).getCover());
                         TextView titleView = view.findViewById(R.id.demand_channel_title);
                         titleView.setText(mWaPiDataList.get(i).getName());
                         TextView descView = view.findViewById(R.id.demand_channel_description);

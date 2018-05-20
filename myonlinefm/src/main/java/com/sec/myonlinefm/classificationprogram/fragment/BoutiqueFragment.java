@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
 import com.sec.myonlinefm.classificationprogram.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify;
@@ -276,7 +277,8 @@ public class BoutiqueFragment extends Fragment {
             } else holder = (ChildViewHolder) convertView.getTag();
 
             if(mRankListMap.get(key) != null) {
-                holder.imageView.setImageBitmap(mRankListMap.get(key).get(childPosition).getCover());
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.imageView, mPlayer, 60, 60);
+                asyncTask.execute(mRankListMap.get(key).get(childPosition).getCover());
                 holder.childMusicName.setText(mRankListMap.get(key).get(childPosition).getName());
                 holder.descView.setText(mRankListMap.get(key).get(childPosition).getDesc());
             }

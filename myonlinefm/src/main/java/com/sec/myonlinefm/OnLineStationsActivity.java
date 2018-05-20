@@ -446,8 +446,11 @@ public class OnLineStationsActivity extends AppCompatActivity implements Service
             } else {
                 holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
             }
-            holder.imgProgramIconLayout.setBackground(new BitmapDrawable(getResources(), mStations.get(position).getStationThumbs()));
-//            if(mStations.get(position).getStationFreq() == null || Objects.equals(mStations.get(position).getStationFreq(), "")) {
+//            holder.imgProgramIconLayout.setBackground(new BitmapDrawable(getResources(), mStations.get(position).getStationThumbs()));
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mContext, holder.imgProgramIconLayout, mPlayer.getMMainInfoCode(), false, 60, 60);
+            asyncTask.execute(mStations.get(position).getStationThumbs());
+
+            //            if(mStations.get(position).getStationFreq() == null || Objects.equals(mStations.get(position).getStationFreq(), "")) {
 //                holder.channelFreq.setVisibility(View.INVISIBLE);
 //            }
             holder.channelFreq.setText(mStations.get(position).getStationFreq()+" MHz");

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
 import com.sec.myonlinefm.classificationprogram.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel;
@@ -252,7 +253,7 @@ public class ChannelRecommendListFragment extends Fragment {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 assert inflater != null;
-                convertView = inflater.inflate(R.layout.demand_channel_item, parent);
+                convertView = inflater.inflate(R.layout.demand_channel_item, null);
 
                 holder = new ViewHolder();
                 holder.mDemandChannelPic = convertView.findViewById(R.id.demand_channel_pic);
@@ -264,7 +265,8 @@ public class ChannelRecommendListFragment extends Fragment {
 
             } else holder = (ViewHolder) convertView.getTag();
 
-            holder.mDemandChannelPic.setImageBitmap(mDemandChannelsList.get(position).getThumbs());
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic, mPlayer, 60, 60);
+            asyncTask.execute(mDemandChannelsList.get(position).getThumbs());
 
             String isBought = "";
             if(mDemandChannelsList.get(position).getSaleType() == DemandChannel.UN_BOUGHT_SALE_TYPE) {
