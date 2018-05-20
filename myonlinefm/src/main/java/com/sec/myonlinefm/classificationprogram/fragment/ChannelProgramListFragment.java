@@ -166,7 +166,7 @@ public class ChannelProgramListFragment extends Fragment implements View.OnClick
 
     private void getClassifyContextList(int mChannelID) {
         if(mChannelID != -1) {
-            mProgramList.setOnItemClickListener(null);
+//            mProgramList.setOnItemClickListener(null);
             mPlayer.getCurrentDemandChannelPrograms(mChannelID,
                     mCurrentPage,
                     mOrder,

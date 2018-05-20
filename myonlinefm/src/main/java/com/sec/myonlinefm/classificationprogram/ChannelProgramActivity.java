@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannelPattern;
 import com.sec.myonlinefm.classificationprogram.fragment.ChannelProgramListFragment;
@@ -107,26 +108,6 @@ public class ChannelProgramActivity extends AppCompatActivity implements View.On
             topBarActionBarView.setVisibility(View.VISIBLE);
     }
 
-    private void blur(Bitmap bkg, View view) {
-        Bitmap overlay = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.translate(-view.getLeft(), -view.getTop());
-        canvas.drawBitmap(scaleBitmap(bkg, view.getMeasuredWidth(), view.getMeasuredHeight()), 0, 0, null);
-        overlay = FastBlur.doBlur(overlay, 100, true);
-        view.setBackground(new BitmapDrawable(getResources(), overlay));
-    }
-    private Bitmap scaleBitmap(Bitmap origin, int newWidth, int newHeight) {
-        if (origin == null) {
-            return null;
-        }
-        int height = origin.getHeight();
-        int width = origin.getWidth();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);// 使用后乘
-        return Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
-    }
 
     @Override
     protected void onDestroy() {
@@ -142,11 +123,24 @@ public class ChannelProgramActivity extends AppCompatActivity implements View.On
             super.handleMessage(msg);
             switch (msg.what) {
                 case UPDATE_CURRENT_DEMAND_CHANNEL_INFO:
-                    mCurrentChannelPic.setImageBitmap(currentDemandChannel.getThumbs());
-                    blur(currentDemandChannel.getThumbs(), mChannelInfoView);
+//                    mCurrentChannelPic.setImageBitmap(mPlayer.getBitmap(currentDemandChannel.getThumbs(),
+//                            100, 100));
+                    UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mCurrentChannelPic, mPlayer, 60,60);
+                    asyncTask.execute(currentDemandChannel.getThumbs());
+
+                    UpdateListViewAsyncTask asyncTaskForBlur = new UpdateListViewAsyncTask(getBaseContext(),
+                            mPlayer, mChannelInfoView, true,
+                            mChannelInfoView.getWidth(), mChannelInfoView.getHeight());
+                    asyncTaskForBlur.execute(currentDemandChannel.getThumbs());
+//                    blur(mPlayer.getBitmap(currentDemandChannel.getThumbs(),
+//                            mChannelInfoView.getWidth(), mChannelInfoView.getHeight()), mChannelInfoView);
                     mCurrentChannelDescription.setText(currentDemandChannel.getDescription());
-                    if(currentDemandChannel.getDetail().getPodCasters() != null && !currentDemandChannel.getDetail().getPodCasters().isEmpty()) {
-                        mPodCasterPic.setImageBitmap(currentDemandChannel.getDetail().getPodCasters().get(0).getImgUrl());
+                    if(currentDemandChannel.getDetail().getPodCasters() != null
+                            && !currentDemandChannel.getDetail().getPodCasters().isEmpty()) {
+//                        mPodCasterPic.setImageBitmap(mPlayer.getBitmap(currentDemandChannel.getDetail().getPodCasters().get(0).getImgUrl(),
+//                                40, 40));
+                        UpdateListViewAsyncTask asyncTaskCaster = new UpdateListViewAsyncTask(mPodCasterPic, mPlayer, 60,60);
+                        asyncTaskCaster.execute(currentDemandChannel.getDetail().getPodCasters().get(0).getImgUrl());
                         mPodCasterName.setText(currentDemandChannel.getDetail().getPodCasters().get(0).getNickName());
                     }
                     break;

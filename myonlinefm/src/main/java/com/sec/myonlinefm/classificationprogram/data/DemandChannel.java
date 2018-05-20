@@ -34,7 +34,7 @@ public class DemandChannel implements Serializable {
     private String update_time; //更新时间
     private String latest_program; //最后一个节目
     private String tags;
-    private Bitmap thumbs;
+    private String thumbs;
     private String thumbsUrl;
 
     public void setCategoryId(int category_id) {
@@ -102,7 +102,7 @@ public class DemandChannel implements Serializable {
     public void setTags(String tags) {
         this.tags = tags;
     }
-    public void setThumbs(Bitmap thumbs) {
+    public void setThumbs(String thumbs) {
         this.thumbs = thumbs;
     }
 
@@ -127,7 +127,7 @@ public class DemandChannel implements Serializable {
     public String getTags(){
         return tags;
     }
-    public Bitmap getThumbs(){
+    public String getThumbs(){
         return thumbs;
     }
 
@@ -322,7 +322,7 @@ public class DemandChannel implements Serializable {
         private int user_id; //主播qingting_id。可以用来查询主播信息
 
         private String desc; //主播简介
-        private Bitmap img_url; //主播头像。
+        private String img_url; //主播头像。
         private String nickname; //主播名字
 
         public void setId(int id) {
@@ -348,7 +348,7 @@ public class DemandChannel implements Serializable {
         public void setDesc(String desc) {
             this.desc = desc;
         }
-        public void setImgUrl(Bitmap img_url) {
+        public void setImgUrl(String img_url) {
             this.img_url = img_url;
         }
         public void setNickName(String nickname) {
@@ -358,7 +358,7 @@ public class DemandChannel implements Serializable {
         public String getDesc() {
             return desc;
         }
-        public Bitmap getImgUrl() {
+        public String getImgUrl() {
             return img_url;
         }
         public String getNickName() {

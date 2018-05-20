@@ -18,7 +18,7 @@ public class Station implements Serializable {
     private String title; //station title
     private String type ;  //classify：channel_on_demand is album；channel_live is radio
     private String update_time; //update time
-    private Bitmap thumbs; //thumbnail. if no set null，if has it likes ：small, medium, large，200，400，800(select the needed)
+    private String thumbs; //thumbnail. if no set null，if has it likes ：small, medium, large，200，400，800(select the needed)
     private String freq; //station frequency
     private int audience_count; //audience count
     private String weBoUrl; //the URL for share
@@ -56,10 +56,10 @@ public class Station implements Serializable {
         return nextProgram;
     }
 
-    public void setStationThumbs(Bitmap thumbs){
+    public void setStationThumbs(String thumbs){
         this.thumbs = thumbs;
     }
-    public Bitmap getStationThumbs(){
+    public String getStationThumbs(){
         return thumbs;
     }
 

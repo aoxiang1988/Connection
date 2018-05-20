@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.abstructObserver.OnLineInfo;
 import com.sec.myonlinefm.data.SearchType;
 import com.sec.myonlinefm.updataUIListener.ObserverUIListenerManager;
@@ -37,6 +39,7 @@ public class SearchResultListFragment extends Fragment {
     private Context mContext;
     private int UPDATE_LIST = 1;
     private int mCurrentPage = 1;
+    private OnLineFMConnectManager mPlayer;
     // TODO: Rename and change types of parameters
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
@@ -67,6 +70,7 @@ public class SearchResultListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPlayer = OnLineFMConnectManager.Companion.getMMainInfoCode();
         mUpdateOnLineInfo = new UpdateOnLineInfo(mContext);
         mUpdateOnLineInfo.addToObserverList();
     }
@@ -148,13 +152,17 @@ public class SearchResultListFragment extends Fragment {
             if(mCurrentTab == 0) {
                 SearchType.ChannelLive mChannelLive = mSearchChannelLiveList.get(position);
                 mSearchTitle.setText(mChannelLive.getChannelLiveTitle());
-                mSearch_Cover.setImageBitmap(mChannelLive.getChannelLiveCover());
+//                mSearch_Cover.setImageBitmap(mPlayer.getBitmap(mChannelLive.getChannelLiveCover(), 60, 50));
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mPlayer, 60,60);
+                asyncTask.execute(mChannelLive.getChannelLiveCover());
                 mSearchFreq.setText(String.format("%s MHz", mChannelLive.getChannelLiveFreqs()));
                 mSearchFreq.setVisibility(View.VISIBLE);
             } else if(mCurrentTab == 1) {
                 SearchType.ProgramLive mProgramLive = mSearchProgramLiveList.get(position);
                 mSearchTitle.setText(mProgramLive.getProgramLiveTitle());
-                mSearch_Cover.setImageBitmap(mProgramLive.getProgramLiveCover());
+//                mSearch_Cover.setImageBitmap(mPlayer.getBitmap(mProgramLive.getProgramLiveCover(), 60, 50));
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mPlayer, 60,60);
+                asyncTask.execute(mProgramLive.getProgramLiveCover());
             }
             return convertView;
         }

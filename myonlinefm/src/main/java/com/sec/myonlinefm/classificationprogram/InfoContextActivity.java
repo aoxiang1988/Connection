@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
+import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.defineview.NoScrollBarGridView;
 import com.sec.myonlinefm.defineview.RefreshListView;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel;
@@ -234,8 +235,9 @@ public class InfoContextActivity extends AppCompatActivity implements RefreshLis
 
             } else holder = (DemandChannelViewHolder) convertView.getTag();
 
-            holder.mDemandChannelPic.setImageBitmap(mDemandChannelsList.get(position).getThumbs());
-
+//            holder.mDemandChannelPic.setImageBitmap(mPlayer.getBitmap(mDemandChannelsList.get(position).getThumbs(), 60, 60));
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic, mPlayer, 60, 60);
+            asyncTask.execute(mDemandChannelsList.get(position).getThumbs());
             String isBought = "";
             if(mDemandChannelsList.get(position).getSaleType() == DemandChannel.UN_BOUGHT_SALE_TYPE) {
                 isBought = "[未购买]";

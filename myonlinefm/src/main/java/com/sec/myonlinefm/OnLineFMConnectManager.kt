@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
@@ -34,6 +35,11 @@ import com.sec.myonlinefm.onlineinfolistener.ObserverListenerManager
 import com.sec.myonlinefm.updataUIListener.ObserverUIListenerManager
 
 import org.json.JSONException
+import java.io.BufferedInputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLConnection
 import java.util.*
 
 /**
@@ -615,6 +621,46 @@ class OnLineFMConnectManager constructor(context: Context) {
         } else {
             String.format(Locale.US, "%.1f", freq / 100f)
         }
+    }
+
+    fun getBitmap(url : String, reqWidth : Int, reqHeight : Int) : Bitmap? {
+        if(url == null)
+            return null
+        var bm : Bitmap? = null
+        try {
+            val iconUrl : URL = URL(url)
+            val conn : URLConnection = iconUrl.openConnection()
+            val http : HttpURLConnection = conn as HttpURLConnection
+            val length : Int = http.contentLength
+            conn.connect()
+            // 获得图像的字符流
+            val inStream : InputStream = conn.getInputStream()
+            val options : BitmapFactory.Options = BitmapFactory.Options()
+            options.inPurgeable = true
+            options.inInputShareable = true
+            options.inJustDecodeBounds = false
+            options.inSampleSize = computeSampleSize(options,reqWidth,reqHeight)
+            options.inPreferredConfig = Bitmap.Config.ARGB_4444
+            val bis = BufferedInputStream(inStream, length)
+            bm = BitmapFactory.decodeStream(bis)
+            bis.close()
+            inStream.close()// 关闭流
+        } catch (e : Exception) {
+            e.printStackTrace()
+        }
+        return bm
+    }
+
+    private fun computeSampleSize(options : BitmapFactory.Options, reqWidth : Int, reqHeight : Int) : Int{
+        val width = options.outWidth
+        val height = options.outHeight
+        var inSampleSize = 1
+        if (width > reqWidth || height > reqHeight) {
+            val widthRadio = Math.round(width * 1.0f / reqWidth)
+            val heightRadio = Math.round(height * 1.0f / reqHeight)
+            inSampleSize = Math.max(widthRadio, heightRadio)
+        }
+        return inSampleSize
     }
 }
 

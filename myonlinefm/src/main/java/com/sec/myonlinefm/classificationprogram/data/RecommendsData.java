@@ -43,7 +43,7 @@ public class RecommendsData {
         private String title; //名称
         private int id; //推荐电台id
         private String thumb; //原图地址
-        private Bitmap thumbs; //节目缩略图。没有时为null，有的时候有三个字段：small, medium, large，分别代表小中大三个分辨率
+        private String thumbs; //节目缩略图。没有时为null，有的时候有三个字段：small, medium, large，分别代表小中大三个分辨率
         private String update_time; //更新时间
         private String sub_title; //副标题
         private int object_id; //recommends.detail的节目id
@@ -57,7 +57,7 @@ public class RecommendsData {
         public void setThumb(String thumb) {
             this.thumb = thumb;
         }
-        public void setThumbs(Bitmap thumbs) {
+        public void setThumbs(String thumbs) {
             this.thumbs = thumbs;
         }
         public void setUpdateTime(String update_time) {
@@ -79,7 +79,7 @@ public class RecommendsData {
         public String getThumb() {
             return thumb;
         }
-        public Bitmap getThumbs() {
+        public String getThumbs() {
             return thumbs;
         }
         public String getUpdateTime() {

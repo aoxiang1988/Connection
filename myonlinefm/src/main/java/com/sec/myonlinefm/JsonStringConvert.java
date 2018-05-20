@@ -123,7 +123,7 @@ public class JsonStringConvert {
                 station.setStationDescription(obj.getString("description"));
                 station.setStationFreq(obj.getString("freq").trim());
                 station.setStationId(obj.getInt("id"));
-                station.setStationThumbs(getBitmap(getThumb(obj)));
+                station.setStationThumbs(getThumb(obj));
                 station.setStationPlayCount(obj.getString("playcount"));
                 station.setStationTitle(obj.getString("title"));
                 station.setStationType(obj.getString("type"));
@@ -329,7 +329,7 @@ public class JsonStringConvert {
      * @param url String
      */
     public Bitmap getThumb(String url) {
-        return getBitmap(url);
+        return OnLineFMConnectManager.Companion.getMMainInfoCode().getBitmap(url, 128, 128);
     }
     //end
 
@@ -345,7 +345,7 @@ public class JsonStringConvert {
                 demand_channel.setCategoryId(obj.getInt("category_id"));
                 demand_channel.setDescription(obj.getString("description"));
                 demand_channel.setId(obj.getInt("id"));
-                demand_channel.setThumbs(getBitmap(getThumb(obj)));
+                demand_channel.setThumbs(getThumb(obj));
                 demand_channel.setProgramCount(obj.getInt("program_count"));
                 demand_channel.setPlayCount(obj.getString("playcount"));
                 demand_channel.setTitle(obj.getString("title"));
@@ -379,7 +379,7 @@ public class JsonStringConvert {
             currentDemandChannel.setOrdered(data.getInt("ordered"));
             currentDemandChannel.setSaleType(data.getInt("sale_type"));
             currentDemandChannel.setTags(data.getString("tags"));
-            currentDemandChannel.setThumbs(getBitmap(getThumb(data)));
+            currentDemandChannel.setThumbs(getThumb(data));
             currentDemandChannel.setThumbsUrl(getThumb(data));
             currentDemandChannel.setTitle(data.getString("title"));
             currentDemandChannel.setType(data.getString("type"));
@@ -414,7 +414,7 @@ public class JsonStringConvert {
                         DemandChannel.PodCasters podCaster = new DemandChannel.PodCasters();
                         podCaster.setNickName(obj.getString("nickname"));
                         podCaster.setDesc(obj.getString("description"));
-                        podCaster.setImgUrl(getBitmap(obj.getString("avatar")));
+                        podCaster.setImgUrl(obj.getString("avatar"));
                         podCaster.setId(obj.getInt("id"));
                         podCaster.setFanNum(obj.getInt("fan_num"));
                         currentDemandChannel.getDetail().getPodCasters().add(podCaster);
@@ -503,7 +503,7 @@ public class JsonStringConvert {
                     recommend.setObjectID(obj_r.getInt("object_id"));
                     recommend.setSubTitle(obj_r.getString("sub_title"));
                     recommend.setThumb(obj_r.getString("thumb"));
-                    recommend.setThumbs(getBitmap(getThumb(obj_r)));
+                    recommend.setThumbs(getThumb(obj_r));
                     recommend.setTitle(obj_r.getString("title"));
                     recommend.setUpdateTime(obj_r.getString("update_time"));
                     if(!obj_r.isNull("detail")) {
@@ -587,7 +587,7 @@ public class JsonStringConvert {
                 WaPiData data = new WaPiData();
                 JSONObject obj = jArr.getJSONObject(i);
                 data.setCategoryID(obj.getInt("category_id"));
-                data.setCover(getBitmap(obj.getString("cover")));
+                data.setCover(obj.getString("cover"));
                 data.setId(obj.getInt("id"));
                 data.setRank(obj.getInt("rank"));
                 data.setDesc(obj.getString("desc"));
@@ -681,7 +681,7 @@ public class JsonStringConvert {
                             mChannelLive.setChannelLiveId(list_data.getInt("id"));
                             mChannelLive.setChannelLiveCategoryId(list_data.getInt("category_id"));
                             mChannelLive.setChannelLiveCategoryName(list_data.getString("category_name"));
-                            mChannelLive.setChannelLiveCover(getBitmap(list_data.getString("cover")));
+                            mChannelLive.setChannelLiveCover(list_data.getString("cover"));
                             mChannelLive.setChannelLiveFreqs(list_data.getString("freqs"));
                             mChannelLive.setChannelLiveKeywords(list_data.getString("keywords"));
                             mChannelLive.setChannelLiveTitle(list_data.getString("title"));
@@ -694,7 +694,7 @@ public class JsonStringConvert {
                             mProgramLive.setProgramLiveId(list_data.getInt("id"));
                             mProgramLive.setProgramLiveCategoryId(list_data.getInt("category_id"));
                             mProgramLive.setProgramLiveCategoryName(list_data.getString("category_name"));
-                            mProgramLive.setProgramLiveCover(getBitmap(list_data.getString("cover")));
+                            mProgramLive.setProgramLiveCover(list_data.getString("cover"));
                             mProgramLive.setProgramLiveParentId(list_data.getInt("parent_id"));
                             mProgramLive.setProgramLiveParentType(list_data.getString("parent_type"));
                             mProgramLive.setProgramLiveTitle(list_data.getString("title"));
@@ -719,27 +719,4 @@ public class JsonStringConvert {
             }
         }
     }
-
-    private Bitmap getBitmap(String url) {
-        if(url == null)
-            return null;
-        Bitmap bm = null;
-        try {
-            URL iconUrl = new URL(url);
-            URLConnection conn = iconUrl.openConnection();
-            HttpURLConnection http = (HttpURLConnection) conn;
-            int length = http.getContentLength();
-            conn.connect();
-            // 获得图像的字符流
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is, length);
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();// 关闭流
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return bm;
-    }
-
 }
