@@ -34,8 +34,8 @@ public class HttpUtil {
     public int expires_in;
     public String error = null;
 
-    private static final String mClient_ID = "***";
-    private static final String mClient_Secret = "***";
+    private static final String mClient_ID = "xxx";
+    private static final String mClient_Secret = "xxx";
 
     /**
      * ** OAuth2.0授权 ***
