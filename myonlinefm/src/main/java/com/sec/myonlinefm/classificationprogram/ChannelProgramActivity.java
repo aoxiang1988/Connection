@@ -125,10 +125,13 @@ public class ChannelProgramActivity extends AppCompatActivity implements View.On
                 case UPDATE_CURRENT_DEMAND_CHANNEL_INFO:
 //                    mCurrentChannelPic.setImageBitmap(mPlayer.getBitmap(currentDemandChannel.getThumbs(),
 //                            100, 100));
-                    UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mCurrentChannelPic, mPlayer, 60,60);
+                    UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mCurrentChannelPic,
+                            currentDemandChannel.getTitle(),
+                            mPlayer, 60,60);
                     asyncTask.execute(currentDemandChannel.getThumbs());
 
                     UpdateListViewAsyncTask asyncTaskForBlur = new UpdateListViewAsyncTask(getBaseContext(),
+                            currentDemandChannel.getTitle(),
                             mPlayer, mChannelInfoView, true,
                             mChannelInfoView.getWidth(), mChannelInfoView.getHeight());
                     asyncTaskForBlur.execute(currentDemandChannel.getThumbs());
@@ -139,7 +142,9 @@ public class ChannelProgramActivity extends AppCompatActivity implements View.On
                             && !currentDemandChannel.getDetail().getPodCasters().isEmpty()) {
 //                        mPodCasterPic.setImageBitmap(mPlayer.getBitmap(currentDemandChannel.getDetail().getPodCasters().get(0).getImgUrl(),
 //                                40, 40));
-                        UpdateListViewAsyncTask asyncTaskCaster = new UpdateListViewAsyncTask(mPodCasterPic, mPlayer, 60,60);
+                        UpdateListViewAsyncTask asyncTaskCaster = new UpdateListViewAsyncTask(mPodCasterPic,
+                                currentDemandChannel.getTitle(),
+                                mPlayer, 60,60);
                         asyncTaskCaster.execute(currentDemandChannel.getDetail().getPodCasters().get(0).getImgUrl());
                         mPodCasterName.setText(currentDemandChannel.getDetail().getPodCasters().get(0).getNickName());
                     }

@@ -325,7 +325,9 @@ public class FMProgramActivity extends AppCompatActivity implements ServiceConne
             mStationName.setText(mStation.getStationTitle());
             mStationFreq.setText(String.format("%s MHz", mStation.getStationFreq()));
 //            mStationPic.setImageBitmap(mPlayer.getBitmap(mStation.getStationThumbs(), 100, 100));
-            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mStationPic, mPlayer, 100, 100);
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mStationPic,
+                    mStation.getStationTitle(),
+                    mPlayer, 100, 100);
             asyncTask.execute(mStation.getStationThumbs());
             try {
                 mProgramAdapter = new ProgramList(this, mProgram);
@@ -412,9 +414,7 @@ public class FMProgramActivity extends AppCompatActivity implements ServiceConne
     protected void onDestroy() {
         super.onDestroy();
         mStation = null;
-        map.clear();
         map = null;
-        mProgram.clear();
         mProgram = null;
         mClickListener = null;
 

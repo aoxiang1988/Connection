@@ -138,6 +138,7 @@ class RadioDialogFragment extends DialogFragment {
                             }
                         })
                         .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @SuppressLint("NewApi")
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ((OnLineStationsActivity)getActivity()).StartPlay(getArguments().getInt(KEY_POSITION));
@@ -163,9 +164,11 @@ class RadioDialogFragment extends DialogFragment {
                 OnLineLocalNames names = new OnLineLocalNames(mLocal, onlineactivity);
                 listView.setAdapter(names);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @SuppressLint("NewApi")
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         assert mLocal != null;
+                        player.setChangedByUser(true);
                         player.setDifferentLocalID(mLocal.get(position).getvaluesId(), 1);
                         ((OnLineStationsActivity)onlineactivity).setLocalName(mLocal.get(position).getvaluesname(),
                                 mLocal.get(position).getvaluesId());

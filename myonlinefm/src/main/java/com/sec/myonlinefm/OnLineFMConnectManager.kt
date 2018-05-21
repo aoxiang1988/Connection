@@ -31,6 +31,7 @@ import com.sec.myonlinefm.data.ClassificationAttributePattern
 import com.sec.myonlinefm.data.PropertyInfo
 import com.sec.myonlinefm.data.Station
 import com.sec.myonlinefm.data.StationProgram
+import com.sec.myonlinefm.defineview.BitMapCache
 import com.sec.myonlinefm.onlineinfolistener.ObserverListenerManager
 import com.sec.myonlinefm.updataUIListener.ObserverUIListenerManager
 
@@ -87,6 +88,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         var isConnectNet : Boolean = true
         var mGPS_Name = "北京"
         var mLocal_ID : Int = 0
+        var changedByUser : Boolean = false
         private const val UPDATE_INFO: Int = 1
         private const val UPDATE_DIFFERENT_INFO: Int = 2
         private const val START_ONLINE_PLAYER: Int = 3
@@ -137,6 +139,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     private fun refreshOnLineWorkerThread() {
         if(mOnLineWorkerThread != null) mOnLineWorkerThread!!.shutdown()
         mOnLineWorkerThread = OnLineWorkerThread(mContext)
+        BitMapCache(((Runtime.getRuntime() .maxMemory() / 1024)/8).toInt())
     }
 
     init {
@@ -166,6 +169,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         mDifferentStations = null
         mDifferent = null
         mOneDayPrograms = null
+        BitMapCache.getInstance().clearCache()
         mContext!!.unregisterReceiver(mNetReceiver)
         mContext = null
     }
@@ -210,7 +214,12 @@ class OnLineFMConnectManager constructor(context: Context) {
         getGPSInfo!!.getLocalName(getGPSInfo!!.location)
     }
 
-    fun updateOnLineInfo() {
+    fun setChangedByUser (changedByUser : Boolean) {
+        Companion.changedByUser = changedByUser
+    }
+    fun startGetOnLineInfo() {
+        if (changedByUser)
+            return
         mGPS_Name = getGPSInfo!!.getStringInfo(mContext, GetGPSInfo.KEY_LOCAL_NAME_FOR_THREAD)
         Log.d(getTAG(), "mGPS_Name : $mGPS_Name")
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_ONLINE_INFO)
@@ -348,7 +357,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun setDifferentLocalID(mLocal_ID : Int, mCurrentPage : Int) {
-        if (mLocal_ID != mLocal_ID)
+        if (mLocal_ID != Companion.mLocal_ID)
             mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_OTHER_ONLINE_INFO, mLocal_ID, mCurrentPage)
     }
     @SuppressLint("UseSparseArrays")
@@ -623,12 +632,12 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getBitmap(url : String, reqWidth : Int, reqHeight : Int) : Bitmap? {
+    fun getBitmap(url : String?, reqWidth : Int, reqHeight : Int) : Bitmap? {
         if(url == null)
             return null
         var bm : Bitmap? = null
         try {
-            val iconUrl : URL = URL(url)
+            val iconUrl = URL(url)
             val conn : URLConnection = iconUrl.openConnection()
             val http : HttpURLConnection = conn as HttpURLConnection
             val length : Int = http.contentLength

@@ -153,7 +153,7 @@ public class SearchResultListFragment extends Fragment {
                 SearchType.ChannelLive mChannelLive = mSearchChannelLiveList.get(position);
                 mSearchTitle.setText(mChannelLive.getChannelLiveTitle());
 //                mSearch_Cover.setImageBitmap(mPlayer.getBitmap(mChannelLive.getChannelLiveCover(), 60, 50));
-                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mPlayer, 60,60);
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mChannelLive.getChannelLiveTitle(), mPlayer, 60,60);
                 asyncTask.execute(mChannelLive.getChannelLiveCover());
                 mSearchFreq.setText(String.format("%s MHz", mChannelLive.getChannelLiveFreqs()));
                 mSearchFreq.setVisibility(View.VISIBLE);
@@ -161,7 +161,7 @@ public class SearchResultListFragment extends Fragment {
                 SearchType.ProgramLive mProgramLive = mSearchProgramLiveList.get(position);
                 mSearchTitle.setText(mProgramLive.getProgramLiveTitle());
 //                mSearch_Cover.setImageBitmap(mPlayer.getBitmap(mProgramLive.getProgramLiveCover(), 60, 50));
-                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mPlayer, 60,60);
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mSearch_Cover, mProgramLive.getProgramLiveTitle(), mPlayer, 60,60);
                 asyncTask.execute(mProgramLive.getProgramLiveCover());
             }
             return convertView;

@@ -245,7 +245,7 @@ class OkHttpUtil (private val mClient_ID : String = "***",
         }
         val body : RequestBody = builder.build()
         val request : Request = Request.Builder().url(httpUrl).post(body).build()
-        var response : Response? = null
+        val response: Response?
         try {
             response = client.newCall(request).execute()
             result = response.body()!!.string()
@@ -264,12 +264,12 @@ class OkHttpUtil (private val mClient_ID : String = "***",
      * @throws
      */
     fun httpGet(httpUrl : String) : String? {
-        var result : String = ""
+        var result = ""
         try {
-            var reader : BufferedReader? = null
-            val sbf : StringBuilder = StringBuilder()
+            val reader: BufferedReader?
+            val sbf = StringBuilder()
 
-            val url : URL = URL( httpUrl )
+            val url = URL( httpUrl )
             val connection : HttpURLConnection = url.openConnection() as HttpURLConnection
             //设置超时时间 10s
             connection.setConnectTimeout(10000)

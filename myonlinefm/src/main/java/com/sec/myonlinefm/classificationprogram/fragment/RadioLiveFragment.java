@@ -85,7 +85,9 @@ public class RadioLiveFragment extends Fragment implements View.OnClickListener 
                     for(int i = 0; i < mWaPiDataList.size(); i++) {
                         View view = LayoutInflater.from(mContext).inflate(R.layout.demand_channel_item, null);
                         ImageView imageView = view.findViewById(R.id.demand_channel_pic);
-                        UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(imageView, mPlayer, 60, 60);
+                        UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(imageView,
+                                mWaPiDataList.get(i).getName(),
+                                mPlayer, 60, 60);
                         asyncTask.execute(mWaPiDataList.get(i).getCover());
                         TextView titleView = view.findViewById(R.id.demand_channel_title);
                         titleView.setText(mWaPiDataList.get(i).getName());

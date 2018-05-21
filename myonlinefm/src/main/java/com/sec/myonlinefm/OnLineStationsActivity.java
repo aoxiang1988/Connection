@@ -287,6 +287,7 @@ public class OnLineStationsActivity extends AppCompatActivity implements Service
     protected void onDestroy() {
         mUpdateOnLineInfo.removeToObserverList();
         OberverOnLinePlayerManager.getInstance().remove(this);
+        mPlayer.setChangedByUser(false);
         super.onDestroy();
     }
 
@@ -447,7 +448,10 @@ public class OnLineStationsActivity extends AppCompatActivity implements Service
                 holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
             }
 //            holder.imgProgramIconLayout.setBackground(new BitmapDrawable(getResources(), mStations.get(position).getStationThumbs()));
-            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mContext, holder.imgProgramIconLayout, mPlayer.getMMainInfoCode(), false, 60, 60);
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(mContext,
+                    mStations.get(position).getStationTitle(),
+                    holder.imgProgramIconLayout, mPlayer.getMMainInfoCode(),
+                    false, 60, 60);
             asyncTask.execute(mStations.get(position).getStationThumbs());
 
             //            if(mStations.get(position).getStationFreq() == null || Objects.equals(mStations.get(position).getStationFreq(), "")) {

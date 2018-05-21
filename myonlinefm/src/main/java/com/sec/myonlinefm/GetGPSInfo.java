@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.sec.myonlinefm.xmlcheck.CharacterParser;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -167,7 +169,9 @@ public class GetGPSInfo {
                         Toast.makeText(mContext, "网络错误，暂时无法更新列表", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    OnLineFMConnectManager.Companion.getMMainInfoCode().updateOnLineInfo();
+                    if(OnLineFMConnectManager.Companion.getMMainInfoCode() != null) {
+                        OnLineFMConnectManager.Companion.getMMainInfoCode().startGetOnLineInfo();
+                    }
                 }
             }
         });

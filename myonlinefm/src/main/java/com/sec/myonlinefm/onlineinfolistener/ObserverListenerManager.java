@@ -41,22 +41,43 @@ public class ObserverListenerManager implements SubjectListener {
      */
     @Override
     public void notifyLiveRadioLocalObserver(List<Station> mStations, Map<Integer, List<StationProgram>> map) {
-        for (ObserverListener observerListener : list){
-            observerListener.observerLiveRadioLocalUpData(mStations, map);
+        if(mStations == null || map == null) {
+            for (ObserverListener observerListener : list) {
+                remove(observerListener);
+                observerManager = null;
+            }
+        } else {
+            for (ObserverListener observerListener : list) {
+                observerListener.observerLiveRadioLocalUpData(mStations, map);
+            }
         }
     }
 
     @Override
     public void notifyLiveRadioCenterObserver(List<Station> mStations, Map<Integer, List<StationProgram>> map) {
-        for (ObserverListener observerListener : list){
-            observerListener.observerLiveRadioCenterUpData(mStations, map);
+        if(mStations == null || map == null) {
+            for (ObserverListener observerListener : list) {
+                remove(observerListener);
+                observerManager = null;
+            }
+        } else {
+            for (ObserverListener observerListener : list) {
+                observerListener.observerLiveRadioCenterUpData(mStations, map);
+            }
         }
     }
 
     @Override
     public void notifyDifferentInfoObserver(List<Station> mStations, Map<Integer, List<StationProgram>> map) {
-        for (ObserverListener observerListener : list){
-            observerListener.observerUpDataDifferentInfo(mStations, map);
+        if(mStations == null || map == null) {
+            for (ObserverListener observerListener : list) {
+                remove(observerListener);
+                observerManager = null;
+            }
+        } else {
+            for (ObserverListener observerListener : list) {
+                observerListener.observerUpDataDifferentInfo(mStations, map);
+            }
         }
     }
 

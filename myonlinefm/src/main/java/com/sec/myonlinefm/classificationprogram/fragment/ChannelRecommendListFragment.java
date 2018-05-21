@@ -265,7 +265,9 @@ public class ChannelRecommendListFragment extends Fragment {
 
             } else holder = (ViewHolder) convertView.getTag();
 
-            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic, mPlayer, 60, 60);
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic,
+                    mDemandChannelsList.get(position).getTitle(),
+                    mPlayer, 60, 60);
             asyncTask.execute(mDemandChannelsList.get(position).getThumbs());
 
             String isBought = "";

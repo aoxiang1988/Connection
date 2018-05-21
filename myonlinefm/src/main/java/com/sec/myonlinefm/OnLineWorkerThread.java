@@ -72,7 +72,11 @@ public class OnLineWorkerThread<T> {
         RejectedExecutionHandler mRejectedExecutionHandler = new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                Toast.makeText(context,"your work has been rejected, please do the work again.", Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(context,"your work has been rejected, please do the work again.", Toast.LENGTH_LONG).show();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -366,6 +370,18 @@ public class OnLineWorkerThread<T> {
     }
 
     public void shutdown(){
-        mExecutorService.shutdown();
+        mExecutorService.shutdown();//not send new task to queue, not stop runnable..
+        try {
+            if (!mExecutorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                mExecutorService.shutdownNow();
+                if (!mExecutorService.awaitTermination(5, TimeUnit.SECONDS))
+                    System.err.println("Pool did not terminate");
+            }
+        } catch (InterruptedException e) {
+            Log.d(_TAG, "shut down task now!!!");
+            mExecutorService.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
+        }
     }
 }

@@ -236,7 +236,9 @@ public class InfoContextActivity extends AppCompatActivity implements RefreshLis
             } else holder = (DemandChannelViewHolder) convertView.getTag();
 
 //            holder.mDemandChannelPic.setImageBitmap(mPlayer.getBitmap(mDemandChannelsList.get(position).getThumbs(), 60, 60));
-            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic, mPlayer, 60, 60);
+            UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.mDemandChannelPic,
+                    mDemandChannelsList.get(position).getTitle(),
+                    mPlayer, 60, 60);
             asyncTask.execute(mDemandChannelsList.get(position).getThumbs());
             String isBought = "";
             if(mDemandChannelsList.get(position).getSaleType() == DemandChannel.UN_BOUGHT_SALE_TYPE) {

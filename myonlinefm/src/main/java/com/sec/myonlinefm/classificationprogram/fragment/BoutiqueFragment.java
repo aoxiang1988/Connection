@@ -277,7 +277,9 @@ public class BoutiqueFragment extends Fragment {
             } else holder = (ChildViewHolder) convertView.getTag();
 
             if(mRankListMap.get(key) != null) {
-                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.imageView, mPlayer, 60, 60);
+                UpdateListViewAsyncTask asyncTask = new UpdateListViewAsyncTask(holder.imageView,
+                        mRankListMap.get(key).get(childPosition).getName(),
+                        mPlayer, 60, 60);
                 asyncTask.execute(mRankListMap.get(key).get(childPosition).getCover());
                 holder.childMusicName.setText(mRankListMap.get(key).get(childPosition).getName());
                 holder.descView.setText(mRankListMap.get(key).get(childPosition).getDesc());

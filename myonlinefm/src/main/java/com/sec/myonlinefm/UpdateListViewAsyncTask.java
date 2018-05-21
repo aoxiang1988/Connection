@@ -3,14 +3,18 @@ package com.sec.myonlinefm;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.sec.myonlinefm.defineview.BitMapCache;
 import com.sec.myonlinefm.defineview.FastBlur;
 
 /**
@@ -28,25 +32,28 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
     private Context context;
     private boolean updateImageView = true;
     private boolean isBlurView = false;
+    private String key;
 
 
-    public UpdateListViewAsyncTask(ImageView imageView,
+    public UpdateListViewAsyncTask(ImageView imageView, String key,
                                    OnLineFMConnectManager mPlayer,
                                    int reqWidth, int reqHeight) {
         super();
         this.imageView = imageView;
+        this.key = key;
         this.mPlayer = mPlayer;
         this.reqWidth = reqWidth;
         this.reqHeight = reqHeight;
     }
 
-    public UpdateListViewAsyncTask(Context context,
+    public UpdateListViewAsyncTask(Context context, String key,
                                    LinearLayout linearLayout,
                                    OnLineFMConnectManager mPlayer,
                                    boolean updateImageView,
                                    int reqWidth, int reqHeight) {
         super();
         this.updateImageView = updateImageView;
+        this.key = key;
         this.context = context;
         this.linearLayout = linearLayout;
         this.mPlayer = mPlayer;
@@ -54,13 +61,14 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
         this.reqHeight = reqHeight;
     }
 
-    public UpdateListViewAsyncTask(Context context,
+    public UpdateListViewAsyncTask(Context context, String key,
                                    OnLineFMConnectManager mPlayer,
                                    View view,
                                    boolean isBlurView,
                                    int reqWidth, int reqHeight) {
         super();
         this.isBlurView = isBlurView;
+        this.key = key;
         this.context = context;
         this.view = view;
         this.mPlayer = mPlayer;
@@ -70,7 +78,14 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
 
     @Override
     protected Bitmap doInBackground(String... strings) {
-        Bitmap bitmap = mPlayer.getBitmap(strings[0], reqWidth, reqHeight);
+        Bitmap bitmap;
+        if(BitMapCache.getInstance().getBitmapFromMemCache(key) != null)
+            bitmap = BitMapCache.getInstance().getBitmapFromMemCache(key);
+        else {
+            bitmap = mPlayer.getBitmap(strings[0], reqWidth, reqHeight);
+            if (bitmap == null) bitmap = getBitmapFromDrawable(context.getDrawable(R.drawable.no_bit));
+            BitMapCache.getInstance().addBitmapToMemoryCache(key, bitmap);
+        }
         publishProgress(bitmap);
         return bitmap;
     }
@@ -106,4 +121,29 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
         matrix.postScale(scaleWidth, scaleHeight);// 使用后乘
         return Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
     }
+
+    private static final int COLORDRAWABLE_DIMENSION = 1;
+    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_4444;
+
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        try {
+            Bitmap bitmap;
+            if (drawable instanceof BitmapDrawable) {
+                return ((BitmapDrawable) drawable).getBitmap();
+            } else if (drawable instanceof ColorDrawable) {
+                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+                        BITMAP_CONFIG);
+            }
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
