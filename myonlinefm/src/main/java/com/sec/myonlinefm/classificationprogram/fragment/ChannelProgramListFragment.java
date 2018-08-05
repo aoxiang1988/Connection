@@ -30,7 +30,7 @@ import android.widget.TextView;
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgram;
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgramPattern;
 import com.sec.myonlinefm.defineview.RefreshListView;

@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/group_icon"
         android:layout_width="30dp"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:layout_gravity="center|left"
         android:src="@drawable/hybrid_radio_on_star" />
 

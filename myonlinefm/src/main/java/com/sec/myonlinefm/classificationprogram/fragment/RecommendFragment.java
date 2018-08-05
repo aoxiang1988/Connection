@@ -2,6 +2,7 @@ package com.sec.myonlinefm.classificationprogram.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,7 @@ import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
 import com.sec.myonlinefm.classificationprogram.InfoContextActivity;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend;
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommendPattern;
 import com.sec.myonlinefm.classificationprogram.data.ObservableController;
@@ -40,7 +42,6 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RecommendFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link RecommendFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -75,12 +76,29 @@ public class RecommendFragment extends Fragment implements Observer{
     private List<ImageView> imageViews;
     private ObservableController mObservable = ObservableController.getInstance();
 
-    private Handler mHandler = null;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == UPDATE_LIST_VIEW) {
+                mRequestProgramClassifyList = RequestProgramClassifyListPattern.getInstance().getRequestProgramClassifyList();
+                mRecommendAdapter.setList(mRequestProgramClassifyList);
+            }
+            if(msg.what == UPDATE_ITEM_TITLE) {
+                mRecommendAdapter.updateTitleView();
+            }
+            if(msg.what == UPDATE_ITEM_THUMB) {
+                mRecommendAdapter.updateThumbView();
+            }
+            if(msg.what == UPDATE_HEADER) {
+                updateImageView();
+            }
+        }
+    };;
 
     public RecommendFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -98,6 +116,81 @@ public class RecommendFragment extends Fragment implements Observer{
         fragment.setArguments(args);
         return fragment;
     }
+    private void initRecommendData(RequestProgramClassifyListPattern val) {
+        for(int i = 0; i < 5; i++) {
+            RequestProgramClassify item = val.getRequestProgramClassifyList().get(i);
+            final int index = i;
+            mPlayer.getFiveRecmThumb(new RequestCallBack<ClassifyRecommend>() {
+                @Override
+                public void onSuccess(ClassifyRecommend val) {
+                    initHeaderThumb(index, val);
+                }
+
+                @Override
+                public void onFail(String errorMessage) {
+                    Log.d("gaolin","onFail : "+errorMessage);
+                }
+            }, item.getSectionId());
+        }
+
+        for(RequestProgramClassify item : val.getRequestProgramClassifyList()) {
+            mPlayer.getRequestRecmmendProgram(new RequestCallBack<ClassifyRecommend>() {
+                @Override
+                public void onSuccess(ClassifyRecommend val) {
+                    ClassifyRecommendPattern map = ClassifyRecommendPattern.getInstance();
+                    map.addRecommendMap(val.getCategoryID(), val);
+                    ObservableController.getInstance().notifyObservers(ObservableController.UPDATETITLE);
+                    initRecommendThumbs(val);
+                }
+
+                @Override
+                public void onFail(String errorMessage) {
+                    Log.d("gaolin","onFail : "+errorMessage);
+                }
+            }, item.getId());
+        }
+    }
+
+    private void initHeaderThumb(int index, final ClassifyRecommend item) {
+        final String url = item.getThumbUrl(0);
+        if(url != null) {
+            final int i = index;
+            mPlayer.getRecommendThumb(new RequestCallBack<Bitmap>() {
+                @Override
+                public void onSuccess(Bitmap val) {
+                    ClassifyRecommendPattern.scrollBitmap[i] = val;
+                    ObservableController.getInstance().notifyObservers(ObservableController.UPDATEHEADER);
+                }
+
+                @Override
+                public void onFail(String errorMessage) {
+                    Log.d("gaolin","onFail : "+errorMessage);
+                }
+            }, url);
+        }
+    }
+
+    private void initRecommendThumbs(final ClassifyRecommend item) {
+        for(int i = 0; i < 3; i++) {
+            final String url = item.getThumbUrl(i);
+            if(url != null) {
+                final int index = i;
+                mPlayer.getRecommendThumb(new RequestCallBack<Bitmap>() {
+                    @Override
+                    public void onSuccess(Bitmap val) {
+                        item.setThumb(index, val);
+                        ClassifyRecommendPattern map = ClassifyRecommendPattern.getInstance();
+                        ObservableController.getInstance().notifyObservers(ObservableController.UPDATETHUMB);
+                    }
+
+                    @Override
+                    public void onFail(String errorMessage) {
+                        Log.d("gaolin","onFail : "+errorMessage);
+                    }
+                }, url);
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,29 +200,21 @@ public class RecommendFragment extends Fragment implements Observer{
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mPlayer = OnLineFMConnectManager.Companion.getMMainInfoCode();
-
         mObservable.addObserver(this);
 
-        mHandler = new Handler(){
+        mPlayer.getRequestProgramClassify(new RequestCallBack<RequestProgramClassifyListPattern>() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if(msg.what == UPDATE_LIST_VIEW) {
-                    mRequestProgramClassifyList = RequestProgramClassifyListPattern.getInstance().getRequestProgramClassifyList();
-                    mRecommendAdapter.setList(mRequestProgramClassifyList);
-                }
-                if(msg.what == UPDATE_ITEM_TITLE) {
-                    mRecommendAdapter.updateTitleView();
-                }
-                if(msg.what == UPDATE_ITEM_THUMB) {
-                    mRecommendAdapter.updateThumbView();
-                }
-                if(msg.what == UPDATE_HEADER) {
-                    updateImageView();
-                }
+            public void onSuccess(RequestProgramClassifyListPattern val) {
+                Log.d("gaolin","onSuccess : ");
+                ObservableController.getInstance().notifyObservers(ObservableController.REFRESH);
+                initRecommendData(val);
             }
-        };
 
+            @Override
+            public void onFail(String errorMessage) {
+                Log.d("gaolin","onFail : "+errorMessage);
+            }
+        });
     }
 
     @Override

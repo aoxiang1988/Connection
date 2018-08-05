@@ -1,10 +1,7 @@
 package com.sec.myonlinefm.classificationprogram.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +20,7 @@ import com.sec.myonlinefm.OnLineStationsActivity;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.RecommendsData;
 import com.sec.myonlinefm.classificationprogram.data.WaPiData;
 import com.sec.myonlinefm.classificationprogram.data.WaPiDataPattern;

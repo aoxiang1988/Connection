@@ -15,7 +15,7 @@ public class MusicImageResource {
 	
 	private static Bitmap bm = null;
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");  
-    private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options(); 
+    private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
     
 	public static Bitmap getArtwork(Context context,long song_id,long album_id){
 		if (album_id < 0) {  
@@ -35,12 +35,12 @@ public class MusicImageResource {
             try {  
                 in = res.openInputStream(uri);
                 sBitmapOptions.inJustDecodeBounds = true;
-                int hight = sBitmapOptions.outHeight/5;
-                int width = sBitmapOptions.outWidth/5;
+                int hight = sBitmapOptions.outHeight/2;
+                int width = sBitmapOptions.outWidth/2;
                 sBitmapOptions.inSampleSize = calculateInSampleSize(sBitmapOptions, width, hight);
                 sBitmapOptions.inJustDecodeBounds = false;
                 bm = BitmapFactory.decodeStream(in, null, sBitmapOptions);
-
+                bm.setConfig(Bitmap.Config.ARGB_4444);
         	    return bm;
             } catch (FileNotFoundException ignored) {}
             finally {  

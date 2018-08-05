@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgramPattern;
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannelPattern;

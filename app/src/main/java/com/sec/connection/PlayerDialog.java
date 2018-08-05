@@ -324,9 +324,7 @@ public class PlayerDialog extends DialogFragment {
 	private  class FolderPathAdapter extends BaseAdapter {
 
 		private Context mContext;
-		private Map<String, List<Audio>> mPathMapForDialog;
 		private List<String> mPathListForDialog;
-        private View convertView = null;
 
 		private FolderPathAdapter(Context mContext,
 								  List<String> mPathListForDialog){
@@ -349,35 +347,43 @@ public class PlayerDialog extends DialogFragment {
 			return position;
 		}
 
-		@SuppressLint("SetTextI18n")
+		@SuppressLint({"SetTextI18n", "InflateParams"})
         @Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-		    if(this.convertView == null) {
+			ViewHolder holder;
+		    if(convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.folder_path_item, null);
-                this.convertView = convertView;
-		    }
-			TextView folder_name = this.convertView.findViewById(R.id.folder_name);
+				holder = new ViewHolder();
+				convertView.setTag(holder);
+		    } else holder = (ViewHolder) convertView.getTag();
+			holder.folder_name = convertView.findViewById(R.id.folder_name);
 
-			TextView music_num = this.convertView.findViewById(R.id.folder_music_no);
+			holder.music_num = convertView.findViewById(R.id.folder_music_no);
 
-			TextView folder_path = this.convertView.findViewById(R.id.folder_path);
-			folder_path.setText(mPathListForDialog.get(position));
+			holder.folder_path = convertView.findViewById(R.id.folder_path);
+			holder.folder_path.setText(mPathListForDialog.get(position));
 
-			CheckBox folder_check_box = this.convertView.findViewById(R.id.folder_path_checkBox);
+			holder.folder_check_box = convertView.findViewById(R.id.folder_path_checkBox);
 
 			String new_path = mPathListForDialog.get(position).replace("0", "@");
 			String split_path[] = new_path.split("@");
-			folder_name.setText(split_path[1]+":");
-			music_num.setText(FilterSettings.mFolderPathData.getlistlangth(position)+"首歌 ：");
+			holder.folder_name.setText(split_path[1]+":");
+			holder.music_num.setText(FilterSettings.mFolderPathData.getlistlangth(position)+"首歌 ：");
 
 			if(FilterSettings.mFolderPathData.isPathSelected(position)){
-				folder_check_box.setChecked(true);
+				holder.folder_check_box.setChecked(true);
 			} else {
-				folder_check_box.setChecked(false);
+				holder.folder_check_box.setChecked(false);
 			}
 
-			return this.convertView;
+			return convertView;
 		}
 	}
 
+	private static class ViewHolder {
+		TextView folder_name;
+		TextView music_num;
+		TextView folder_path;
+		CheckBox folder_check_box;
+	}
 }

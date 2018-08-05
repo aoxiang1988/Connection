@@ -2,6 +2,7 @@ package com.sec.myonlinefm.classificationprogram.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.os.Handler;
@@ -23,6 +24,8 @@ import com.sec.myonlinefm.classificationprogram.data.ObservableController;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassifyListPattern;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -50,6 +53,7 @@ public class ClassifyFragment extends Fragment implements Observer {
 
     private List<RequestProgramClassify> mRequestProgramClassifyList = null;
     private ObservableController mObservable = ObservableController.getInstance();
+    private List<Integer> resIds;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -97,7 +101,13 @@ public class ClassifyFragment extends Fragment implements Observer {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        TypedArray ar = getResources().obtainTypedArray(R.array.category_drawable);
+        final int len = ar.length();
+        resIds = new ArrayList<>();
+        for (int i = 0; i < len; i++){
+            resIds.add(ar.getResourceId(i, 0));
+        }
+        ar.recycle();
         mPlayer = OnLineFMConnectManager.Companion.getMMainInfoCode();
         mObservable.addObserver(this);
     }
@@ -218,6 +228,7 @@ public class ClassifyFragment extends Fragment implements Observer {
                     holder = (ViewHolder) convertView.getTag();//取出ViewHolder对象
                 }
                 holder.classify_name.setText(mRequestProgramClassifyList.get(position).getName());
+                holder.classify_icon.setImageDrawable(getResources().getDrawable(resIds.get(position)));
                 return convertView;
             }
         }

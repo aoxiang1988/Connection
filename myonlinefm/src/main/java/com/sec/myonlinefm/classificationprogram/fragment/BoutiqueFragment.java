@@ -3,6 +3,7 @@ package com.sec.myonlinefm.classificationprogram.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,12 +20,13 @@ import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassifyListPattern;
 import com.sec.myonlinefm.classificationprogram.data.WaPiData;
 import com.sec.myonlinefm.classificationprogram.data.WaPiDataPattern;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,8 @@ public class BoutiqueFragment extends Fragment {
     private View view;
     private ExpandableListView expandableListView;
     private boolean isFinished = true;
+
+    private List<Integer> resIds;
 
     public BoutiqueFragment() {
         // Required empty public constructor
@@ -130,6 +134,13 @@ public class BoutiqueFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        TypedArray ar = getResources().obtainTypedArray(R.array.category_drawable);
+        final int len = ar.length();
+        resIds = new ArrayList<>();
+        for (int i = 0; i < len; i++){
+            resIds.add(ar.getResourceId(i, 0));
+        }
+        ar.recycle();
         mPlayer = OnLineFMConnectManager.Companion.getMMainInfoCode();
     }
 
@@ -245,9 +256,11 @@ public class BoutiqueFragment extends Fragment {
                 holder = new GroupViewHolder();
                 holder.tv = convertView.findViewById(R.id.group_title);
                 holder.mDropUpDown = convertView.findViewById(R.id.group_down);
+                holder.mGroupIcon =  convertView.findViewById(R.id.group_icon);
                 convertView.setTag(holder);
             } else holder = (GroupViewHolder) convertView.getTag();
 
+            holder.mGroupIcon.setImageDrawable(getResources().getDrawable(resIds.get(groupPosition)));
             holder.tv.setText(mRequestProgramClassifyList.get(groupPosition).getName());
             if(expandableListView.isGroupExpanded(groupPosition)){
                 holder.tv.setTextColor(getResources().getColor(R.color.net_fm_back_b));
@@ -296,6 +309,7 @@ public class BoutiqueFragment extends Fragment {
 
     static class GroupViewHolder {
         TextView tv;
+        ImageView mGroupIcon;
         ImageView mDropUpDown;
     }
 

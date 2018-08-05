@@ -1,7 +1,6 @@
 package com.sec.myonlinefm.classificationprogram.mainfacefragment;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,9 +15,7 @@ import android.widget.TabWidget;
 
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
-import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend;
-import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommendPattern;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.ObservableController;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify;
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassifyListPattern;
@@ -290,6 +287,7 @@ public class OnLineHomeFragment extends Fragment {
     /* ***
    add by gaolin 5/4
  */
+    private List<RequestProgramClassify> classifyList;
     private void initData() {
         mPlayer = OnLineFMConnectManager.Companion.getMMainInfoCode();
         mPlayer.getRequestProgramClassify(new RequestCallBack<RequestProgramClassifyListPattern>() {
@@ -297,7 +295,8 @@ public class OnLineHomeFragment extends Fragment {
             public void onSuccess(RequestProgramClassifyListPattern val) {
                 Log.d("gaolin","onSuccess : ");
                 ObservableController.getInstance().notifyObservers(ObservableController.REFRESH);
-                initRecommendData(val);
+//                initRecommendData(val);
+                classifyList = val.getRequestProgramClassifyList();
             }
 
             @Override
@@ -306,81 +305,4 @@ public class OnLineHomeFragment extends Fragment {
             }
         });
     }
-
-    private void initRecommendData(RequestProgramClassifyListPattern val) {
-        for(int i = 0; i < 5; i++) {
-            RequestProgramClassify item = val.getRequestProgramClassifyList().get(i);
-            final int index = i;
-            mPlayer.getFiveRecmThumb(new RequestCallBack<ClassifyRecommend>() {
-                @Override
-                public void onSuccess(ClassifyRecommend val) {
-                    initHeaderThumb(index, val);
-                }
-
-                @Override
-                public void onFail(String errorMessage) {
-                    Log.d("gaolin","onFail : "+errorMessage);
-                }
-            }, item.getSectionId());
-        }
-
-        for(RequestProgramClassify item : val.getRequestProgramClassifyList()) {
-            mPlayer.getRequestRecmmendProgram(new RequestCallBack<ClassifyRecommend>() {
-                @Override
-                public void onSuccess(ClassifyRecommend val) {
-                    ClassifyRecommendPattern map = ClassifyRecommendPattern.getInstance();
-                    map.addRecommendMap(val.getCategoryID(), val);
-                    ObservableController.getInstance().notifyObservers(ObservableController.UPDATETITLE);
-                    initRecommendThumbs(val);
-                }
-
-                @Override
-                public void onFail(String errorMessage) {
-                    Log.d("gaolin","onFail : "+errorMessage);
-                }
-            }, item.getId());
-        }
-    }
-
-    private void initHeaderThumb(int index, final ClassifyRecommend item) {
-        final String url = item.getThumbUrl(0);
-        if(url != null) {
-            final int i = index;
-            mPlayer.getRecommendThumb(new RequestCallBack<Bitmap>() {
-                @Override
-                public void onSuccess(Bitmap val) {
-                    ClassifyRecommendPattern.scrollBitmap[i] = val;
-                    ObservableController.getInstance().notifyObservers(ObservableController.UPDATEHEADER);
-                }
-
-                @Override
-                public void onFail(String errorMessage) {
-                    Log.d("gaolin","onFail : "+errorMessage);
-                }
-            }, url);
-        }
-    }
-
-    private void initRecommendThumbs(final ClassifyRecommend item) {
-        for(int i = 0; i < 3; i++) {
-            final String url = item.getThumbUrl(i);
-            if(url != null) {
-                final int index = i;
-                mPlayer.getRecommendThumb(new RequestCallBack<Bitmap>() {
-                    @Override
-                    public void onSuccess(Bitmap val) {
-                        item.setThumb(index, val);
-                        ClassifyRecommendPattern map = ClassifyRecommendPattern.getInstance();
-                        ObservableController.getInstance().notifyObservers(ObservableController.UPDATETHUMB);
-                    }
-
-                    @Override
-                    public void onFail(String errorMessage) {
-                        Log.d("gaolin","onFail : "+errorMessage);
-                    }
-                }, url);
-            }
-        }
-    }
-
 }

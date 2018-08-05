@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/1/31.
@@ -165,13 +166,14 @@ public class GetGPSInfo {
                         mLocalNameForThread = addressStrForThread;
                         saveStringInfo(mContext, KEY_LOCAL_NAME, mLocalName);
                         saveStringInfo(mContext, KEY_LOCAL_NAME_FOR_THREAD, mLocalNameForThread);
+                        if(OnLineFMConnectManager.Companion.getMMainInfoCode() != null) {
+                            OnLineFMConnectManager.Companion.getMMainInfoCode().startGetOnLineInfo();
+                        }
                     } else {
                         Toast.makeText(mContext, "网络错误，暂时无法更新列表", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    if(OnLineFMConnectManager.Companion.getMMainInfoCode() != null) {
-                        OnLineFMConnectManager.Companion.getMMainInfoCode().startGetOnLineInfo();
-                    }
+
                 }
             }
         });

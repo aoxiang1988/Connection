@@ -46,11 +46,11 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
         this.reqHeight = reqHeight;
     }
 
-    public UpdateListViewAsyncTask(Context context, String key,
-                                   LinearLayout linearLayout,
-                                   OnLineFMConnectManager mPlayer,
-                                   boolean updateImageView,
-                                   int reqWidth, int reqHeight) {
+    UpdateListViewAsyncTask(Context context, String key,
+                            LinearLayout linearLayout,
+                            OnLineFMConnectManager mPlayer,
+                            boolean updateImageView,
+                            int reqWidth, int reqHeight) {
         super();
         this.updateImageView = updateImageView;
         this.key = key;
@@ -79,22 +79,25 @@ public class UpdateListViewAsyncTask extends AsyncTask<String, Bitmap, Bitmap > 
     @Override
     protected Bitmap doInBackground(String... strings) {
         Bitmap bitmap;
-        if(BitMapCache.getInstance().getBitmapFromMemCache(key) != null)
+        if(BitMapCache.getInstance().getBitmapFromMemCache(key) != null) {
             bitmap = BitMapCache.getInstance().getBitmapFromMemCache(key);
+            publishProgress(bitmap);
+        }
         else {
             bitmap = mPlayer.getBitmap(strings[0], reqWidth, reqHeight);
             if (bitmap == null) bitmap = getBitmapFromDrawable(context.getDrawable(R.drawable.no_bit));
             BitMapCache.getInstance().addBitmapToMemoryCache(key, bitmap);
+            publishProgress(bitmap);
         }
-        publishProgress(bitmap);
         return bitmap;
     }
 
     @Override
     protected void onProgressUpdate(Bitmap... values) {
         super.onProgressUpdate(values);
-        if (updateImageView && !isBlurView)
+        if (updateImageView && !isBlurView) {
             imageView.setImageBitmap(values[0]);
+        }
         if (!updateImageView && !isBlurView)
             linearLayout.setBackground(new BitmapDrawable(context.getResources(),values[0]));
         if(isBlurView)

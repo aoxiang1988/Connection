@@ -4,20 +4,12 @@ import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,12 +24,12 @@ import android.widget.Toast;
 import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.UpdateListViewAsyncTask;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannelPattern;
 import com.sec.myonlinefm.classificationprogram.fragment.ChannelProgramListFragment;
 import com.sec.myonlinefm.classificationprogram.fragment.ChannelRecommendListFragment;
 import com.sec.myonlinefm.dbdata.MySQLHelper;
-import com.sec.myonlinefm.defineview.FastBlur;
 import com.sec.myonlinefm.defineview.RoundImageView;
 
 /* https://blog.csdn.net/xx23x/article/details/54617928

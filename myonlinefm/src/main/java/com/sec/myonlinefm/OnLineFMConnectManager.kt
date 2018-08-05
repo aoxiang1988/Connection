@@ -18,7 +18,7 @@ import android.support.annotation.RequiresApi
 import android.util.Log
 
 import com.sec.myonlinefm.OnLineFMPlayerListener.OberverOnLinePlayerManager
-import com.sec.myonlinefm.classificationprogram.RequestCallBack
+import com.sec.myonlinefm.abstructObserver.RequestCallBack
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgramPattern
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel
@@ -212,6 +212,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         centerMap = HashMap()
         getGPSInfo = GetGPSInfo(mContext)
         getGPSInfo!!.getLocalName(getGPSInfo!!.location)
+        startGetOnLineInfo()
     }
 
     fun setChangedByUser (changedByUser : Boolean) {
@@ -280,6 +281,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
     fun getClassificationAttributeAsyncEx(mCategoryID : Int) : ClassificationAttributePattern? {
+        Log.d(getTAG(),"getClassificationAttributeAsyncEx")
         getTime()
         connectPrepare()
         try {
@@ -299,6 +301,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getOneDayProgramAsyncEx() {//0:yesterday; 1:today; 2:tomorrow
+        Log.d(getTAG(),"getOneDayProgramAsyncEx")
         var dayOfWeek : Int = this.mDayOfWeek
         if(mDayInfo == 0) {
             if(dayOfWeek == 1) dayOfWeek = 6
@@ -322,6 +325,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getOnlineInfoAsyncEx() {
+        Log.d(getTAG(),"getOnlineInfoAsyncEx")
         var find: Boolean
         mInfoMap = getClassificationAttributeAsyncEx(5)!!.infoMap
         val stationInfo: String?
@@ -362,6 +366,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
     @SuppressLint("UseSparseArrays")
     fun getDifferentLocalOnlineInfoAsyncEx (mLocal_ID : Int, mCurrentPage : Int) {
+        Log.d(getTAG(),"getDifferentLocalOnlineInfoAsyncEx")
         var find = false
         val stationInfo: String?
         try {
@@ -418,6 +423,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getReplayUrlAsyncEx() {
+        Log.d(getTAG(),"getReplayUrlAsyncEx")
         try {
             val mRule : JsonStringConvert.Rule = mConvert!!.getReplay_URL_Rule(mHttpUtil!!.replayRule)
 
@@ -441,6 +447,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getSearchResultAsyncEx (keyword : String, type : String, mCurrentPage : Int) {
+        Log.d(getTAG(),"getSearchResultAsyncEx")
         val mSearchResult: String?
         try{
             mSearchResult = mHttpUtil!!.getSearchResult(keyword, type, mCurrentPage)
@@ -492,10 +499,11 @@ class OnLineFMConnectManager constructor(context: Context) {
                 requestCallBack,
                 mChannelID,
                 mCurrentPage)
-        if(mAttrId != null) mDCAttrId = mAttrId
+        mDCAttrId = mAttrId
     }
 
     fun getRequestProgramClassifyAsyncEx() : List<RequestProgramClassify> ? {
+        Log.d(getTAG(),"getRequestProgramClassifyAsyncEx")
         connectPrepare()
         val mRequestProgramResult: String?
         return try {
@@ -508,7 +516,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getDemandChannelContextAsyncEx(categoryID : Int, currentPage : Int) : List<DemandChannel> ? {
-
+        Log.d(getTAG(),"getDemandChannelContextAsyncEx")
         if(mHttpUtil!!.getAccess_token() == null)
             connectPrepare()
         val mDemandChannelContextResult: String?
@@ -521,6 +529,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
     fun getCurrentDemandChannelAsyncEx(channelID : Int) : DemandChannel ? {
+        Log.d(getTAG(),"getCurrentDemandChannelAsyncEx")
         if(mHttpUtil!!.getAccess_token() == null)
             connectPrepare()
         val mCurrentDemandChannelResult: String?
@@ -534,6 +543,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getCurrentDemandChannelProgramsAsyncEx(channelID : Int, current_page : Int) : ChannelProgramPattern ? {
+        Log.d(getTAG(),"getCurrentDemandChannelProgramsAsyncEx")
         if(mHttpUtil!!.getAccess_token() == null)
             connectPrepare()
         val mCurrentDemandChannelProgramsResult: String?
@@ -556,6 +566,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getFiveRecmAsyncEx(sectionId : Int) : ClassifyRecommend ? {
+        Log.d(getTAG(),"getFiveRecmAsyncEx")
         val mRecommendResult : String
         return try {
             mRecommendResult = mHttpUtil!!.getFiveRecommend(sectionId)
@@ -571,6 +582,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getRecommendAsyncEx(category_id : Int) : ClassifyRecommend ? {
+        Log.d(getTAG(),"getRecommendAsyncEx")
         val mRecommendResult : String
         return try {
             mRecommendResult = mHttpUtil!!.getRecommendProgram(category_id)
@@ -581,11 +593,12 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getRecommendThumb( callBack : RequestCallBack<Bitmap>,  url : String) {
+    fun getRecommendThumb(callBack : RequestCallBack<Bitmap>, url : String) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_REQUEST_RECOMMEND_THUMB, callBack, url)
     }
 
     fun getThumbAsyncEx(url : String) : Bitmap ? {
+        Log.d(getTAG(),"getThumbAsyncEx")
         return try {
             mConvert!!.getThumb(url)
         }catch (e : Exception) {
@@ -599,6 +612,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getRecommendsDataListAsyncEx(section_id : Int) : RecommendsDataPattern ? {
+        Log.d(getTAG(),"getRecommendsDataListAsyncEx")
         val mRecommendResult : String
         return try {
             mRecommendResult = mHttpUtil!!.getFiveRecommend(section_id)
@@ -614,6 +628,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     }
 
     fun getWaPiDataListAsyncEx(category_id : Int) : WaPiDataPattern ? {
+        Log.d(getTAG(),"getWaPiDataListAsyncEx")
         val mWaPiDataResult : String
         return try {
             mWaPiDataResult = mHttpUtil!!.getWapiDataResult(category_id)

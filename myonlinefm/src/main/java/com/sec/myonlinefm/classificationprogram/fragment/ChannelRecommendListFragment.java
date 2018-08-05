@@ -20,7 +20,7 @@ import com.sec.myonlinefm.OnLineFMConnectManager;
 import com.sec.myonlinefm.R;
 import com.sec.myonlinefm.UpdateListViewAsyncTask;
 import com.sec.myonlinefm.classificationprogram.ChannelProgramActivity;
-import com.sec.myonlinefm.classificationprogram.RequestCallBack;
+import com.sec.myonlinefm.abstructObserver.RequestCallBack;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel;
 import com.sec.myonlinefm.classificationprogram.data.DemandChannelPattern;
 import com.sec.myonlinefm.defineview.RefreshListView;
