@@ -3,6 +3,7 @@ package com.sec.connection;
 import android.app.Application;
 
 import com.sec.connection.data.Audio;
+import com.sec.connection.data.MySelfDateBase;
 import com.sec.connecttoapilibrary.ConnectMainManager;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class MusicApplication extends Application {
 	public static String PREF_NAME = "CURRENT_MUSIC"; // .xml
 	private ConnectMainManager mMainManager;
 	private BaseListInfo mInfo;
+	private MySelfDateBase mySelfDateBase;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -18,6 +20,7 @@ public class MusicApplication extends Application {
 		PlayerNotificationManager mNotifyManger = PlayerNotificationManager.instance();
 		mInfo = new BaseListInfo();
 		mNotifyManger.initialize(this);
+		mySelfDateBase = new MySelfDateBase(this, null);
 		super.onCreate();
 	}
 

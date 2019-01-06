@@ -9,11 +9,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.sec.connection.R;
 import com.sec.connection.xmlcheck.LocalInfo;
-import com.sec.connection.xmlcheck.Progrem;
+import com.sec.connection.xmlcheck.Program;
 import com.sec.connecttoapilibrary.ConnectMainManager;
 import com.sec.connecttoapilibrary.RequestCallBack;
 import com.sec.connecttoapilibrary.onlinefm.liveRadioData.OnLineRadioPattern;
@@ -33,9 +35,9 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
 
     private static final int DRAW_LIST = 1;
     Thread thread;
-    private List<LocalInfo> onlineinfo = new ArrayList<>();
-    private Map<String,List<Progrem>> map = new HashMap<>();
-    private List<Progrem> progrems = null;
+    private List<LocalInfo> mOnlineInfo = new ArrayList<>();
+    private Map<String,List<Program>> mMap = new HashMap<>();
+    private List<Program> mPrograms = null;
 
     Bundle bundle = new Bundle();
 
@@ -55,6 +57,17 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +101,13 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
         });
         /*
          * *******************************************************************************************/
-        thread = new Thread(dosearchmusic);
+        thread = new Thread(doSearchMusic);
         thread.start();
     }
 
     static boolean find = false;
 
-    Runnable dosearchmusic = new Runnable() {
+    Runnable doSearchMusic = new Runnable() {
         Document document = null;
         public void run() {
             // TODO Auto-generated method stub
@@ -113,10 +126,10 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
                         bundle.putString("PICTURE", src);
                         bundle.putString("NETURL", radio_ID);
                         Log.d("bin1111.yang","info : "+fmtitle);
-                        getProgrem(fmtitle, radio_ID);
+                        getProgram(fmtitle, radio_ID);
 
                         LocalInfo localInfo = new LocalInfo(bundle,getApplicationContext());
-                        onlineinfo.add(localInfo);
+                        mOnlineInfo.add(localInfo);
                     }
                     find = true;
                     handler.sendEmptyMessage(DRAW_LIST);
@@ -130,26 +143,27 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
         }
     };
 
-    private void getProgrem(String fmtitle, String radio_ID) throws IOException {
-        progrems = new ArrayList<>();
-        Document document_progrem = null;
-        String search_progrem = "http://www.qingting.fm"+radio_ID;
-        document_progrem = Jsoup.connect(search_progrem).data("query", "Java").timeout(5000).get();
-        Elements progrem_info = document_progrem.select("li._3w3t");
-//        Elements progrem_title = document_progrem.select("span._1dQW");
-//        Elements progrem_time = document_progrem.select("span._1DvZ");
-        for (Element p : progrem_info){
-            Progrem progrem = new Progrem();
+    private void getProgram(String fmtitle, String radio_ID) throws IOException {
+        
+        mPrograms = new ArrayList<>();
+        Document document_program;
+        String search_program = "http://www.qingting.fm"+radio_ID;
+        document_program = Jsoup.connect(search_program).data("query", "Java").timeout(5000).get();
+        Elements program_info = document_program.select("li._3w3t");
+//        Elements progrem_title = document_program.select("span._1dQW");
+//        Elements progrem_time = document_program.select("span._1DvZ");
+        for (Element p : program_info){
+            Program program = new Program();
             String content = p.select("div").text();
             String time = p.select("span._1DvZ").text();
             String new_path = time.replace(" - ", "@");
-            String splitpath[] = new_path.split("@");
-            progrem.setcontent(content);
-            progrem.settime(time);
-            progrems.add(progrem);
-            Log.d("bin1111.yang","progrem : "+content+" "+splitpath[0]+"~"+splitpath[1]);
+            String splitPath[] = new_path.split("@");
+            program.setcontent(content);
+            program.settime(time);
+            mPrograms.add(program);
+            Log.d("bin1111.yang","program : "+content+" "+splitPath[0]+"~"+splitPath[1]);
         }
-        map.put(fmtitle ,progrems);
+        mMap.put(fmtitle , mPrograms);
     }
 
 }

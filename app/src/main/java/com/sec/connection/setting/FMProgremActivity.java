@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sec.connection.R;
-import com.sec.connection.xmlcheck.Progrem;
+import com.sec.connection.xmlcheck.Program;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -37,8 +37,8 @@ public class FMProgremActivity extends AppCompatActivity {
     private String get_src;
 
     private Bitmap bitmap = null;
-    private Map<String,List<Progrem>> map = null;
-    List<Progrem> progrems = null;
+    private Map<String,List<Program>> map = null;
+    List<Program> programs = null;
 
     private String GTE_STATION_INFO = "fm.action.GTE_STATION_INFO";
 
@@ -57,7 +57,7 @@ public class FMProgremActivity extends AppCompatActivity {
         mStationFreq = (TextView)findViewById(R.id.station_freq);
         mProgremList = (ListView)findViewById(R.id.progrem_list);
 
-        progrems = map.get(get_name);
+        programs = map.get(get_name);
 
         bitmap = getBitmap(get_src);
         mStationPic.setImageBitmap(bitmap);
@@ -98,12 +98,12 @@ public class FMProgremActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return progrems.size();
+            return programs.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return progrems.get(position);
+            return programs.get(position);
         }
 
         @Override
@@ -123,9 +123,9 @@ public class FMProgremActivity extends AppCompatActivity {
             TextView mStartTime = convertView.findViewById(R.id.start_time);
             TextView mFinishTime = convertView.findViewById(R.id.finish_time);
 
-            mProgremName.setText(progrems.get(position).getcontent());
-            mStartTime.setText(progrems.get(position).getstarttime());
-            mFinishTime.setText(progrems.get(position).getfinishtime());
+            mProgremName.setText(programs.get(position).getcontent());
+            mStartTime.setText(programs.get(position).getstarttime());
+            mFinishTime.setText(programs.get(position).getfinishtime());
             return convertView;
         }
     }

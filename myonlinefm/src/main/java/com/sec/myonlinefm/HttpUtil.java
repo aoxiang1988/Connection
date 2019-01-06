@@ -32,10 +32,10 @@ public class HttpUtil {
     public String access_token;
     public String token_type;
     public int expires_in;
-    public String error = null;
+    private String error = null;
 
-    private static final String mClient_ID = "xxx";
-    private static final String mClient_Secret = "xxx";
+    private static final String mClient_ID = "MjM2NDI4MzYtZmE3Mi0xMWU3LTkyM2YtMDAxNjNlMDAyMGFk";
+    private static final String mClient_Secret = "YzhjNTljOWEtZTRlMS0zNDU1LTlhOGUtMTgyZTJjYzE3OGM5";
 
     /**
      * ** OAuth2.0授权 ***
@@ -255,7 +255,7 @@ public class HttpUtil {
     }
 
     /**
-     * httpPost请求
+     * httpPost&#x8bf7;&#x6c42;
      * @param httpUrl
      * @param nameValuePairs
      * @return result
@@ -264,7 +264,7 @@ public class HttpUtil {
         String result = "" ;
         HttpPost httpPost = new HttpPost( httpUrl );
 
-        HttpResponse httpResponse = null;
+        HttpResponse httpResponse;
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpClient httpClient = new DefaultHttpClient() ;
@@ -299,7 +299,7 @@ public class HttpUtil {
     public String httpGet(String httpUrl ){
         String result = "" ;
         try {
-            BufferedReader reader = null;
+            BufferedReader reader;
             StringBuilder sbf = new StringBuilder() ;
 
             URL url  = new URL( httpUrl ) ;
@@ -311,7 +311,7 @@ public class HttpUtil {
             connection.connect();
             InputStream is = connection.getInputStream() ;
             reader = new BufferedReader(new InputStreamReader( is , "UTF-8" )) ;
-            String strRead = null ;
+            String strRead;
             while ((strRead = reader.readLine()) != null) {
                 sbf.append(strRead);
                 sbf.append("\r\n");

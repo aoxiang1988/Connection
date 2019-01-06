@@ -11,5 +11,5 @@ import java.util.Map;
 public interface LocalInfoParser {
     public List<LocalInfo> parse(InputStream is) throws Exception;
     public String serialize(List<LocalInfo> books) throws Exception;
-    public Map<Integer,List<Progrem>> getmap() throws Exception;
+    public Map<Integer,List<Program>> getmap() throws Exception;
 }

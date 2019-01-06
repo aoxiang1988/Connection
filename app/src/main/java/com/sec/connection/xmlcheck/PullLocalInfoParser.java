@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class PullLocalInfoParser implements LocalInfoParser {
 
-    private List<Progrem> progrems = null;
-    private Progrem progrem = null;
-    private Map<Integer,List<Progrem>> map = new HashMap<>();
+    private List<Program> programs = null;
+    private Program program = null;
+    private Map<Integer,List<Program>> map = new HashMap<>();
 
     private List<LocalInfo> localInfos = null;
     private LocalInfo localInfo = null;
@@ -42,7 +42,7 @@ public class PullLocalInfoParser implements LocalInfoParser {
                     }
                     if(parser.getName().equals("station")) {
                         localInfo = new LocalInfo();
-                        progrems = new ArrayList<>();
+                        programs = new ArrayList<>();
                         localInfo.setpostion(postion);
                         localInfo.settag(Integer.parseInt(parser.getAttributeValue(0)));
                         localInfo.setstationname(parser.getAttributeValue(1));
@@ -50,17 +50,17 @@ public class PullLocalInfoParser implements LocalInfoParser {
                         localInfos.add(localInfo);
                     }
 //                    if(parser.getName().equals("program")) {
-//                        progrem = new Progrem();
-//                        progrem.setdata(Integer.parseInt(parser.getAttributeValue(0)));
-//                        progrem.settime(parser.getAttributeValue(1));
-//                        progrem.setcontent(parser.getAttributeValue(2));
-//                        progrems.add(progrem);
+//                        program = new Program();
+//                        program.setdata(Integer.parseInt(parser.getAttributeValue(0)));
+//                        program.settime(parser.getAttributeValue(1));
+//                        program.setcontent(parser.getAttributeValue(2));
+//                        programs.add(program);
 //                    }
 //                    eventType = parser.next();
                     break;
                 case XmlPullParser.END_TAG:
 //                    if(parser.getName().equals("station")){
-//                        map.put(localInfo.getchannel() ,progrems);
+//                        map.put(localInfo.getchannel() ,programs);
 //                    }
                     break;
             }
@@ -75,7 +75,7 @@ public class PullLocalInfoParser implements LocalInfoParser {
     }
 
     @Override
-    public Map<Integer, List<Progrem>> getmap() throws Exception {
+    public Map<Integer, List<Program>> getmap() throws Exception {
         return map;
     }
 }

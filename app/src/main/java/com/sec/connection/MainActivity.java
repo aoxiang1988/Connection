@@ -49,7 +49,7 @@ import com.sec.connection.setting.MusicInformationActivity;
 import com.sec.connection.view.FlingView;
 import com.sec.connection.view.LrcView;
 import com.sec.connection.xmlcheck.LocalInfo;
-import com.sec.connection.xmlcheck.Progrem;
+import com.sec.connection.xmlcheck.Program;
 import com.sec.connection.xmlcheck.PullLocalInfoParser;
 import com.sec.connecttoapilibrary.ConnectMainManager;
 import com.sec.connecttoapilibrary.RequestCallBack;
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 			Log.d("bin1111.yang","info : "+is);
 			PullLocalInfoParser parser = new PullLocalInfoParser();
 			List<LocalInfo> localInfos = parser.parse(is);
-			Map<Integer,List<Progrem>> map = parser.getmap();
+			Map<Integer,List<Program>> map = parser.getmap();
 			Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
 			int minute = c.get(Calendar.MINUTE);

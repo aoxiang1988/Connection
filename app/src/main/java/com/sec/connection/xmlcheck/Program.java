@@ -4,7 +4,7 @@ package com.sec.connection.xmlcheck;
  * Created by SRC-TJ-MM-BinYang on 2018/1/8.
  */
 
-public class Progrem {
+public class Program {
     private String time;
     private int data;
     private String content;
