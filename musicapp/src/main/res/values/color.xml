@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <color name="playingcolor">#0bbfe6</color>
+        <color name="noplaycolor">#86898b</color>
+        <color name="widget_no_play">#ffffff</color>
+        <color name="group_item_defult">#7aa5ff62</color>
+        <color name="windowBackground">#eaffbb33</color>
+        <color name="radiotext">#0bbfd6</color>
+        <color name="c_start">#d9FFEBCD</color>
+        <color name="c_center">#d9FFDEAD</color>
+        <color name="c_end">#d9FFEBCD</color>
+        <color name="lrc_back">#760000ff</color>
+        <color name="black">#aa000000</color>
+        <color name="flingview_borad">#8A2BE2</color>
+        <color name="flingview_press">#00ffffff</color>
+        <color name="app_back_ground">#00ffffff</color>
+
+    </resources>

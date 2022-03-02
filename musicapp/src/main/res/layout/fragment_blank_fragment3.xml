@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.sec.connection.vpview.FragmentViewPager.AlbumListFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.sec.connection.view.SelfGridView
+        android:id="@+id/new_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:horizontalSpacing="@dimen/activity_horizontal_margin"
+        android:numColumns="3"
+        android:listSelector="?android:attr/selectableItemBackground"
+        android:verticalSpacing="@dimen/activity_vertical_margin" />
+
+</FrameLayout>

@@ -6,15 +6,15 @@ package com.sec.myonlinefm.classificationprogram.data
 
 class ChannelProgramPattern {
 
-    private var channelProgramList : MutableList<ChannelProgram>? = null
+    private var channelProgramList : MutableList<ChannelProgram?>? = null
 
     private var total = 0
 
-    fun setChannelProgramList(channelProgramList : MutableList<ChannelProgram>) {
+    fun setChannelProgramList(channelProgramList: MutableList<ChannelProgram?>) {
         this.channelProgramList = channelProgramList
     }
 
-    fun getChannelProgramList() : MutableList<ChannelProgram>? {
+    fun getChannelProgramList() : MutableList<ChannelProgram?>? {
         return channelProgramList
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Local>
+    <item position = "天津">
+        <station tag = "0" name = "滨海广播" channel="8780"/>
+        <station tag = "0" name = "农村广播" channel="8850"/>
+        <station tag = "0" name = "生活广播" channel="9110"/>
+        <station tag = "0" name = "相声广播" channel="9210">
+        </station>
+        <station tag = "0" name = "新闻广播" channel="9720"/>
+        <station tag = "0" name = "音乐广播" channel="9900"/>
+        <station tag = "0" name = "经济广播" channel="10140"/>
+        <station tag = "0" name = "文艺广播" channel="10460"/>
+        <station tag = "0" name = "交通广播" channel="10680"/>
+        <station tag = "1" name = "中国之声" channel="10290"/>
+        <station tag = "1" name = "音乐之声" channel="9250"/>
+        <station tag = "1" name = "经济之声" channel="9800"/>
+    </item>
+</Local>

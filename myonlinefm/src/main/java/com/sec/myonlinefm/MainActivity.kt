@@ -1,15 +1,18 @@
 package com.sec.myonlinefm
 
+import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
-import com.sec.myonlinefm.classificationprogram.RequestProgramClassifyActivity
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import com.sec.myonlinefm.data.Station
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private var topBarActionBarView: View? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setTopPanelOnActionBar(title: String, isShowSearchView: Boolean) {
         val bar = supportActionBar
         if (bar != null) {
@@ -33,11 +37,13 @@ class MainActivity : AppCompatActivity() {
         topBarActionBarView = layoutInflater.inflate(R.layout.top_bar_panel_online, null)
         val mBackBut = topBarActionBarView!!.findViewById<ImageView>(R.id.back_but)
         mBackBut.setOnClickListener({finish()})
-//        mBackBut.setVisibility(View.INVISIBLE)
+//        mBackBut.setVisibility(View.INVISIBLE
         val mTopBarTitle = topBarActionBarView!!.findViewById<TextView>(R.id.top_bar_title)
         val mOnLineSearchView = topBarActionBarView!!.findViewById<SearchView>(R.id.online_search)
         mOnLineSearchView.setOnClickListener(View.OnClickListener {
-            val i = Intent(this, SearchActivity::class.java)
+            val i = Intent.makeMainActivity(
+                    ComponentName.createRelative(
+                            "com.sec.myonlinefm","SearchActivity"))
             startActivity(i)
         })
         mTopBarTitle.setText(title)
@@ -56,18 +62,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportActionModeStarted(mode: android.support.v7.view.ActionMode) {
+    override fun onSupportActionModeStarted(mode: ActionMode) {
         super.onSupportActionModeStarted(mode)
         if (topBarActionBarView != null)
             topBarActionBarView!!.setVisibility(View.VISIBLE)
     }
 
-    override fun onSupportActionModeFinished(mode: android.support.v7.view.ActionMode) {
+    override fun onSupportActionModeFinished(mode: ActionMode) {
         super.onSupportActionModeFinished(mode)
         if (topBarActionBarView != null)
             topBarActionBarView!!.setVisibility(View.VISIBLE)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTopPanelOnActionBar("MainFace", false)
@@ -76,8 +83,10 @@ class MainActivity : AppCompatActivity() {
         val mButton : Button = findViewById(R.id.to_on_line_fm) as Button
         mButton.setOnClickListener(
                 {
-                    val intent : Intent = Intent()
-                    intent.setClass(this, RequestProgramClassifyActivity::class.java)
+                    val intent : Intent = Intent.makeMainActivity(
+                            ComponentName.createRelative(
+                                    "com.sec.myonlinefm.classificationprogram",
+                                    "RequestProgramClassifyActivity"))
                     startActivity(intent)
                 })
         mFMListData = NewFMListData(this);
