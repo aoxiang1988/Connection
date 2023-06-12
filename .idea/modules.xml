@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MyAutoApplication.iml" filepath="$PROJECT_DIR$/.idea/modules/MyAutoApplication.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/automotive/MyAutoApplication.automotive.iml" filepath="$PROJECT_DIR$/.idea/modules/automotive/MyAutoApplication.automotive.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/connecttoapilibrary/MyAutoApplication.connecttoapilibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/connecttoapilibrary/MyAutoApplication.connecttoapilibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile/MyAutoApplication.mobile.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile/MyAutoApplication.mobile.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/musicapp/MyAutoApplication.musicapp.iml" filepath="$PROJECT_DIR$/.idea/modules/musicapp/MyAutoApplication.musicapp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/myonlinefm/MyAutoApplication.myonlinefm.iml" filepath="$PROJECT_DIR$/.idea/modules/myonlinefm/MyAutoApplication.myonlinefm.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/nativelib/MyAutoApplication.nativelib.iml" filepath="$PROJECT_DIR$/.idea/modules/nativelib/MyAutoApplication.nativelib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/MyAutoApplication.shared.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/MyAutoApplication.shared.iml" />
     </modules>
   </component>
 </project>
