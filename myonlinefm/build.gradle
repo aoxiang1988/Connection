@@ -22,7 +22,7 @@ android {
     configurations {
         all*.exclude module: 'commons-io'
     }
-    buildToolsVersion '30.0.2'
+    namespace 'com.sec.myonlinefm'
 }
 
 dependencies {

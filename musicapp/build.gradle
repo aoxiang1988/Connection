@@ -18,7 +18,7 @@ android {
     }
     productFlavors {
     }
-    buildToolsVersion '30.0.2'
+    namespace 'com.sec.connection'
 }
 
 dependencies {
