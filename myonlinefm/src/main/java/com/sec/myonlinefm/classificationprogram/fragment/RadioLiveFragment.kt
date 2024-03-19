@@ -1,5 +1,6 @@
 package com.sec.myonlinefm.classificationprogram.fragment
 
+import android.annotation.SuppressLint
 import com.sec.myonlinefm.OnLineFMConnectManager.Companion.mMainInfoCode
 import com.sec.myonlinefm.R
 import com.sec.myonlinefm.OnLineFMConnectManager
@@ -120,6 +121,7 @@ class RadioLiveFragment : Fragment(), View.OnClickListener {
         super.onDetach()
     }
 
+    @SuppressLint("NewApi")
     override fun onClick(v: View?) {
         when (v!!.getId()) {
             R.id.local_but -> {

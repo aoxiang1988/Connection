@@ -44,7 +44,7 @@ class FMProgramActivity : AppCompatActivity(), ServiceConnection, ObserverPlayer
     private var mPlayer: OnLineFMConnectManager? = null
     private var mOnLineStationPlay: LinearLayout? = null
     private var mStationInfo: LinearLayout? = null
-    private var mOnLinePlayerController: ConstraintLayout? = null
+    private var mOnLinePlayerController: FrameLayout? = null
     private var mControllerStationName: TextView? = null
     private var mControllerProgramName: TextView? = null
     private val mStartTime: TextView? = null
@@ -148,7 +148,7 @@ class FMProgramActivity : AppCompatActivity(), ServiceConnection, ObserverPlayer
     }
 
     fun initController() {
-        mOnLinePlayerController = findViewById<View?>(R.id.voice_list_clip_panel_layout) as ConstraintLayout
+        mOnLinePlayerController = findViewById<View?>(R.id.voice_list_clip_panel_layout) as FrameLayout
         mPlayButton = findViewById<View?>(R.id.play_pause_btn) as ImageButton
         mPlayButton!!.setOnClickListener(mClickListener)
         mControllerStationName = findViewById<View?>(R.id.online_station_name) as TextView
