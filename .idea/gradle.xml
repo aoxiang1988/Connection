@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/myonlinefm" />
             <option value="$PROJECT_DIR$/nativelib" />
             <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/testview2" />
           </set>
         </option>
       </GradleProjectSettings>
