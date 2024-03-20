@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.sec.myonlinefm
 
 import android.annotation.SuppressLint
@@ -11,29 +9,29 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.os.Build
 import android.os.Handler
 import android.os.Message
-import android.support.annotation.RequiresApi
 import android.util.Log
-
 import com.sec.myonlinefm.OnLineFMPlayerListener.OberverOnLinePlayerManager
+
 import com.sec.myonlinefm.abstructObserver.RequestCallBack
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgramPattern
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend
 import com.sec.myonlinefm.classificationprogram.data.DemandChannel
-import com.sec.myonlinefm.classificationprogram.data.DemandChannelPattern
 import com.sec.myonlinefm.classificationprogram.data.RecommendsDataPattern
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassifyListPattern
 import com.sec.myonlinefm.classificationprogram.data.WaPiDataPattern
-import com.sec.myonlinefm.data.ClassificationAttributePattern
+import com.sec.myonlinefm.classificationprogram.dataimport.DemandChannelPattern
 import com.sec.myonlinefm.data.PropertyInfo
-import com.sec.myonlinefm.data.Station
 import com.sec.myonlinefm.data.StationProgram
+import com.sec.myonlinefm.data.Station
+import com.sec.myonlinefm.data.ClassificationAttributePattern
+
 import com.sec.myonlinefm.defineview.BitMapCache
 import com.sec.myonlinefm.onlineinfolistener.ObserverListenerManager
 import com.sec.myonlinefm.updataUIListener.ObserverUIListenerManager
+import com.sec.myonlinefmimport.OnLineWorkerThread
 
 import org.json.JSONException
 import java.io.BufferedInputStream
@@ -47,7 +45,6 @@ import java.util.*
  * Created by SRC-TJ-MM-BinYang on 2018/3/8.
  * this is all the main work code of online fm
  */
-@RequiresApi(Build.VERSION_CODES.KITKAT)
 class OnLineFMConnectManager constructor(context: Context) {
 
     private fun getTAG(): String = "OnLineFMConnectManager"
@@ -55,30 +52,30 @@ class OnLineFMConnectManager constructor(context: Context) {
 
     private var mOnLineWork : Boolean = false
     private var mHttpUtil : HttpUtil? = null
-    private var mConvert : JsonStringConvert ? = null
-    private var mOnLineWorkerThread : OnLineWorkerThread<Objects> ? = null
+    private var mConvert : JsonStringConvert? = null
+    private var mOnLineWorkerThread : OnLineWorkerThread<Objects>? = null
 
-    private var mInfoMap : MutableMap<Int, List<PropertyInfo.values>> ? = null
-    var mStations : List<Station>? = null
-    var mCenterStations : List<Station> ? = null
-    var map : MutableMap<Int, List<StationProgram>>? = null
-    var centerMap : MutableMap<Int, List<StationProgram>>? = null
-    var mDifferentStations : MutableList<Station>? = null
-    var mDifferent : MutableMap<Int, List<StationProgram>>? = null
-    var mOneDayPrograms : List<StationProgram> ? = null
+    private var mInfoMap : MutableMap<Int?, MutableList<PropertyInfo.values?>?> ? = null
+    var mStations : MutableList<Station?>? = null
+    var mCenterStations : MutableList<Station?>? = null
+    var map : MutableMap<Int?, MutableList<StationProgram?>?>? = null
+    var centerMap : MutableMap<Int?, MutableList<StationProgram?>?>? = null
+    var mDifferentStations : MutableList<Station?>? = null
+    var mDifferent : MutableMap<Int?, MutableList<StationProgram?>?>? = null
+    var mOneDayPrograms : MutableList<StationProgram?> ? = null
 
     private var mDayOfWeek : Int = 1
     private lateinit var mTime : String
 
     private var stationId : Int = -1
     var mPlayType : Int = 0
-    private var mProgramStartTime : java.lang.String? = null
-    private var mProgramEndTime : java.lang.String ? = null
+    private var mProgramStartTime : String? = null
+    private var mProgramEndTime : String ? = null
     lateinit var mRequestReplayUrl : String
     private lateinit var mStation : Station
     private var mDayInfo : Int = 0
     private var mOrder : Int = 0
-    private var mDCAttrId : Array<Int>? = null
+    private var mDCAttrId : Array<Int?>? = null
     private var getGPSInfo : GetGPSInfo? = null
 
     companion object {
@@ -97,26 +94,38 @@ class OnLineFMConnectManager constructor(context: Context) {
 
     @SuppressLint("HandlerLeak")
     private var handler : Handler = object : Handler() {
-        override fun handleMessage(msg : Message?) {
+        override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when {
-                msg!!.what == UPDATE_INFO -> {
-                    ObserverListenerManager.getInstance().notifyLiveRadioLocalObserver(mStations, map)
-                    ObserverListenerManager.getInstance().notifyLiveRadioCenterObserver(mCenterStations, centerMap)
+                msg.what == UPDATE_INFO -> {
+                    ObserverListenerManager.getInstance()!!.notifyLiveRadioLocalObserver(mStations , map)
+                    ObserverListenerManager.getInstance()!!.notifyLiveRadioCenterObserver(mCenterStations, centerMap)
                 }
-                msg.what == UPDATE_DIFFERENT_INFO -> ObserverListenerManager.getInstance().notifyDifferentInfoObserver(mDifferentStations, mDifferent)
-                msg.what == START_ONLINE_PLAYER -> OberverOnLinePlayerManager.getInstance().notifyObserver(mRequestReplayUrl, mPlayType)
-                msg.what == UPDATE_ONE_DAY_PROGRAM -> ObserverUIListenerManager.getInstance().notifyOneDayProgramUpData(mOneDayPrograms)
+                msg.what == UPDATE_DIFFERENT_INFO -> ObserverListenerManager
+                        .getInstance()
+                        ?.notifyDifferentInfoObserver(mDifferentStations, mDifferent)
+
+                msg.what == START_ONLINE_PLAYER -> OberverOnLinePlayerManager
+                        .getInstance()
+                        ?.notifyObserver(mRequestReplayUrl, mPlayType)
+
+                msg.what == UPDATE_ONE_DAY_PROGRAM -> ObserverUIListenerManager
+                        .getInstance()
+                        ?.notifyOneDayProgramUpData(mOneDayPrograms)
             }
         }
     }
 
     private fun checkNetWorkStatus() : Boolean {
         val connectivityManager : ConnectivityManager = mContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val mobNetInfo : NetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        val wifiNetInfo : NetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mobNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+        val wifiNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
 
-        OnLineFMConnectManager.isConnectNet = !(!mobNetInfo.isConnected && !wifiNetInfo.isConnected)
+        if (mobNetInfo != null) {
+            if (wifiNetInfo != null) {
+                OnLineFMConnectManager.isConnectNet = !(!mobNetInfo.isConnected && !wifiNetInfo.isConnected)
+            }
+        }
         Log.d(getTAG(),"isConnectNet "+ OnLineFMConnectManager.isConnectNet)
         return OnLineFMConnectManager.isConnectNet
     }
@@ -124,15 +133,19 @@ class OnLineFMConnectManager constructor(context: Context) {
     private var mNetReceiver : BroadcastReceiver = object: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val connectivityManager : ConnectivityManager ? = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-            val mobNetInfo : NetworkInfo = connectivityManager!!.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-            val wifiNetInfo : NetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            val mobNetInfo = connectivityManager!!.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+            val wifiNetInfo : NetworkInfo? = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
 
-            if (!mobNetInfo.isConnected && !wifiNetInfo.isConnected) { isConnectNet = false
-            } else {
-                isConnectNet = true
-                getOnLineFM()
+            if (mobNetInfo != null) {
+                if (wifiNetInfo != null) {
+                    if (!mobNetInfo.isConnected && !wifiNetInfo.isConnected) { isConnectNet = false
+                    } else {
+                        isConnectNet = true
+                        getOnLineFM()
+                    }
+                }
             }
-            ObserverUIListenerManager.getInstance().notifyConnectStatus(isConnectNet)
+            ObserverUIListenerManager.getInstance()!!.notifyConnectStatus(isConnectNet)
         }
     }
 
@@ -169,7 +182,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         mDifferentStations = null
         mDifferent = null
         mOneDayPrograms = null
-        BitMapCache.getInstance().clearCache()
+        BitMapCache.getInstance()!!.clearCache()
         mContext!!.unregisterReceiver(mNetReceiver)
         mContext = null
     }
@@ -178,27 +191,27 @@ class OnLineFMConnectManager constructor(context: Context) {
      *online thread
      * ********/
 
-    fun getOnLineStations() : List<Station>? {
+    fun getOnLineStations() : MutableList<Station?>? {
         return mStations
     }
 
-    fun getOnLineCenterStations() : List<Station>? {
+    fun getOnLineCenterStations() : MutableList<Station?>? {
         return mCenterStations
     }
 
-    fun getOnLineStationMap(mStations : List<Station> ) :  Map<Int, Station> {
+    fun getOnLineStationMap(mStations: MutableList<Station?>?) :  Map<Int, Station> {
         val map : MutableMap<Int, Station> = HashMap()
-        for (i in mStations) {
-            map.put(i.stationId, i)
+        for (i in mStations!!) {
+            map.put(i!!.getStationId(), i)
         }
         return map
     }
 
-    fun getOnLineStationProgramMap() : MutableMap<Int, List<StationProgram>>? {
+    fun getOnLineStationProgramMap() : MutableMap<Int?, MutableList<StationProgram?>?>? {
         return map
     }
 
-    fun getOnLineStationProgramCentermap() : Map<Int, List<StationProgram>>? {
+    fun getOnLineStationProgramCentermap() : MutableMap<Int?, MutableList<StationProgram?>?>? {
         return centerMap
     }
 
@@ -211,7 +224,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         map = HashMap()
         centerMap = HashMap()
         getGPSInfo = GetGPSInfo(mContext)
-        getGPSInfo!!.getLocalName(getGPSInfo!!.location)
+        getGPSInfo!!.getLocalName(getGPSInfo!!.getLocation())
         startGetOnLineInfo()
     }
 
@@ -221,7 +234,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     fun startGetOnLineInfo() {
         if (changedByUser)
             return
-        mGPS_Name = getGPSInfo!!.getStringInfo(mContext, GetGPSInfo.KEY_LOCAL_NAME_FOR_THREAD)
+        mGPS_Name = getGPSInfo!!.getStringInfo(mContext, GetGPSInfo.KEY_LOCAL_NAME_FOR_THREAD)!!
         Log.d(getTAG(), "mGPS_Name : $mGPS_Name")
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_ONLINE_INFO)
     }
@@ -244,15 +257,15 @@ class OnLineFMConnectManager constructor(context: Context) {
         mTime = mh + "${':'}" + mM
     }
 
-    fun getLocalInfo() : List<PropertyInfo.values>? {
+    fun getLocalInfo() : List<PropertyInfo.values?>? {
         return mInfoMap!![20]
     }
 
     private fun getStationsLocalId(mGPS_Name : String) : Int {
         var id = 0
-        val mLocal : List<PropertyInfo.values> = mInfoMap!![20]!!
+        val mLocal : List<PropertyInfo.values?> = mInfoMap!![20]!!
         for (i in mLocal) {
-            if (Objects.equals(i.getvaluesname(), mGPS_Name)) {
+            if (Objects.equals(i!!.getvaluesname(), mGPS_Name)) {
                 id = i.getvaluesId()
                 mLocal_ID = id
                 break
@@ -268,7 +281,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     private fun connectPrepare() {
         var mTokenResult : String? = null
         try {
-            mTokenResult = mHttpUtil!!.access_Token
+            mTokenResult = mHttpUtil!!.getAccess_Token()
             Log.d(getTAG(), "result :$mTokenResult")
         } catch (e : NullPointerException) {
             if(mTokenResult == null)
@@ -313,7 +326,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
         var find = false
         try {
-            val programInfo : String = mHttpUtil!!.getStationProgram(mStation.stationId, dayOfWeek)
+            val programInfo : String = mHttpUtil!!.getStationProgram(mStation.getStationId(), dayOfWeek)!!
             mOneDayPrograms = mConvert!!.getStationProgram(programInfo, dayOfWeek)
             find = true
         } catch (e : JSONException) {
@@ -327,7 +340,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     fun getOnlineInfoAsyncEx() {
         Log.d(getTAG(),"getOnlineInfoAsyncEx")
         var find: Boolean
-        mInfoMap = getClassificationAttributeAsyncEx(5)!!.infoMap
+        mInfoMap = getClassificationAttributeAsyncEx(5)!!.getInfoMap()
         val stationInfo: String?
         val centerStationInfo : String?
         try {
@@ -340,15 +353,15 @@ class OnLineFMConnectManager constructor(context: Context) {
         try {
             mStations = mConvert!!.getAll_Station(stationInfo)
             mCenterStations = mConvert!!.getAll_Station(centerStationInfo)
-            for (i in (mCenterStations as MutableList<Station>?)!!) {
-                val programInfo : String = mHttpUtil!!.getStationProgram(i.stationId, mDayOfWeek)
-                val programs : List<StationProgram> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)
-                centerMap!!.put(i.stationId, programs)
+            for (i in (mCenterStations )!!) {
+                val programInfo : String = mHttpUtil!!.getStationProgram(i!!.getStationId(), mDayOfWeek)!!
+                val programs : MutableList<StationProgram?> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)!!
+                centerMap!!.put(i.getStationId(), programs)
             }
-            for (i in (mStations as MutableList<Station>?)!!) {
-                val programInfo : String = mHttpUtil!!.getStationProgram(i.stationId, mDayOfWeek)
-                val programs : List<StationProgram> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)
-                map!!.put(i.stationId, programs)
+            for (i in (mStations )!!) {
+                val programInfo : String = mHttpUtil!!.getStationProgram(i!!.getStationId(), mDayOfWeek)!!
+                val programs : MutableList<StationProgram?> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)!!
+                map!!.put(i.getStationId(), programs)
             }
             find = true
         } catch (e : JSONException) {
@@ -379,9 +392,9 @@ class OnLineFMConnectManager constructor(context: Context) {
             mDifferent = HashMap()
             mDifferentStations = mConvert!!.getAll_Station(stationInfo)
             for (i in mDifferentStations!!) {
-                val programInfo : String = mHttpUtil!!.getStationProgram(i.stationId, mDayOfWeek)
-                val mPrograms : List<StationProgram> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)
-                mDifferent!!.put(i.stationId, mPrograms)
+                val programInfo : String = mHttpUtil!!.getStationProgram(i!!.getStationId(), mDayOfWeek)!!
+                val mPrograms : MutableList<StationProgram?> = mConvert!!.getStationProgram(programInfo, mDayOfWeek)!!
+                mDifferent!!.put(i.getStationId(), mPrograms)
             }
             find = true
         } catch (e : JSONException) {
@@ -395,7 +408,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     /* ********************
      * *replay on line **
      * *******************/
-    fun getReplayUrl(stationId: Int, programStartTime: java.lang.String?, programEndTime: java.lang.String?, play_type: Int) {
+    fun getReplayUrl(stationId: Int, programStartTime: String?, programEndTime: String?, play_type: Int) {
         this.stationId = stationId
         this.mProgramStartTime = programStartTime
         this.mProgramEndTime = programEndTime
@@ -425,7 +438,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     fun getReplayUrlAsyncEx() {
         Log.d(getTAG(),"getReplayUrlAsyncEx")
         try {
-            val mRule : JsonStringConvert.Rule = mConvert!!.getReplay_URL_Rule(mHttpUtil!!.replayRule)
+            val mRule : JsonStringConvert.Rule = mConvert!!.getReplay_URL_Rule(mHttpUtil!!.getReplayRule())!!
 
             mRequestReplayUrl = if (mPlayType == 2) {
                 val mData : String = getData()
@@ -461,40 +474,40 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getClassificationAttribute (mCategoryID : Int,
-                                           requestCallBack : RequestCallBack<ClassificationAttributePattern>) {
+    fun getClassificationAttribute (mCategoryID: Int,
+                                    requestCallBack: RequestCallBack<ClassificationAttributePattern?>) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_CLASSIFY_ATTRIBUTE,
                 requestCallBack,
                 mCategoryID,
                 -1)
     }
 
-    fun getRequestProgramClassify(callBack : RequestCallBack<RequestProgramClassifyListPattern>) {
+    fun getRequestProgramClassify(callBack: RequestCallBack<RequestProgramClassifyListPattern?>) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_REQUEST_PROGRAM_CLASSIFY_PROGRAM,
                 callBack)
     }
 
-    fun getCurrentDemandChannel(channelID : Int,
-                                       requestCallBack : RequestCallBack<DemandChannelPattern>) {
+    fun getCurrentDemandChannel(channelID: Int,
+                                requestCallBack: RequestCallBack<DemandChannelPattern?>) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_CURRENT_DEMAND_CHANNEL,
                 requestCallBack,
                 channelID,
                 -1)
     }
 
-    fun getCurrentDemandChannelPrograms(channelID : Int,
-                                               current_page : Int,
-                                               order : Int,
-                                               requestCallBack : RequestCallBack<ChannelProgramPattern>) {
+    fun getCurrentDemandChannelPrograms(channelID: Int,
+                                        current_page: Int,
+                                        order: Int,
+                                        requestCallBack: RequestCallBack<ChannelProgramPattern?>) {
         mOrder = order
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_CURRENT_DEMAND_CHANNEL_PROGRAMS,
                 requestCallBack, channelID, current_page)
     }
 
-    fun getClassifyInfoContext(mCurrentPage : Int,
-                                      mChannelID : Int,
-                                      mAttrId : Array<Int>?,
-                                      requestCallBack : RequestCallBack<DemandChannelPattern>) {
+    fun getClassifyInfoContext(mCurrentPage: Int,
+                               mChannelID: Int,
+                               mAttrId: Array<Int?>?,
+                               requestCallBack: RequestCallBack<DemandChannelPattern?>) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_CLASSIFY_CONTEXT,
                 requestCallBack,
                 mChannelID,
@@ -502,12 +515,12 @@ class OnLineFMConnectManager constructor(context: Context) {
         mDCAttrId = mAttrId
     }
 
-    fun getRequestProgramClassifyAsyncEx() : List<RequestProgramClassify> ? {
+    fun getRequestProgramClassifyAsyncEx() : MutableList<RequestProgramClassify?> ? {
         Log.d(getTAG(),"getRequestProgramClassifyAsyncEx")
         connectPrepare()
         val mRequestProgramResult: String?
         return try {
-            mRequestProgramResult = mHttpUtil!!.requestProgram
+            mRequestProgramResult = mHttpUtil!!.getRequestProgram()
             mConvert!!.getRequestProgramClassifiesList(mRequestProgramResult)
         } catch (e : JSONException) {
             e.printStackTrace()
@@ -515,7 +528,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getDemandChannelContextAsyncEx(categoryID : Int, currentPage : Int) : List<DemandChannel> ? {
+    fun getDemandChannelContextAsyncEx(categoryID : Int, currentPage : Int) : MutableList<DemandChannel?> ? {
         Log.d(getTAG(),"getDemandChannelContextAsyncEx")
         if(mHttpUtil!!.getAccess_token() == null)
             connectPrepare()
@@ -561,7 +574,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     /* *****
        add by gaolin 4/20
      */
-    fun getFiveRecmThumb(callBack : RequestCallBack<ClassifyRecommend>, sectionId : Int) {
+    fun getFiveRecmThumb(callBack: RequestCallBack<ClassifyRecommend?>, sectionId: Int) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_FIVE_RECOMMEND_THUMB, callBack, sectionId)
     }
 
@@ -569,7 +582,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         Log.d(getTAG(),"getFiveRecmAsyncEx")
         val mRecommendResult : String
         return try {
-            mRecommendResult = mHttpUtil!!.getFiveRecommend(sectionId)
+            mRecommendResult = mHttpUtil!!.getFiveRecommend(sectionId)!!
             mConvert!!.getClassifyRecommendheader(mRecommendResult, sectionId)
         }catch (e : JSONException) {
             e.printStackTrace()
@@ -577,7 +590,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getRequestRecmmendProgram(callBack : RequestCallBack<ClassifyRecommend>, category_id : Int) {
+    fun getRequestRecmmendProgram(callBack: RequestCallBack<ClassifyRecommend?>, category_id: Int) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_REQUEST_PROGRAM_RECOMMEND, callBack, category_id)
     }
 
@@ -585,7 +598,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         Log.d(getTAG(),"getRecommendAsyncEx")
         val mRecommendResult : String
         return try {
-            mRecommendResult = mHttpUtil!!.getRecommendProgram(category_id)
+            mRecommendResult = mHttpUtil!!.getRecommendProgram(category_id)!!
             mConvert!!.getClassifyRecommendItem(mRecommendResult, category_id)
         }catch (e : JSONException) {
             e.printStackTrace()
@@ -593,7 +606,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getRecommendThumb(callBack : RequestCallBack<Bitmap>, url : String) {
+    fun getRecommendThumb(callBack : RequestCallBack<Bitmap?>, url : String) {
         mOnLineWorkerThread!!.SendNewRunnable(OnLineWorkerThread.OPERATION_GET_REQUEST_RECOMMEND_THUMB, callBack, url)
     }
 
@@ -615,7 +628,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         Log.d(getTAG(),"getRecommendsDataListAsyncEx")
         val mRecommendResult : String
         return try {
-            mRecommendResult = mHttpUtil!!.getFiveRecommend(section_id)
+            mRecommendResult = mHttpUtil!!.getFiveRecommend(section_id)!!
             mConvert!!.getRecommendsData(mRecommendResult)
         }catch (e : JSONException) {
             e.printStackTrace()
@@ -623,7 +636,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun getWaPiDataList(category_id : Int, requestCallBack : RequestCallBack<WaPiDataPattern>) {
+    fun getWaPiDataList(category_id: Int, requestCallBack: RequestCallBack<WaPiDataPattern?>) {
         mOnLineWorkerThread!!.SendNewRunnableWaPi(OnLineWorkerThread.OPERATION_GET_WAPI_DATA_LIST, requestCallBack, category_id)
     }
 
@@ -631,7 +644,7 @@ class OnLineFMConnectManager constructor(context: Context) {
         Log.d(getTAG(),"getWaPiDataListAsyncEx")
         val mWaPiDataResult : String
         return try {
-            mWaPiDataResult = mHttpUtil!!.getWapiDataResult(category_id)
+            mWaPiDataResult = mHttpUtil!!.getWapiDataResult(category_id)!!
             mConvert!!.getWapiData(mWaPiDataResult)
         }catch (e : JSONException) {
             e.printStackTrace()
@@ -639,11 +652,11 @@ class OnLineFMConnectManager constructor(context: Context) {
         }
     }
 
-    fun convertToMhz(freq : Int) : String ? {
+    fun convertToMhz(freq: Int): String {
         return if (freq == 0) {
-            "000.0"
+            "000.0";
         } else {
-            String.format(Locale.US, "%.1f", freq / 100f)
+            (freq / 100f).toString()
         }
     }
 

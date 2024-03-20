@@ -1,0 +1,11 @@
+com/example/myautoapplication/shared/BuildConfig.java
+ com.example.myautoapplication.shared.BuildConfig
+com/example/myautoapplication/shared/IMyAidlInterface.java
+ com.example.myautoapplication.shared.IMyAidlInterface
+ com.example.myautoapplication.shared.IMyAidlInterface$Default
+ com.example.myautoapplication.shared.IMyAidlInterface$Stub
+ com.example.myautoapplication.shared.IMyAidlInterface$Stub$Proxy
+com/example/myautoapplication/shared/MyMusicService.java
+ com.example.myautoapplication.shared.MyMusicService
+ com.example.myautoapplication.shared.MyMusicService$1
+ com.example.myautoapplication.shared.MyMusicService$MediaSessionCallback

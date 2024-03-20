@@ -1,0 +1,38 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<!-- suppress ALL -->
+3<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+4    package="com.example.myautoapplication.shared" >
+5
+6    <uses-sdk
+7        android:minSdkVersion="21"
+7-->D:\github\Connection\shared\src\main\AndroidManifest.xml
+8        android:targetSdkVersion="30" />
+8-->D:\github\Connection\shared\src\main\AndroidManifest.xml
+9
+10    <application>
+10-->D:\github\Connection\shared\src\main\AndroidManifest.xml:5:5-21:19
+11        <meta-data
+11-->D:\github\Connection\shared\src\main\AndroidManifest.xml:7:9-9:59
+12            android:name="com.google.android.gms.car.application"
+12-->D:\github\Connection\shared\src\main\AndroidManifest.xml:8:13-66
+13            android:resource="@xml/automotive_app_desc" />
+13-->D:\github\Connection\shared\src\main\AndroidManifest.xml:9:13-56
+14
+15        <!--
+16         Main music service, provides media browsing and media playback services to
+17         consumers through MediaBrowserService and MediaSession. Consumers connect to it through
+18         MediaBrowser (for browsing) and MediaController (for playback control)
+19        -->
+20        <service android:name="com.example.myautoapplication.shared.MyMusicService" >
+20-->D:\github\Connection\shared\src\main\AndroidManifest.xml:14:9-19:19
+20-->D:\github\Connection\shared\src\main\AndroidManifest.xml:15:13-79
+21            <intent-filter>
+21-->D:\github\Connection\shared\src\main\AndroidManifest.xml:16:13-18:29
+22                <action android:name="android.media.browse.MediaBrowserService" />
+22-->D:\github\Connection\shared\src\main\AndroidManifest.xml:17:17-83
+22-->D:\github\Connection\shared\src\main\AndroidManifest.xml:17:25-80
+23            </intent-filter>
+24        </service>
+25    </application>
+26
+27</manifest>

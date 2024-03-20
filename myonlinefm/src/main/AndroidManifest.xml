@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--suppress ALL -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.sec.myonlinefm">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="com.samsung.android.permission.LOCK_TASK_MODE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -54,25 +53,13 @@
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- on line demo code -->
         <activity
             android:name="com.sec.myonlinefm.OnLineStationsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:theme="@style/NetFMThem"
-            android:windowSoftInputMode="adjustPan|adjustResize">
-            <layout
-                android:minHeight="@dimen/multi_window_min_height"
-                android:minWidth="@dimen/multi_window_min_width" />
-        </activity>
-        <activity
-            android:name="com.sec.myonlinefm.FMProgramActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"
@@ -95,10 +82,6 @@
                 android:minHeight="@dimen/multi_window_min_height"
                 android:minWidth="@dimen/multi_window_min_width" />
         </activity>
-        <service
-            android:name="com.sec.myonlinefm.OnLineFMPlayerService"
-            android:enabled="true"
-            android:exported="true" />
         <activity
             android:name="com.sec.myonlinefm.classificationprogram.RequestProgramClassifyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
@@ -119,17 +102,6 @@
             android:launchMode="singleTop"
             android:theme="@style/NetFMThem"
             android:windowSoftInputMode="adjustPan|adjustResize">
-            <layout
-                android:minHeight="@dimen/multi_window_min_height"
-                android:minWidth="@dimen/multi_window_min_width" />
-        </activity>
-        <activity
-            android:name="com.sec.myonlinefm.classificationprogram.ChannelProgramActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:theme="@style/NetFMThem">
             <layout
                 android:minHeight="@dimen/multi_window_min_height"
                 android:minWidth="@dimen/multi_window_min_width" />

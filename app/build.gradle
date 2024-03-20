@@ -1,11 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    signingConfigs {
+        debug {
+            storeFile file(kotlin_version)
+        }
+    }
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.sec.connection"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,6 +23,7 @@ android {
     }
     productFlavors {
     }
+    buildToolsVersion '28.0.1'
 }
 repositories {
     flatDir {

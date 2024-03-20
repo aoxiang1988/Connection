@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginEnd="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    tools:ignore="MissingDefaultResource">
+
+    <ImageView
+        android:id="@+id/video_imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="?android:attr/galleryItemBackground"
+        android:layout_weight="3"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/video_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            android:singleLine="true"
+            android:text="aaaaaaaaaaaaaaaaaaaa"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/video_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:textSize="15sp"
+                android:text="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                android:singleLine="true"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/video_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:singleLine="true"
+                android:textSize="15sp"
+                android:gravity="bottom|center"
+                android:text="00:00:00" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:background="@color/grey"
+            android:layout_height="1px"/>
+    </LinearLayout>
+</LinearLayout>

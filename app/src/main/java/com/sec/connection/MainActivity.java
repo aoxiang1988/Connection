@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 					mNotificationManager.shownotification(mList.get(mListPosition));
 					break;
 				case REMOVE_NOTIFICATION:
-					mNotificationManager.removenotification(getBaseContext());
+					mNotificationManager.removenotification(mService.getBaseContext());
 					break;
 				case QUICK_RIGHT:
 					if (mCurrentTime < mList.get(mListPosition).getDuration()) {

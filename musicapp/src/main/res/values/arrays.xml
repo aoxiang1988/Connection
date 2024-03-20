@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="info">
+        <item name = "musicname">歌曲名：</item>
+        <item name = "artister">演唱者：</item>
+        <item name = "musicpath">文件位置：</item>
+        <item name = "musize">大小：</item>
+        <item name = "musictime">录制日期：</item>
+        <item name = "trank">音轨：</item>
+    </string-array>
+</resources>

@@ -1,0 +1,53 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.play.com.example.test.musictest.play.MainActivity" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/Media_seting"
+        android:orderInCategory="100"
+        android:title="Media_seting"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/searchmusic"
+        android:orderInCategory="100"
+        android:title="@string/network_search"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/list_show"
+        android:orderInCategory="100"
+        android:title="@string/change"
+        android:icon="@drawable/tw_ic_ab_drawer_mtrl"
+        app:showAsAction="always"/>
+    <item 
+        android:id="@+id/search_music"
+        android:orderInCategory="100"
+        android:title="@string/network_search"
+        android:icon="@drawable/list"
+        app:showAsAction="ifRoom|withText"
+        app:actionViewClass="android.widget.SearchView" />
+    <item
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/filter_settings"
+                    android:title="@string/filter"
+                    />
+                <item
+                    android:id="@+id/test"
+                    android:title="test"
+                    />
+            </group>
+        </menu>
+    </item>
+	
+</menu>

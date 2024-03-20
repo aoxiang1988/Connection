@@ -75,25 +75,17 @@ class OkHttpUtil (private val mClient_ID : String = "***",
         val attr : StringBuilder = StringBuilder()
         val mAll_Station_Url : String
         if(attr_id_1 == 0) {
-            if(attr_id == null) {
-                mAll_Station_Url = "http://api.open.qingting.fm/v6/media/categories/" +
-                        category_id.toString() +
-                        "/channels/order/0/curpage/" +
-                        current_page.toString() +
-                        "/pagesize/30?"
-            } else {
-                for (anAttr_id in attr_id) {
-                    if(anAttr_id > 0)
-                        attr.append(anAttr_id).append("/")
-                }
-                mAll_Station_Url = "http://api.open.qingting.fm/v6/media/categories/"+
-                        category_id.toString()+
-                        "/channels/order/0/attr/"+
-                        attr.toString()+
-                        "curpage/"+
-                        current_page.toString()+
-                        "/pagesize/30?"
+            for (anAttr_id in attr_id) {
+                if(anAttr_id > 0)
+                    attr.append(anAttr_id).append("/")
             }
+            mAll_Station_Url = "http://api.open.qingting.fm/v6/media/categories/"+
+                    category_id.toString()+
+                    "/channels/order/0/attr/"+
+                    attr.toString()+
+                    "curpage/"+
+                    current_page.toString()+
+                    "/pagesize/30?"
         }
         else
             mAll_Station_Url = "http://api.open.qingting.fm/v6/media/categories/"+
@@ -263,7 +255,7 @@ class OkHttpUtil (private val mClient_ID : String = "***",
      * @return
      * @throws
      */
-    fun httpGet(httpUrl : String) : String? {
+    fun httpGet(httpUrl : String) : String {
         var result = ""
         try {
             val reader: BufferedReader?

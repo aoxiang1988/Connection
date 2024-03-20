@@ -109,7 +109,7 @@ public class HttpUtil {
         return httpPost(getAll_Station_Url(category_id, curpage, attr_id_1));
     }
 
-    /* *************
+    /**
      * get replay url rule
      * *************/
     public String getReplayRule() {
