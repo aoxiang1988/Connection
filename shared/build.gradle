@@ -1,7 +1,7 @@
 apply plugin: "com.android.library"
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
 
     defaultConfig {
         minSdkVersion 21
@@ -10,6 +10,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace 'com.example.myautoapplication.shared'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '31.0.0'
 }
 
 dependencies {

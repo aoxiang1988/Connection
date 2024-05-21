@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
     defaultConfig {
         applicationId "com.sec.myonlinefm"
         minSdkVersion 21
@@ -23,6 +23,11 @@ android {
         all*.exclude module: 'commons-io'
     }
     namespace 'com.sec.myonlinefm'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '31.0.0'
 }
 
 dependencies {
