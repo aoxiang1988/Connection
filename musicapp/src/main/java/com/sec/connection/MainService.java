@@ -184,6 +184,7 @@ public class MainService extends Service{
 	Widget_Receiver widget_Receiver;
 	Notify_Receiver mNotifyReceiver;
 	MyReceiver myReceiver;
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -617,6 +618,7 @@ public class MainService extends Service{
 	/*存储监听
 	* */
 	ScanSdReceiver scanSdReceiver;
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
 	public void scanSdCard(){
         IntentFilter intentfilter = new IntentFilter( Intent.ACTION_MEDIA_SCANNER_STARTED);
         intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);

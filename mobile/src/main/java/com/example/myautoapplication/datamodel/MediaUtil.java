@@ -59,7 +59,7 @@ public class MediaUtil {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             Bundle bundle = new Bundle();
             for (final String key : AUDIO_KEY) {
-                final int columnIndex = cursor.getColumnIndex(key);
+                final int columnIndex = cursor.getColumnIndexOrThrow(key);
                 final int type = cursor.getType(columnIndex);
                 switch (type) {
                     case Cursor.FIELD_TYPE_FLOAT:
@@ -114,7 +114,7 @@ public class MediaUtil {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             Bundle bundle = new Bundle();
             for (final String key : VIDEO_KEY) {
-                final int columnIndex = cursor.getColumnIndex(key);
+                final int columnIndex = cursor.getColumnIndexOrThrow(key);
                 final int type = cursor.getType(columnIndex);
                 switch (type) {
                     case Cursor.FIELD_TYPE_FLOAT:

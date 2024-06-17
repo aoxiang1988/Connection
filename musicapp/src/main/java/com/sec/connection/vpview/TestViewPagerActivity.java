@@ -1,5 +1,6 @@
 package com.sec.connection.vpview;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
@@ -22,15 +22,14 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.sec.connection.BaseListInfo;
+import com.sec.connection.MainActivity;
 import com.sec.connection.MainService;
 import com.sec.connection.R;
-import com.sec.connection.MainActivity;
-import com.sec.connection.MusicApplication;
+import com.sec.connection.view.NewImageView;
 import com.sec.connection.vpview.FragmentViewPager.AlbumListFragment;
 import com.sec.connection.vpview.FragmentViewPager.AllListFragment;
 import com.sec.connection.vpview.FragmentViewPager.ArtistMusicListFragment;
 import com.sec.connection.vpview.FragmentViewPager.FilterListFragment;
-import com.sec.connection.view.NewImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +71,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
     View actionBar;
     private ViewReceiver mViewReceiver;
 
+    @SuppressLint({"MissingInflatedId", "UnspecifiedRegisterReceiverFlag"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -285,7 +285,14 @@ public class TestViewPagerActivity extends AppCompatActivity {
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
+
+                if (v.getId() == R.id.st_ac_start) {
+                    PlayMusicUIUpdate(MainActivity.getcurrentposition());
+                } else if (v.getId() == R.id.st_ac_stop) {
+                    PlayMusicUIUpdate(MainActivity.getcurrentposition());
+                }
+
+                /*switch (v.getId()) {
                     case R.id.st_ac_pre :
 
                         break;
@@ -298,7 +305,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
                     case R.id.st_ac_stop :
                         PlayMusicUIUpdate(MainActivity.getcurrentposition());
                         break;
-                }
+                }*/
             }
         };
     }

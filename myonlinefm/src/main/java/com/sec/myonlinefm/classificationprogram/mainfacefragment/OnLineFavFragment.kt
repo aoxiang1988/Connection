@@ -99,11 +99,11 @@ class OnLineFavFragment : Fragment() {
         if (cursor.moveToFirst()) {
             do {
                 val favData = FavData()
-                val cid = cursor.getInt(cursor.getColumnIndex("channel_id"))
-                val category_id = cursor.getInt(cursor.getColumnIndex("category_id"))
-                val name = cursor.getString(cursor.getColumnIndex("channel_name"))
-                val url = cursor.getString(cursor.getColumnIndex("channel_them_url"))
-                val podCasterName = cursor.getString(cursor.getColumnIndex("pod_caster_name"))
+                val cid = cursor.getInt(cursor.getColumnIndexOrThrow("channel_id"))
+                val category_id = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("channel_name"))
+                val url = cursor.getString(cursor.getColumnIndexOrThrow("channel_them_url"))
+                val podCasterName = cursor.getString(cursor.getColumnIndexOrThrow("pod_caster_name"))
                 Log.d("bin1111.yang", "favData : $name $cid $url")
                 favData.channelID = cid
                 favData.categoryID = category_id

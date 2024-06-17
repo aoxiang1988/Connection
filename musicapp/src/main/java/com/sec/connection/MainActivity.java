@@ -13,7 +13,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -44,18 +43,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sec.connection.vpview.TestViewPagerActivity;
 import com.sec.connection.data.Audio;
 import com.sec.connection.setting.FilterSettings;
 import com.sec.connection.setting.MediaPlayerTest;
 import com.sec.connection.setting.MusicInformationActivity;
 import com.sec.connection.view.FlingView;
 import com.sec.connection.view.LrcView;
+import com.sec.connection.vpview.TestViewPagerActivity;
 import com.sec.connection.xmlcheck.LocalInfo;
 import com.sec.connection.xmlcheck.Program;
 import com.sec.connection.xmlcheck.PullLocalInfoParser;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
@@ -200,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	};
 
+	@SuppressLint({"NewApi", "UnspecifiedRegisterReceiverFlag"})
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -224,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 		mActionBar = findViewById(R.id.action_bar);
 		mActionBar.setBackgroundColor(getResources().getColor(R.color.playingcolor));
 //		mActionBar.setVisibility(View.GONE);
-	}
+    }
 
 	private void onmycreate() {
 		setContentView(R.layout.activity_main);

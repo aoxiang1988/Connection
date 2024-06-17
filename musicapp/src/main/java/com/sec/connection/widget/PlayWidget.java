@@ -13,11 +13,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.sec.connection.BaseListInfo;
+import com.sec.connection.MainService;
 import com.sec.connection.R;
 import com.sec.connection.StartActivity;
 import com.sec.connection.data.Audio;
-import com.sec.connection.MainService;
-import com.sec.connection.MusicApplication;
 
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class PlayWidget extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		// TODO Auto-generated method stub
 		Intent intent_mainactivity = new Intent(context, StartActivity.class);
-		PendingIntent pendingintent_mainactivity = PendingIntent.getActivity(context, 0, intent_mainactivity, 0);
+		PendingIntent pendingintent_mainactivity = PendingIntent.getActivity(context, 0, intent_mainactivity, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE);
 		
 		ComponentName componentName = new ComponentName(context, PlayWidget.class);
 		widget_view = new RemoteViews(context.getPackageName(), R.layout.widget);
@@ -71,20 +70,20 @@ public class PlayWidget extends AppWidgetProvider {
 		
 		if(!MainService.isPlay){
 			widget_view.setOnClickPendingIntent(R.id.ic_media_play, 
-					PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_PLAY), 0));
+					PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_PLAY), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 			widget_view.setViewVisibility(R.id.ic_media_stop, View.GONE);
 			widget_view.setViewVisibility(R.id.ic_media_play, View.VISIBLE);
 		} else {
 			widget_view.setOnClickPendingIntent(R.id.ic_media_stop, 
-					PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_STOP), 0));
+					PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_STOP), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 			widget_view.setViewVisibility(R.id.ic_media_play, View.GONE);
 			widget_view.setViewVisibility(R.id.ic_media_stop, View.VISIBLE);
 		}
 		
 		widget_view.setOnClickPendingIntent(R.id.ic_media_next, 
-				PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_NEXT), 0));
+				PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_NEXT), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 		widget_view.setOnClickPendingIntent(R.id.ic_media_previous, 
-				PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_PRE), 0));
+				PendingIntent.getBroadcast(context, 1, new Intent(MainService.NOTIFY_PRE), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 
 		Intent intent = new Intent(context, RemoteViewService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);

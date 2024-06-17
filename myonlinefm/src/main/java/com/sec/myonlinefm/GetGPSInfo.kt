@@ -86,7 +86,7 @@ class GetGPSInfo(private val mContext: Context?) {
             if (mLocation != null) {
                 val latitude = mLocation.latitude
                 val longitude = mLocation.longitude
-                val geocoder = Geocoder(mContext, Locale.getDefault())
+                val geocoder = Geocoder(mContext!!, Locale.getDefault())
                 var addresses: MutableList<Address?>? = null
                 try {
                     addresses = geocoder.getFromLocation(latitude, longitude, 1)

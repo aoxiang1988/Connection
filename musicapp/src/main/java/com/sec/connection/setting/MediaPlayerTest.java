@@ -4,10 +4,8 @@ package com.sec.connection.setting;
  * Created by SRC-TJ-MM-BinYang on 2017/10/9.
  * media effect test
  */
+
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -35,10 +33,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.fragment.app.DialogFragment;
-
-import com.sec.connection.R;
 import com.sec.connection.MainService;
+import com.sec.connection.R;
 import com.sec.connection.view.VerticalSeekBar;
 
 import java.util.ArrayList;

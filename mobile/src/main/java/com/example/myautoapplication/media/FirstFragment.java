@@ -1,31 +1,20 @@
 package com.example.myautoapplication.media;
 
 
-import static android.content.Context.BIND_ALLOW_OOM_MANAGEMENT;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
-import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -92,11 +81,12 @@ public class FirstFragment extends Fragment implements UpdateListener {
                 getContext(),
                 1,
                 new Intent("bbb"),
-                PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE
         );
 
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     public void onResume() {
         super.onResume();
@@ -134,38 +124,33 @@ public class FirstFragment extends Fragment implements UpdateListener {
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.button:
-                    if (mCurrentPosition > 0) {
-                        playVideo(mCurrentPosition - 1);
-                    } else {
-                        Toast.makeText(getContext(), R.string.first_video, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.button2:
-                    playVideo(mCurrentPosition);
-                    break;
-                case R.id.button3:
-                    stopPlayVideo();
-                    break;
-                case R.id.button4:
-                    if (mCurrentPosition < mList.size() - 1) {
-                        playVideo(mCurrentPosition + 1);
-                    } else {
-                        Toast.makeText(getContext(), R.string.last_video, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.big_video_view:
-                    NavHostFragment.findNavController(FirstFragment.this)
-                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
-                    SecondActivity.mService.setCurVideoInfo(
-                            binding.firstFragmentVideoVideoView.isPlaying(),
-                            mCurrentPosition,
-                            mCurDuration
-                            );
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + v.getId());
+
+            if(v.getId() ==  R.id.button) {
+                if (mCurrentPosition > 0) {
+                    playVideo(mCurrentPosition - 1);
+                } else {
+                    Toast.makeText(getContext(), R.string.first_video, Toast.LENGTH_SHORT).show();
+                }
+            } else if(v.getId() == R.id.button2) {
+                playVideo(mCurrentPosition);
+            } else if(v.getId() == R.id.button3) {
+                stopPlayVideo();
+            } else if(v.getId() == R.id.button4) {
+                if (mCurrentPosition < mList.size() - 1) {
+                    playVideo(mCurrentPosition + 1);
+                } else {
+                    Toast.makeText(getContext(), R.string.last_video, Toast.LENGTH_SHORT).show();
+                }
+            } else if(v.getId() == R.id.big_video_view) {
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                SecondActivity.mService.setCurVideoInfo(
+                        binding.firstFragmentVideoVideoView.isPlaying(),
+                        mCurrentPosition,
+                        mCurDuration
+                );
+            } else {
+                throw new IllegalStateException("Unexpected value: " + v.getId());
             }
         }
     };

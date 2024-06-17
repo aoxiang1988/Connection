@@ -147,7 +147,6 @@ public class SearchOnNetWork extends Activity {
 			//                                          int[] grantResults)
 			// to handle the case where the user grants the permission. See the documentation
 			// for ActivityCompat#requestPermissions for more details.
-			return;
 		}
 		Location location = locationManager
 				.getLastKnownLocation(provider);
@@ -178,7 +177,7 @@ public class SearchOnNetWork extends Activity {
 				}
 			}
 		});
-	}
+    }
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub

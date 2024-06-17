@@ -1,7 +1,5 @@
 package com.example.myautoapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -16,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myautoapplication.datamodel.Audio;
 import com.example.myautoapplication.datamodel.MediaUtil;
@@ -79,12 +79,10 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.butToActivity:
-                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.butPlay:
+            if (v.getId() == R.id.butToActivity) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
+            } else if (v.getId() == R.id.butPlay) {
                     if (mService != null) {
                         if (mService.getPlayState()) {
                             mPlayBut.setText(R.string.play_source);
@@ -96,14 +94,10 @@ public class MainActivity extends AppCompatActivity {
                             mService.playSource();
                         }
                     }
-                    break;
-                case R.id.butStop:
+            } else if (v.getId() == R.id.butStop) {
                     if (mService != null) {
                         mService.stopSource();
                     }
-                    break;
-                default:
-                    break;
             }
         }
     };
@@ -113,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         mIntentFilter.addAction(MyService.SERVICE_INTENT_ACTION);
         mIntentFilter.addAction(MyService.MEDIA_SOURCE_STOP_ACTION);
         registerReceiver(mReceiver, mIntentFilter);
-
     }
 
     @Override

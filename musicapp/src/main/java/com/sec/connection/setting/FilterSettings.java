@@ -17,11 +17,11 @@ import androidx.annotation.Nullable;
 
 import com.sec.connection.BaseListInfo;
 import com.sec.connection.MusicApplication;
-import com.sec.connection.data.FolderPathData;
-import com.sec.connection.MainService;
 import com.sec.connection.PlayerDialog;
-import com.sec.connection.vpview.TestViewPagerActivity;
 import com.sec.connection.R;
+import com.sec.connection.data.FolderPathData;
+import com.sec.connection.vpview.TestViewPagerActivity;
+
 import java.util.List;
 
 /**
@@ -190,15 +190,13 @@ public class FilterSettings extends Activity {
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            switch (seekBar.getId()) {
-                case R.id.first_filter_seekbar:
-                    mSetSizeValue = progress;
-                    getMinSize(mSetSizeValue);
-                break;
-                case R.id.second_filter_seekbar:
+            if (seekBar.getId() == R.id.first_filter_seekbar) {
+                mSetSizeValue = progress;
+                getMinSize(mSetSizeValue);
+            }
+            if (seekBar.getId() == R.id.second_filter_seekbar) {
                     mSetDurationValue = progress;
                     getMinDerection(mSetDurationValue);
-                break;
             }
         }
 

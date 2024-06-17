@@ -97,7 +97,7 @@ class UpdateListViewAsyncTask : AsyncTask<String?, Bitmap?, Bitmap?> {
         val canvas = Canvas(overlay)
         canvas.translate(-view.getLeft().toFloat(), -view.getTop().toFloat())
         canvas.drawBitmap(scaleBitmap(bkg, view.getMeasuredWidth(), view.getMeasuredHeight())!!, 0f, 0f, null)
-        overlay = FastBlur.doBlur(overlay, 100, true)
+        overlay = FastBlur.doBlur(overlay, 100, true)!!
         view.setBackground(BitmapDrawable(context!!.getResources(), overlay))
     }
 

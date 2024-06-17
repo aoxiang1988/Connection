@@ -181,8 +181,8 @@ class ChannelProgramActivity : AppCompatActivity(), View.OnClickListener {
         val cursor = db!!.query("fav_channels", null, null, null, null, null, null)
         if (cursor.moveToFirst()) {
             do {
-                val pid = cursor.getInt(cursor.getColumnIndex("channel_id"))
-                val name = cursor.getString(cursor.getColumnIndex("channel_name"))
+                val pid = cursor.getInt(cursor.getColumnIndexOrThrow("channel_id"))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("channel_name"))
                 if (pid == mChannelID) {
                     Toast.makeText(this, "已收藏$name", Toast.LENGTH_SHORT).show()
                     cursor.close()

@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 31
+    compileSdk 34
     defaultConfig {
         applicationId "com.example.myautoapplication"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,11 +23,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '31.0.0'
+    buildToolsVersion '34.0.0'
 }
 
 dependencies {
-    implementation fileTree(dir: 'D:\\Android\\AndroidProject\\MyAutoApplication\\musicapp\\libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
     implementation 'com.android.support:appcompat-v7:30.0.0'
     implementation 'com.android.support:gridlayout-v7:30.0.0'
     implementation 'com.android.support:mediarouter-v7:30.0.0'

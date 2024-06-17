@@ -59,28 +59,23 @@ public class SecondFragment extends Fragment {
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.button:
-                    if (mCurrentPosition > 0) {
-                        playVideo(mCurrentPosition - 1);
-                    } else {
-                        Toast.makeText(getContext(), R.string.first_video, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.button2:
+            if (v.getId() == R.id.button) {
+                if (mCurrentPosition > 0) {
+                    playVideo(mCurrentPosition - 1);
+                } else {
+                    Toast.makeText(getContext(), R.string.first_video, Toast.LENGTH_SHORT).show();
+                }
+            } else if (v.getId() == R.id.button2) {
                     playVideo(mCurrentPosition);
-                    break;
-                case R.id.button3:
+            } else if (v.getId() == R.id.button3) {
                     stopPlayVideo();
-                    break;
-                case R.id.button4:
+            } else if (v.getId() == R.id.button4) {
                     if (mCurrentPosition < SecondActivity.getVideoList().size() - 1) {
                         playVideo(mCurrentPosition + 1);
                     } else {
                         Toast.makeText(getContext(), R.string.last_video, Toast.LENGTH_SHORT).show();
                     }
-                    break;
-                case R.id.big_video_view:
+            } else if (v.getId() == R.id.big_video_view) {
                     NavHostFragment.findNavController(SecondFragment.this)
                             .navigate(R.id.action_SecondFragment_to_FirstFragment);
                     SecondActivity.mService.setCurVideoInfo(
@@ -88,8 +83,7 @@ public class SecondFragment extends Fragment {
                             mCurrentPosition,
                             mCurDuration
                     );
-                    break;
-                default:
+            } else {
                     throw new IllegalStateException("Unexpected value: " + v.getId());
             }
         }

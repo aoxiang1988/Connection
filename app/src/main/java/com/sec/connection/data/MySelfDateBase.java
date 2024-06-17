@@ -90,9 +90,9 @@ public class MySelfDateBase extends SQLiteOpenHelper {
             //存在数据才返回true
             if (cursor.moveToFirst()) {
                 Bundle bundle = new Bundle();
-                int music_id = cursor.getInt(cursor.getColumnIndex("musicid"));
-                String title = cursor.getString(cursor.getColumnIndex("musicname"));
-                String artist = cursor.getString(cursor.getColumnIndex("artist"));
+                int music_id = cursor.getInt(cursor.getColumnIndexOrThrow("musicid"));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow("musicname"));
+                String artist = cursor.getString(cursor.getColumnIndexOrThrow("artist"));
                 bundle.putInt(MediaStore.Audio.Media._ID, music_id);
                 bundle.putString(MediaStore.Audio.Media.TITLE, title);
                 bundle.putString(MediaStore.Audio.Media.ARTIST, artist);
@@ -111,9 +111,9 @@ public class MySelfDateBase extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM AllMusic ORDER BY musicid ASC LIMIT = ?,?",
                     new String[]{String.valueOf(offset), String.valueOf(maxResult)});
             while (cursor.moveToNext()) {
-                int music_id = cursor.getInt(cursor.getColumnIndex("musicid"));
-                String title = cursor.getString(cursor.getColumnIndex("musicname"));
-                String artist = cursor.getString(cursor.getColumnIndex("artist"));
+                int music_id = cursor.getInt(cursor.getColumnIndexOrThrow("musicid"));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow("musicname"));
+                String artist = cursor.getString(cursor.getColumnIndexOrThrow("artist"));
                 Bundle bundle = new Bundle();
                 bundle.putInt(MediaStore.Audio.Media._ID, music_id);
                 bundle.putString(MediaStore.Audio.Media.TITLE, title);

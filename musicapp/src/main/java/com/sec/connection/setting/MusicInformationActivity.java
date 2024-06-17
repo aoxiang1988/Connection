@@ -9,10 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sec.connection.BaseListInfo;
+import com.sec.connection.MainActivity;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
-import com.sec.connection.MainActivity;
-import com.sec.connection.MusicApplication;
 
 import java.util.ArrayList;
 import java.util.List;

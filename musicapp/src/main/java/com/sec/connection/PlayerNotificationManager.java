@@ -76,23 +76,23 @@ public class PlayerNotificationManager {
 
 		mNotification.flags = Notification.FLAG_NO_CLEAR;
 		views.setOnClickPendingIntent(R.id.ic_media_next,
-				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_NEXT), 0));
+				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_NEXT), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 		views.setOnClickPendingIntent(R.id.ic_media_previous,
-				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_PRE), 0));
+				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_PRE), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 		views.setOnClickPendingIntent(R.id.finish,
-				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_REMOVE), 0));//?no action need check
+				PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_REMOVE), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));//?no action need check
 		assert ((NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE)) != null;
 		((NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, mNotification);
 	}
 	public void updatecontureUI(){
 		if(!MainService.isPlay){
 			views.setOnClickPendingIntent(R.id.ic_media_play,
-					PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_PLAY), 0));
+					PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_PLAY), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 			views.setViewVisibility(R.id.ic_media_stop, View.GONE);
 			views.setViewVisibility(R.id.ic_media_play, View.VISIBLE);
 		} else {
 			views.setOnClickPendingIntent(R.id.ic_media_stop,
-					PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_STOP), 0));
+					PendingIntent.getBroadcast(mContext, 1, new Intent(MainService.NOTIFY_STOP), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE));
 			views.setViewVisibility(R.id.ic_media_play, View.GONE);
 			views.setViewVisibility(R.id.ic_media_stop, View.VISIBLE);
 		}

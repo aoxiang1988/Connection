@@ -1,5 +1,6 @@
 package com.sec.connection.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -7,11 +8,10 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.sec.connection.BaseListInfo;
-import com.sec.connection.R;
-import com.sec.connection.data.Audio;
 import com.sec.connection.MainActivity;
 import com.sec.connection.MainService;
-import com.sec.connection.MusicApplication;
+import com.sec.connection.R;
+import com.sec.connection.data.Audio;
 
 import java.util.List;
 
@@ -47,6 +47,7 @@ public class MyRemoteViewsFactory implements RemoteViewsFactory {
 		return list.size();
 	}
 
+	@SuppressLint("ResourceType")
 	@Override
 	public RemoteViews getViewAt(int position) {
 		if (position < 0 || position >= list.size())  {
