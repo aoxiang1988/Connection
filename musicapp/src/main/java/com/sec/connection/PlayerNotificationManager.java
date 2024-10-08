@@ -45,7 +45,7 @@ public class PlayerNotificationManager {
 		Intent intent = new Intent(mContext, MainActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
 		stackBuilder.addNextIntent(intent);
-		PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_MUTABLE);
 
 		assert notificationManager != null;
 		if (android.os.Build.VERSION.SDK_INT >= 26) {

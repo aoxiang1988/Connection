@@ -13,12 +13,12 @@ import androidx.fragment.app.Fragment;
  * create an instance of this fragment.
  */
 public class BaseFragment extends Fragment {
-
+    private static final String TAG = "BaseFragment";
     public BaseFragment() {
         // Required empty public constructor
     }
 
     public void RemoveRunnable() {
-        Log.d("bin1111.yang","RemoveRunnable");
+        Log.d(TAG,"RemoveRunnable");
     }
 }

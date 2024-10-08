@@ -91,7 +91,7 @@ public class PlayWidget extends AppWidgetProvider {
 
 		intent.setAction(COLLECTION_VIEW_ACTION);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         // 设置intent模板
         widget_view.setPendingIntentTemplate(R.id.widget_listview, pendingIntent);
 

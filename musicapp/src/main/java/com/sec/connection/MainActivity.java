@@ -62,6 +62,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+	private static final String TAG = "MainActivity";
 	private static final String UPDATE_ACTION = "com.example.action.UPDATE_ACTION";
 	private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
 	//	public static final String DELETE_ITEM = "com.example.action.DELETE_ITEM";
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("bin1111.yang","onCreate");
+		Log.d(TAG,"onCreate");
 		isActivity = true;
 		onmycreate();
 		mNotificationManager = PlayerNotificationManager.instance();
@@ -230,16 +231,16 @@ public class MainActivity extends AppCompatActivity {
 		try {
 			
 			InputStream is = getAssets().open("TianJin.xml");
-			Log.d("bin1111.yang","info : "+is);
+			Log.d(TAG,"info : "+is);
 			PullLocalInfoParser parser = new PullLocalInfoParser();
 			List<LocalInfo> localInfos = parser.parse(is);
 			Map<Integer,List<Program>> map = parser.getmap();
 			Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
 			int minute = c.get(Calendar.MINUTE);
-			Log.d("bin1111.yang","time : "+hour+":"+minute);
+			Log.d(TAG,"time : "+hour+":"+minute);
 			for (int i=0;i<localInfos.size();i++) {
-				Log.d("bin1111.yang","info : "
+				Log.d(TAG,"info : "
 						+localInfos.get(i).getpostion()+" "
 						+localInfos.get(i).gettag()+" "
 						+localInfos.get(i).getstationname()+" "
@@ -248,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 				for(int j = 0; j< Objects.requireNonNull(
 						map.get(localInfos.get(i).getchannel())
 				).size(); j++){
-					Log.d("bin1111.yang","progrem : "
+					Log.d(TAG,"progrem : "
 							+ localInfos.get(i).getchannel()+" "
 							+ map.get(localInfos.get(i).getchannel()).get(j).getcontent()+" "
 
@@ -264,16 +265,16 @@ public class MainActivity extends AppCompatActivity {
 				@Override
 				public void onSuccess(OnLineRadioPattern val) {
 					String a = val.getCurrentStationList().get(0).getStationTitle();
-					Log.d("bin1111.yang","mTitle : "+a);
+					Log.d(TAG,"mTitle : "+a);
 				}
 
 				@Override
 				public void onFail(String errorMessage) {
-					Log.d("bin1111.yang","error : "+errorMessage);
+					Log.d(TAG,"error : "+errorMessage);
 				}
 			});
 		} catch (Exception e) {
-			Log.e("bin1111.yang","ConnectMainManager start failed");
+			Log.e(TAG,"ConnectMainManager start failed");
 		}*/
 
 
@@ -667,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
 
 	protected void quick_right() {
 		// TODO Auto-generated method stub
-//		Log.d("bin1111.yang", "quick_right()");
+//		Log.d(TAG, "quick_right()");
 		mHandler.sendEmptyMessage(QUICK_RIGHT);
 	}
 
@@ -855,7 +856,7 @@ public class MainActivity extends AppCompatActivity {
 				PullLocalInfoParser parser = new PullLocalInfoParser();
 				List<LocalInfo> localInfos = parser.parse(is);
 				for (LocalInfo local : localInfos) {
-					Log.d("bin1111.yang","info : "
+					Log.d(TAG,"info : "
 							+local.getpostion()+" "
 							+local.gettag()+" "
 							+local.getstationname()+" "

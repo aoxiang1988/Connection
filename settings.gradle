@@ -9,6 +9,8 @@ dependencyResolutionManagement {
 rootProject.name = "MyAutoApplication"
 include ':mobile'
 include ':musicapp'
+//include ':app'
 include ':connecttoapilibrary'
 include ':myonlinefm'
 include ':testview2'
+include ':automusic'

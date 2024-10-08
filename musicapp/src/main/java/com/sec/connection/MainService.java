@@ -43,6 +43,8 @@ import java.util.Objects;
 import java.util.Timer;
 
 public class MainService extends Service{
+
+	private static final String TAG = "MainService";
 	public MediaPlayer mediaPlayer = null;
 	public static MainService myService;
 	private int duration;
@@ -71,7 +73,7 @@ public class MainService extends Service{
 	public static final String NOTIFY_REMOVE = "com.example.action.NOTIFY_REMOVE";
 	private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
 
-	private static String FilePath = "/storage/emulated/0";
+	private static final String FILE_PATH = "/storage/emulated/0";
 
 	private static final int UPDATE_CURRENT_TIME = 1;
 	private static final int STOP_CURRENT_TIME = 2;
@@ -301,7 +303,7 @@ public class MainService extends Service{
 				try {
 					mediaPlayer.setDataSource(path);
 					mediaPlayer.prepare();
-					Log.d("bin1111.yang","c_Time: "+c_Time);
+					Log.d(TAG,"c_Time: "+c_Time);
 					mediaPlayer.setOnPreparedListener(new PreparedListener(c_Time));
 
 					handler.sendEmptyMessage(UPDATE_CURRENT_TIME);
@@ -625,12 +627,12 @@ public class MainService extends Service{
         intentfilter.addDataScheme("file");
 		scanSdReceiver = new ScanSdReceiver();
 		registerReceiver(scanSdReceiver, intentfilter);
-		Log.d("bin1111.yang"," "+Environment.getExternalStorageDirectory().getAbsolutePath());
+		Log.d(TAG,"local storage: "+Environment.getExternalStorageDirectory().getAbsolutePath());
 //		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
 //				Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath())));
 		MediaScannerConnection.scanFile(getBaseContext(),
 				new String[]{
-				Environment.getExternalStorageDirectory().getAbsolutePath()
+						FILE_PATH
 				}, null, null);
 	}
 	public class ScanSdReceiver extends BroadcastReceiver {
@@ -639,6 +641,7 @@ public class MainService extends Service{
 		private int count;
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			//Log.d(TAG,"scanSdReceiver onReceive");
 			String action = intent.getAction();
 			if (Intent.ACTION_MEDIA_SCANNER_STARTED.equals(action)){
 				Cursor c1 = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -647,7 +650,7 @@ public class MainService extends Service{
 				assert c1 != null;
 				count1 = c1.getCount();
 				System.out.println("count:"+count);
-				Log.d("bin1111.yang","正在扫描存储卡...");
+				Log.d(TAG,"正在扫描存储卡...");
 				c1.close();
 			}else if(Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)){
 				Cursor c2 = context.getContentResolver()
@@ -658,7 +661,7 @@ public class MainService extends Service{
 				count2 = c2.getCount();
 				count = count2-count1;
 				if (count!=0){
-					Log.d("bin1111.yang","需要更新list");
+					Log.d(TAG,"需要更新list");
 					list  = MediaUtile.getAudioList(getBaseContext());
 					if(c_music >= list.size()) {
 						c_music = 0;

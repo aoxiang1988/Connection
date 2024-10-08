@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class StartActivity extends Activity {
+public class StartActivity extends AppCompatActivity {
 
 	private static final String TAG = "StartActivity";
 	private static final int MY_PERMISSIONS_REQUEST_PERMISSION = 101;
@@ -42,13 +44,13 @@ public class StartActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
-		if (Build.VERSION.SDK_INT >= 23) {
+		/*if (Build.VERSION.SDK_INT >= 23) {
 			if (!Settings.canDrawOverlays(this)) {
 				Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivityForResult(intent, 1);
 			}
-		}
+		}*/
 		progressBar = findViewById(R.id.progressBar1);
 		imageView = findViewById(R.id.imageView2);
 
@@ -57,6 +59,16 @@ public class StartActivity extends Activity {
 		animationDrawable.start();
 
 		mHandler = new Handler(msg -> {
+			if (msg.what == 0) {
+				if(!BaseListInfo.getInstance().getList().isEmpty()) {
+					Log.d(TAG, "has music");
+					mStartMainActivity.what = 2;
+					mHandler.sendMessageDelayed(mStartMainActivity, 2000);
+				} else {
+					Log.d(TAG, "no music");
+					mHandler.sendEmptyMessage(1);
+				}
+			}
 			if(msg.what == 1){
 				Toast.makeText(getBaseContext(),"no music",Toast.LENGTH_LONG).show();
 				updateFace();
@@ -92,6 +104,7 @@ public class StartActivity extends Activity {
 			}
 		}
 		if (needRequestPermissions) {
+			Log.d(TAG, "needRequestPermissions " + needRequestPermissions);
 			String[] needToRequestPermission = new String[stringList.size()];
 			ActivityCompat.requestPermissions(this,
 					stringList.toArray(needToRequestPermission),
@@ -100,10 +113,29 @@ public class StartActivity extends Activity {
 			t = new Thread(() -> {
 				BaseListInfo.getInstance().setList(MediaUtile.getAudioList(getApplicationContext()));
 				startMainService();
+				mHandler.sendEmptyMessageDelayed(0, 10000);
+			});
+			t.start();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == MY_PERMISSIONS_REQUEST_PERMISSION) {
+			for (int i = 0; i < permissions.length; i++) {
+				Log.i("MainActivity", "申请的权限为：" + permissions[i] + ",申请结果：" + grantResults[i]);
+			}
+
+			t = new Thread(() -> {
+				BaseListInfo.getInstance().setList(MediaUtile.getAudioList(getApplicationContext()));
+				startMainService();
 				if(!BaseListInfo.getInstance().getList().isEmpty()) {
+					Log.d(TAG, "has music");
 					mStartMainActivity.what = 2;
 					mHandler.sendMessageDelayed(mStartMainActivity, 2000);
 				} else {
+					Log.d(TAG, "no music");
 					mHandler.sendEmptyMessage(1);
 				}
 			});
