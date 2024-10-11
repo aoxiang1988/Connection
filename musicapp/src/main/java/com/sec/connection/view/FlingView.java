@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -22,7 +23,7 @@ import java.util.logging.Handler;
 
 @SuppressLint("InflateParams")
 public class FlingView extends ViewGroup {
-
+	private static final String TAG = "FlingView";
 	private static final int SNAP_VELOCITY = 1000;
 	// 记录当前屏幕下标，取值范围是：0 到 getChildCount()-1
 	private int mCurrentScreen;
@@ -72,29 +73,30 @@ public class FlingView extends ViewGroup {
 		mTouchSlop = configuration.getScaledTouchSlop();
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		try {
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					int listmax = MainService.list.size();
-					for(int i = 0; i < listmax; i++){
-						LayoutInflater inflater = LayoutInflater.from(getContext());
-						View view = inflater.inflate(R.layout.change_layout, null);
-						imageView = (NewImageView) view.findViewById(R.id.imageView_change);
-						if(MainService.list.get(i).getBitmap() != null){
-							imageView.setImageBitmap(MainService.list.get(i).getBitmap());
-						}else{
-							imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic));
-						}
-
-						imageView.setShapeType(1);
-						imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
-						imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
-						imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
-						imageView.setPressColor(getResources().getColor(R.color.flingview_press));
-						addView(view);
-					}
+			Thread t = new Thread(() -> {
+				if (MainService.list == null) {
+					return;
 				}
-			});
+                int listMax = MainService.list.size();
+				Log.d(TAG, "MainService.list : " + MainService.list.size());
+                for(int i = 0; i < listMax; i++){
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    View view = inflater.inflate(R.layout.change_layout, null);
+                    imageView = (NewImageView) view.findViewById(R.id.imageView_change);
+                    if(MainService.list.get(i).getBitmap() != null){
+                        imageView.setImageBitmap(MainService.list.get(i).getBitmap());
+                    }else{
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic));
+                    }
+
+                    imageView.setShapeType(1);
+                    imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
+                    imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
+                    imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
+                    imageView.setPressColor(getResources().getColor(R.color.flingview_press));
+                    addView(view);
+                }
+            });
 			t.start();
 		} catch (NullPointerException e) {
 			Toast.makeText(getContext(),"list null",Toast.LENGTH_SHORT);

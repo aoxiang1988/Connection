@@ -7,7 +7,10 @@ package com.sec.connection.setting;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +23,8 @@ import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,13 +46,13 @@ import com.sec.connection.view.VerticalSeekBar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MediaPlayerTest extends Activity
-{
+public class MediaPlayerTest extends Activity implements ServiceConnection {
+    private static final String TAG = "MediaPlayerTest";
     // 定义播放声音的MediaPlayer
     private MediaPlayer mPlayer;
     // 定义系统的频谱
     private Visualizer mVisualizer;
-    private MainService mainService;
+    private MainService mService;
     // 定义系统的均衡器
     private Equalizer mEqualizer;
     // 定义系统的重低音控制器
@@ -78,30 +83,23 @@ public class MediaPlayerTest extends Activity
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mVisualizer.release();
+                if (mVisualizer != null)
+                    mVisualizer.release();
                 finish();
             }
         });
 
-        // 创建MediaPlayer对象,并添加音频
-        // 音频路径为  res/raw/beautiful.mp3
-        try {
-            mPlayer = MainService.myService.mediaPlayer;
-
-            // 初始化示波器
-            setupVisualizer();
-            // 初始化均衡控制器
-            setupEqualizer();
-            // 初始化重低音控制器
-            setupBassBoost();
-            // 初始化预设音场控制器
-            setupPresetReverb();
-            // 开发播放音乐
-//        mPlayer.start();
-        } catch (NullPointerException n) {
-            n.printStackTrace();
-        }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindService(
+                new Intent(this, MainService.class), this,
+                BIND_ALLOW_OOM_MANAGEMENT
+        );//绑定服务
+    }
+
     /**
      * 初始化频谱
      */
@@ -320,9 +318,12 @@ public class MediaPlayerTest extends Activity
         super.onPause();
         if (isFinishing() && mPlayer == null) {
             // 释放所有对象
-            mEqualizer.release();
-            mPresetReverb.release();
-            mBass.release();
+            if (mEqualizer != null)
+                mEqualizer.release();
+            if (mPresetReverb != null)
+                mPresetReverb.release();
+            if (mBass != null)
+                mBass.release();
         }
     }
 
@@ -336,16 +337,49 @@ public class MediaPlayerTest extends Activity
 
     @Override
     protected void onDestroy() {
-        mVisualizer.release();
         super.onDestroy();
+        if (mVisualizer != null)
+            mVisualizer.release();
+        unbindService(this);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mVisualizer != null) {
             mVisualizer.release();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isBind = false;
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        MainService.ServiceBinder binder = (MainService.ServiceBinder) service;
+        mService = binder.getService();
+        isBind = true;
+        Log.d(TAG, "onServiceConnected " + mService);
+
+        try {
+            mPlayer = mService.getMediaPlayer();
+
+            // 初始化示波器
+            setupVisualizer();
+            // 初始化均衡控制器
+            setupEqualizer();
+            // 初始化重低音控制器
+            setupBassBoost();
+            // 初始化预设音场控制器
+            setupPresetReverb();
+            // 开发播放音乐
+//        mPlayer.start();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        isBind = false;
     }
 
     /**

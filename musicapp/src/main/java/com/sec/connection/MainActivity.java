@@ -286,9 +286,11 @@ public class MainActivity extends AppCompatActivity {
 		FindViewById();
 		SetOnClickListener();
 		SetOnLongClickListener();
-//		mLrcView = (LrcView) findViewById(R.id.textView1);
+		mLrcView = (LrcView) findViewById(R.id.textView1);
 		mPlayBar.setOnSeekBarChangeListener(new SeekBarListener());
 		mUserAdapter = new UserAdapter(this, R.layout.listitem, mList);
+		Log.d(TAG, "list " + mList);
+		Log.d(TAG, "list size " + mList.size());
 		mListView.setAdapter(mUserAdapter);
 		mListView.setOnItemClickListener(new ItemClickListener());
 		mListView.setOnItemLongClickListener(mLongClickListener);
@@ -740,7 +742,7 @@ public class MainActivity extends AppCompatActivity {
 		else{
 			mPreBut.setBackground(getResources().getDrawable(R.drawable.previous_button_ripple, null));
 		}
-		if(mListPosition + 1 == mList.size()) {
+		if(mList != null && mListPosition + 1 == mList.size()) {
 			mNextBut.setBackground(getResources().getDrawable(R.drawable.disable_next, null));
 		}
 		else{

@@ -45,7 +45,7 @@ import java.util.Timer;
 public class MainService extends Service{
 
 	private static final String TAG = "MainService";
-	public MediaPlayer mediaPlayer = null;
+	private MediaPlayer mediaPlayer = null;
 	public static MainService myService;
 	private int duration;
 	private int c_duration;
@@ -79,15 +79,23 @@ public class MainService extends Service{
 	private static final int STOP_CURRENT_TIME = 2;
 	public static final String COLLECTION_VIEW_ACTION = "com.example.play.COLLECTION_VIEW_ACTION";
 
-	static class ServiceBinder extends Binder{
+	public MediaPlayer getMediaPlayer() {
+		if (mediaPlayer == null) {
+			mediaPlayer = new MediaPlayer();
+		}
+		return mediaPlayer;
+	}
+
+	public static class ServiceBinder extends Binder{
 		private MainService mService = null;
 		ServiceBinder(MainService service) {
 			// TODO Auto-generated constructor stub
 			mService = service;
 		}
-		void getService() {
+		public MainService getService() {
 			// TODO Auto-generated method stub
 			myService = mService;
+			return myService;
 		}
 	}
 	@Override
@@ -195,6 +203,7 @@ public class MainService extends Service{
 		MainActivity.initService(this);
 		scanSdCard();
 		mediaPlayer = new MediaPlayer();
+		Log.d(TAG, "onCreate MediaPlayer");
 		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
 		widget_Receiver = new Widget_Receiver();

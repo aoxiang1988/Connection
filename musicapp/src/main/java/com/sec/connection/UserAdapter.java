@@ -32,7 +32,6 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		this.resource = resource;
 		this.context = context;
 		this.objects = objects;
-		Log.d(TAG,"   "+objects.toString());
 	}
 	public UserAdapter(Context context, int resource, List<Audio> objects ,int which) {
 		super(context, resource, objects);

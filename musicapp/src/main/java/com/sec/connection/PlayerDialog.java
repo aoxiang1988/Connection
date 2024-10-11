@@ -198,15 +198,12 @@ public class PlayerDialog extends DialogFragment {
 		FolderPathAdapter adapter = new FolderPathAdapter(getActivity(), mPathListForDialog);
 		ListView folderpathlistview = view.findViewById(R.id.folder_path_list);
 		folderpathlistview.setAdapter(adapter);
-		folderpathlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.d(TAG, "onItemClick position : "+position+" ; "+FilterSettings.mFolderPathData.isPathSelected(position));
-				FilterSettings.mFolderPathData.setWhicPathOn(position);
-				CheckBox foldercheckBox = view.findViewById(R.id.folder_path_checkBox);
-                foldercheckBox.setChecked(FilterSettings.mFolderPathData.isPathSelected(position));
-			}
-		});
+		folderpathlistview.setOnItemClickListener((parent, view1, position, id) -> {
+            Log.d(TAG, "onItemClick position : "+position+" ; "+FilterSettings.mFolderPathData.isPathSelected(position));
+            FilterSettings.mFolderPathData.setWhicPathOn(position);
+            CheckBox foldercheckBox = view1.findViewById(R.id.folder_path_checkBox);
+foldercheckBox.setChecked(FilterSettings.mFolderPathData.isPathSelected(position));
+        });
 
 		ImageView folderNegativeButton = view.findViewById(R.id.folder_path_negative);
 		ImageView folderPositiveButton = view.findViewById(R.id.folder_path_positive);
