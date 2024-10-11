@@ -1,6 +1,5 @@
 package com.sec.connection;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,10 +19,10 @@ import com.sec.connection.data.Audio;
 import java.util.List;
 
 public class UserAdapter extends ArrayAdapter<Audio> {
-
-	private int resource;
-	private Context context;
-	private List<Audio> objects;
+	private static final String TAG = "UserAdapter";
+	private final int resource;
+	private final Context context;
+	private final List<Audio> objects;
 	private boolean update_position = false;
 	private int which = 0;
 
@@ -34,7 +32,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		this.resource = resource;
 		this.context = context;
 		this.objects = objects;
-		Log.d("bin1111.yang","   "+objects.toString());
+		Log.d(TAG,"   "+objects.toString());
 	}
 	public UserAdapter(Context context, int resource, List<Audio> objects ,int which) {
 		super(context, resource, objects);
@@ -59,7 +57,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		// TODO Auto-generated method stub
 		Audio audio = objects.get(position);
 		ViewHolder holder;
-        Log.d("bin1111.yang","title : "+audio.getTitle());
+        Log.d(TAG,"title : "+audio.getTitle());
 		if(convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(resource, null);
 			holder = new ViewHolder();
@@ -109,7 +107,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
             }
 			holder.time.setText(String.format("%s:%s", string_min, string_sec));
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				if(MainService.isPlay && position == MainActivity.getcurrentposition()){
+				if(MainService.isPlay && position == MainActivity.getCurrentPosition()){
 					holder.title.setTextColor(context.getResources().getColor(R.color.playingcolor, null));
 					holder.artist.setTextColor(context.getResources().getColor(R.color.playingcolor, null));
 					holder.time.setTextColor(context.getResources().getColor(R.color.playingcolor, null));
@@ -119,7 +117,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 					holder.time.setTextColor(context.getResources().getColor(R.color.noplaycolor, null));
 				}
 			} else {
-				if(MainService.isPlay && position == MainActivity.getcurrentposition()){
+				if(MainService.isPlay && position == MainActivity.getCurrentPosition()){
 					holder.title.setTextColor(context.getResources().getColor(R.color.playingcolor));
 					holder.artist.setTextColor(context.getResources().getColor(R.color.playingcolor));
 					holder.time.setTextColor(context.getResources().getColor(R.color.playingcolor));
@@ -144,17 +142,14 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		}
 		return convertView;
 	}
-	void addItems(List<Audio> list, boolean update_position){
+	void addItems(List<Audio> list){
 		this.objects.clear();
 		this.objects.addAll(list);
-		setupdatepostion(update_position);
+		setUpdatePosition();
 		notifyDataSetChanged();
 	}
 
-	private void setupdatepostion(boolean update_position) {
-		this.update_position = update_position;
-	}
-	public boolean getupdatepostion(){
-		return update_position;
+	private void setUpdatePosition() {
+		this.update_position = true;
 	}
 }

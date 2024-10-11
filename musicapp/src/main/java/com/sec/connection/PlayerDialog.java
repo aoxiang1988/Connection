@@ -42,6 +42,8 @@ import java.util.Map;
 
 public class PlayerDialog extends DialogFragment {
 
+	private static final String TAG = "PlayerDialog";
+
 	public static final int STATUE = 1;
 	public static final int EXIT = 2;
 	public static final int DELETE = 3;
@@ -49,7 +51,7 @@ public class PlayerDialog extends DialogFragment {
 	public static final int NETWORK = 5 ;
 	public static final int FOLDER_PATH = 6;
 	private static final String KEY_TYPE = "type";
-	private static final String KEY_POSTION = "postion";
+	private static final String KEY_POSITION = "position";
 	private static final String KEY_MAP = "map";
 	private static final String KEY_SELECT_MAP = "select map";
 	private static final String KEY_LIST = "list";
@@ -105,7 +107,7 @@ public class PlayerDialog extends DialogFragment {
 					// TODO Auto-generated method stub
 					((MainActivity)getActivity()).stop();
 					getActivity().finish();
-					notificationManager.removenotification(getActivity());
+					notificationManager.reMoveNotification(getActivity());
 				}
 			}).setNegativeButton(R.string.back,null).setTitle(R.string.exit).create();
 			break;
@@ -129,7 +131,7 @@ public class PlayerDialog extends DialogFragment {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					int postion = getArguments().getInt(KEY_POSTION);
+					int postion = getArguments().getInt(KEY_POSITION);
 					((MainActivity)getActivity()).delete(postion); 
 				}
 			}).setNegativeButton(R.string.back,null).setTitle(R.string.delete).create();
@@ -166,6 +168,7 @@ public class PlayerDialog extends DialogFragment {
 		builder.show();
 		builder.getWindow().setContentView(R.layout.folder_paths_dialog_layout);
 		LayoutInflater factory = LayoutInflater.from(getActivity());
+		@SuppressLint("InflateParams")
 		final View view = factory.inflate(R.layout.folder_paths_dialog_layout, null);
 		builder.getWindow().setContentView(view);
 		final Window dialogWindow = builder.getWindow();
@@ -196,33 +199,29 @@ public class PlayerDialog extends DialogFragment {
 		folderpathlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("bin1111.yang", "onItemClick position : "+position+" ; "+FilterSettings.mFolderPathData.isPathSelected(position));
+				Log.d(TAG, "onItemClick position : "+position+" ; "+FilterSettings.mFolderPathData.isPathSelected(position));
 				FilterSettings.mFolderPathData.setWhicPathOn(position);
 				CheckBox foldercheckBox = view.findViewById(R.id.folder_path_checkBox);
-				if(FilterSettings.mFolderPathData.isPathSelected(position)){
-					foldercheckBox.setChecked(true);
-				} else {
-					foldercheckBox.setChecked(false);
-				}
+                foldercheckBox.setChecked(FilterSettings.mFolderPathData.isPathSelected(position));
 			}
 		});
 
-		ImageView foldernegativebutton = view.findViewById(R.id.folder_path_negative);
-		ImageView folderpositivebutton = view.findViewById(R.id.folder_path_positive);
+		ImageView folderNegativeButton = view.findViewById(R.id.folder_path_negative);
+		ImageView folderPositiveButton = view.findViewById(R.id.folder_path_positive);
 
-		foldernegativebutton.setOnClickListener(new View.OnClickListener() {
+		folderNegativeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				FilterSettings.mFolderPathData.setallpahtoff();
-				FilterSettings._inActivity.setfilterFolder(false);
+				FilterSettings._inActivity.setFilterFolder(false);
 				builder.dismiss();
 			}
 		});
 
-		folderpositivebutton.setOnClickListener(new View.OnClickListener() {
+		folderPositiveButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FilterSettings._inActivity.setfilterFolder(true);
+				FilterSettings._inActivity.setFilterFolder(true);
 				builder.dismiss();
 			}
 		});
@@ -275,8 +274,8 @@ public class PlayerDialog extends DialogFragment {
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.WRAP_CONTENT, 100);
 			radiogroup.addView(rb,layoutParams);
-			if(((MainActivity) getActivity()).getstatus() == i+1) {
-				Log.d("bin1111.yang","i : "+i);
+			if(((MainActivity) getActivity()).getStatus() == i+1) {
+				Log.d(TAG,"i : "+i);
 				radiogroup.check(i);
 			}
 		}
@@ -287,16 +286,16 @@ public class PlayerDialog extends DialogFragment {
 
 				switch (checkedId){
 					case 0:
-						((MainActivity)getActivity()).setstatus(1);
+						((MainActivity)getActivity()).setStatus(1);
 						break;
 					case 1:
-						((MainActivity)getActivity()).setstatus(2);
+						((MainActivity)getActivity()).setStatus(2);
 						break;
 					case 2:
-						((MainActivity)getActivity()).setstatus(3);
+						((MainActivity)getActivity()).setStatus(3);
 						break;
 					case 3:
-						((MainActivity)getActivity()).setstatus(4);
+						((MainActivity)getActivity()).setStatus(4);
 						break;
 				}
 			}
@@ -322,10 +321,10 @@ public class PlayerDialog extends DialogFragment {
 		}
 	}
 
-	private  class FolderPathAdapter extends BaseAdapter {
+	private static class FolderPathAdapter extends BaseAdapter {
 
-		private Context mContext;
-		private List<String> mPathListForDialog;
+		private final Context mContext;
+		private final List<String> mPathListForDialog;
 
 		private FolderPathAdapter(Context mContext,
 								  List<String> mPathListForDialog){
@@ -367,15 +366,11 @@ public class PlayerDialog extends DialogFragment {
 			holder.folder_check_box = convertView.findViewById(R.id.folder_path_checkBox);
 
 			String new_path = mPathListForDialog.get(position).replace("0", "@");
-			String split_path[] = new_path.split("@");
+			String[] split_path = new_path.split("@");
 			holder.folder_name.setText(split_path[1]+":");
 			holder.music_num.setText(FilterSettings.mFolderPathData.getlistlangth(position)+"首歌 ：");
 
-			if(FilterSettings.mFolderPathData.isPathSelected(position)){
-				holder.folder_check_box.setChecked(true);
-			} else {
-				holder.folder_check_box.setChecked(false);
-			}
+            holder.folder_check_box.setChecked(FilterSettings.mFolderPathData.isPathSelected(position));
 
 			return convertView;
 		}

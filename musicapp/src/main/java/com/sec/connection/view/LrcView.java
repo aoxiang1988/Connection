@@ -19,7 +19,7 @@ public class LrcView extends AppCompatTextView {
     private float height;       //歌词视图高度  
     private Paint currentPaint; //当前画笔对象
     private int currentSize = 50;
-    private int nocurrentSize = 40;
+    private int noCurrentSize = 40;
     private Paint notCurrentPaint;  //非当前画笔对象  
     private float textHeight = 25;  //文本高度  
     private int index = 0;      //list集合下标
@@ -83,16 +83,16 @@ public class LrcView extends AppCompatTextView {
         currentPaint.setTextSize(currentSize);
         currentPaint.setTypeface(Typeface.SERIF);
 
-        notCurrentPaint.setTextSize(nocurrentSize);
+        notCurrentPaint.setTextSize(noCurrentSize);
         notCurrentPaint.setTypeface(Typeface.DEFAULT);
 
         try {
             setText("");
-            canvas.drawText(mLrcList.get(index).getlrcstr(), width / 2 - 50, height / 2 - 10, currentPaint);
+            canvas.drawText(mLrcList.get(index).getLrcStr(), width / 2 - 50, height / 2 - 10, currentPaint);
             float tempY = height / 2;
             tempY = tempY + textHeight;
             if(index+1 <= mLrcList.size() )
-            	canvas.drawText(mLrcList.get(index + 1).getlrcstr(), width / 2 + 50, tempY + 10, notCurrentPaint);
+            	canvas.drawText(mLrcList.get(index + 1).getLrcStr(), width / 2 + 50, tempY + 10, notCurrentPaint);
         } catch (Exception e) {
             setText("");
         }
@@ -114,7 +114,7 @@ public class LrcView extends AppCompatTextView {
 
     public void setTextSize(int currentSize,int nocurrentSize,int textHeight){
         this.currentSize = currentSize;
-        this.nocurrentSize = nocurrentSize;
+        this.noCurrentSize = nocurrentSize;
         this.textHeight = textHeight;
     }
 

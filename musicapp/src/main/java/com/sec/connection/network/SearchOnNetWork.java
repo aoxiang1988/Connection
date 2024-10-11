@@ -60,6 +60,7 @@ public class SearchOnNetWork extends Activity {
 	 * http://blog.csdn.net/kieven2008/article/details/8210737 maybe need
 	 * http://www.2cto.com/kf/201605/504920.html   ***************/
 
+	private static final String TAG = "SearchOnNetWork";
 	private ListView mSearchResult = null;
 	private AutoCompleteTextView mTextViewMusicName;
 	private static String ACTION_START_WEB_PLAY = "com.example.action.ACTION_START_WEB_PLAY";
@@ -84,29 +85,26 @@ public class SearchOnNetWork extends Activity {
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			switch (msg.what) {
-				case DRAW_LIST:
-					//if(list == null){
-					UserAdapter adapter = new UserAdapter(getApplicationContext(), R.layout.listitem, list, 1);
-					adapter.notifyDataSetChanged();
-					start = start + 20;
-					mSearchResult.setAdapter(adapter);
-					mSearchResult.setOnItemClickListener(new OnItemClickListener() {
+            if (msg.what == DRAW_LIST) {//if(list == null){
+                UserAdapter adapter = new UserAdapter(getApplicationContext(), R.layout.listitem, list, 1);
+                adapter.notifyDataSetChanged();
+                start = start + 20;
+                mSearchResult.setAdapter(adapter);
+                mSearchResult.setOnItemClickListener(new OnItemClickListener() {
 
-						@Override
-						public void onItemClick(AdapterView<?> arg0, View arg1,
-												int arg2, long arg3) {
-							// TODO Auto-generated method stub
-							Intent intent = new Intent(ACTION_START_WEB_PLAY);
-							mNetPosition = arg2;
-							url = list.get(mNetPosition).getNetUrl();
-							intent.putExtra("music_url", url);
-							intent.setClass(SearchOnNetWork.this, PlayWebActivity.class);
-							startActivity(intent);
-						}
-					});
-					break;
-			}
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1,
+                                            int arg2, long arg3) {
+                        // TODO Auto-generated method stub
+                        Intent intent = new Intent(ACTION_START_WEB_PLAY);
+                        mNetPosition = arg2;
+                        url = list.get(mNetPosition).getNetUrl();
+                        intent.putExtra("music_url", url);
+                        intent.setClass(SearchOnNetWork.this, PlayWebActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
 		}
 	};
 
@@ -169,9 +167,9 @@ public class SearchOnNetWork extends Activity {
 						if(list != null)
 							list.clear();
 						mPreSearchMusic = mSearchMusicName;
-						searchmusic();
+						searchMusic();
 					} else
-						searchmusic();
+						searchMusic();
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
@@ -184,7 +182,7 @@ public class SearchOnNetWork extends Activity {
 		super.onDestroy();
 	}
 	
-	protected void searchmusic() {
+	protected void searchMusic() {
 		// TODO Auto-generated method stub
 		thread = new Thread(DoSearchMusic);
 		thread.start();
@@ -207,12 +205,12 @@ public class SearchOnNetWork extends Activity {
 				List<Address> addresses = geocoder.getFromLocation(latitude,
 						longitude, 1);
 				StringBuilder sb = new StringBuilder();
-				if (addresses.size() > 0) {
+				if (!addresses.isEmpty()) {
 					Address address = addresses.get(0);
 //					for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
 //						sb.append(address.getAddressLine(i)).append("\n");
 //					}
-					Log.d("bin1111.yang","pin yin : "+ characterParser.getSelling(address.getLocality()));
+					Log.d(TAG,"pin yin : "+ characterParser.getSelling(address.getLocality()));
 					sb.append(address.getLocality()).append("\n");
 					sb.append(address.getCountryName());
 					addressStr = sb.toString();
@@ -224,7 +222,7 @@ public class SearchOnNetWork extends Activity {
 			coordinate = "no coordinate!\n";
 		}
 
-		Log.d("bin1111.yang","GPS : "+"your coordinate：\n" + coordinate + "\n"
+		Log.d(TAG,"GPS : "+"your coordinate：\n" + coordinate + "\n"
 				+ addressStr);
 	}
 

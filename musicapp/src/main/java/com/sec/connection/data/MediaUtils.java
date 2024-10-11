@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MediaUtile {
+public class MediaUtils {
 	private static final String[] AUDIO_KEY = {
 		MediaStore.Audio.Media._ID,
 		MediaStore.Audio.Media.TITLE,

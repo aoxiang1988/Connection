@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.samsung.android.permission.LOCK_TASK_MODE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"
@@ -60,7 +61,8 @@
             android:label="@string/app_name"
             android:exported="false"
             android:theme="@style/AppBaseTheme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            tools:ignore="RedundantLabel">
 
         </activity>
 
@@ -69,7 +71,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppBaseTheme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            tools:ignore="RedundantLabel">
         </activity>
 
         <activity
@@ -77,12 +80,14 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/OtherActivityTheme"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            tools:ignore="RedundantLabel" />
 
         <service
             android:name=".MainService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedService">
 
         </service>
         <receiver android:name=".widget.PlayWidget"
@@ -111,13 +116,15 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OtherActivityTheme"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".setting.MusicInformationActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OtherActivityTheme"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".setting.FilterSettings"
             android:configChanges="orientation"
@@ -133,7 +140,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop"/>
         <activity
-            android:name=".setting.FMProgremActivity"
+            android:name=".setting.FMProgramActivity"
             android:theme="@style/OtherActivityTheme"
             android:launchMode="singleTop">
 

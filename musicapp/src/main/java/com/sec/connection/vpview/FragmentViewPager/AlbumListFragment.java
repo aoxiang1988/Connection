@@ -1,5 +1,6 @@
 package com.sec.connection.vpview.FragmentViewPager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,9 +18,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.sec.connection.BaseListInfo;
-import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
 import com.sec.connection.GridAdapter;
@@ -50,8 +51,7 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     public AlbumListFragment() {
         // Required empty public constructor
     }
@@ -59,10 +59,10 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
     private Context mContext = null;
 
     private List<String> alumblist = new ArrayList<>();
-    private List<Audio> misname_alumb;
-    private Map<String, List<Audio>> map_alumb = null;
-    private SelfGridView albumlistview;
+    private Map<String, List<Audio>> map_album = null;
+    private SelfGridView albumListView;
 
+    @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(View v, MotionEvent event) {
         return true;
     }
@@ -89,27 +89,27 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            getArguments().getString(ARG_PARAM1);
+            getArguments().getString(ARG_PARAM2);
         }
         List<Audio> mList = BaseListInfo.getInstance().getList();
-        map_alumb = new HashMap<>();
-        List<String> alumblist1 = new ArrayList<>();
+        map_album = new HashMap<>();
+        List<String> albumList1 = new ArrayList<>();
         for (int a = 0; a < mList.size(); a++) {
-            alumblist1.add( mList.get(a).getAlbum());
+            albumList1.add( mList.get(a).getAlbum());
         }
-        alumblist = removeDuplicate(alumblist1);
-        /*add the music name to alumb list*/
+        alumblist = removeDuplicate(albumList1);
+        /*add the music name to album list*/
         for (int b = 0; b < alumblist.size(); b++) {
             int m = 0;
-            misname_alumb = new ArrayList<>();
+            List<Audio> misname_album = new ArrayList<>();
             for (int a = 0; a < mList.size(); a++) {
                 if (Objects.equals(alumblist.get(b), mList.get(a).getAlbum())) {
-                    misname_alumb.add(m, mList.get(a));
+                    misname_album.add(m, mList.get(a));
                     m = m+1;
                 }
             }
-            map_alumb.put(alumblist.get(b), misname_alumb);
+            map_album.put(alumblist.get(b), misname_album);
         }
     }
 
@@ -118,28 +118,28 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank_fragment3, container, false);
-        albumlistview = (SelfGridView) view.findViewById(R.id.new_grid_view);
-        final GridAdapter gridadapter = new GridAdapter(mContext,alumblist,map_alumb);
-        albumlistview.setAdapter(gridadapter);
-        albumlistview.setDragResponseMS(2000);
-        albumlistview.setOnChangeListener(new SelfGridView.OnChanageListener() {
+        albumListView = (SelfGridView) view.findViewById(R.id.new_grid_view);
+        final GridAdapter gridadapter = new GridAdapter(mContext,alumblist, map_album);
+        albumListView.setAdapter(gridadapter);
+        albumListView.setDragResponseMS(2000);
+        albumListView.setOnChangeListener(new SelfGridView.OnChanageListener() {
             @Override
             public void onChange(int form, int to) {
                 Collections.swap(alumblist,form,to);
                 gridadapter.notifyDataSetChanged();
             }
         });
-        albumlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String alumb_name = alumblist.get(position);
-                ArrayList<Audio> alumb_name_list = new ArrayList<>();
-                for(int a = 0; a < map_alumb.get(alumb_name).size(); a++){
-                    alumb_name_list.add(a, map_alumb.get(alumb_name).get(a));
+                String album_name = alumblist.get(position);
+                ArrayList<Audio> album_name_list = new ArrayList<>();
+                for(int a = 0; a < map_album.get(album_name).size(); a++){
+                    album_name_list.add(a, map_album.get(album_name).get(a));
                 }
 
-                mCustomDialog(alumb_name, alumb_name_list);
+                mCustomDialog(album_name, album_name_list);
             }
         });
         return view ;
@@ -159,8 +159,8 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(!isVisibleToUser && albumlistview != null)
-            albumlistview.removeRunnable();
+        if(!isVisibleToUser && albumListView != null)
+            albumListView.removeRunnable();
     }
 
     private static List<String> removeDuplicate(List<String> list) {
@@ -176,18 +176,19 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
         super.onStop();
     }
 
-    private void mCustomDialog(String alumb_name, ArrayList<Audio> alumb_name_list) {
+    private void mCustomDialog(String album_name, ArrayList<Audio> album_name_list) {
         final AlertDialog builder = new AlertDialog.Builder(getActivity(),R.style.CreatDialog).create();
         builder.show();
         builder.getWindow().setContentView(R.layout.custom_list_layout);
         LayoutInflater factory = LayoutInflater.from(getActivity());
+        @SuppressLint("InflateParams")
         View view = factory.inflate(R.layout.custom_list_layout, null);
-        Button alumbname = (Button) view.findViewById(R.id.alumb_name);
+        Button albumName = (Button) view.findViewById(R.id.alumb_name);
         ListView list = (ListView) view.findViewById(R.id.alumb_list);
-        UserAdapter adapter = new UserAdapter(mContext, R.layout.listitem, alumb_name_list);
+        UserAdapter adapter = new UserAdapter(mContext, R.layout.listitem, album_name_list);
         list.setAdapter(adapter);
-        alumbname.setText(alumb_name);
-        alumbname.setOnClickListener(new View.OnClickListener() {
+        albumName.setText(album_name);
+        albumName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 builder.dismiss();

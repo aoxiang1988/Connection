@@ -20,24 +20,26 @@ import com.sec.connection.data.Audio;
 
 import java.util.List;
 
-/*****http://johnsonxu.iteye.com/blog/1763042******/
+/* *
+ * ***http://johnsonxu.iteye.com/blog/1763042
+ * ****
+ * **/
 public class PlayWidget extends AppWidgetProvider {
 	public static final String PLAY_STATUE = "com.example.action.PLAY_STATUE";
 	public static final String COLLECTION_VIEW_ACTION = "com.example.play.COLLECTION_VIEW_ACTION";
 	public static final String UPDATE_ACTION = "com.example.action.UPDATE_ACTION";
 	private RemoteViews widget_view;
-	private Bitmap bitmap = null;
-	private int listitem = 0;
-	private String TAG = "PlayWidget";
-	List<Audio> list = BaseListInfo.getInstance().getList();
+    private int mListItem = 0;
+    List<Audio> list = BaseListInfo.getInstance().getList();
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub	
 		AppWidgetManager appWidgetManger = AppWidgetManager.getInstance(context);  
 		int[] appIds = appWidgetManger.getAppWidgetIds(new ComponentName(context, PlayWidget.class));
-		listitem = intent.getIntExtra("current_music", 0);
-		Log.d(TAG,"listitem : "+listitem);
+		mListItem = intent.getIntExtra("current_music", 0);
+        String TAG = "PlayWidget";
+        Log.d(TAG,"listitem : "+ mListItem);
 		String action = intent.getAction();
 		if(action.equals(PLAY_STATUE)){
 			intent.getBooleanExtra("isplay", false);
@@ -61,11 +63,11 @@ public class PlayWidget extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		// TODO Auto-generated method stub
 		Intent intent_mainactivity = new Intent(context, StartActivity.class);
-		PendingIntent pendingintent_mainactivity = PendingIntent.getActivity(context, 0, intent_mainactivity, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE);
+		PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(context, 0, intent_mainactivity, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_NO_CREATE);
 		
 		ComponentName componentName = new ComponentName(context, PlayWidget.class);
 		widget_view = new RemoteViews(context.getPackageName(), R.layout.widget);
-		widget_view.setOnClickPendingIntent(R.id.widget_imageView, pendingintent_mainactivity);
+		widget_view.setOnClickPendingIntent(R.id.widget_imageView, pendingIntentMainActivity);
 		
 		
 		if(!MainService.isPlay){
@@ -95,14 +97,14 @@ public class PlayWidget extends AppWidgetProvider {
         // 设置intent模板
         widget_view.setPendingIntentTemplate(R.id.widget_listview, pendingIntent);
 
-		update(list.get(listitem));
+		update(list.get(mListItem));
 
 		appWidgetManager.updateAppWidget(componentName, widget_view);
 		
 	}
 
 	public void update(Audio audio){
-		bitmap = audio.getBitmap();
+        Bitmap bitmap = audio.getBitmap();
 		if(bitmap != null){
 			widget_view.setImageViewBitmap(R.id.widget_imageView, bitmap);
 		} else {

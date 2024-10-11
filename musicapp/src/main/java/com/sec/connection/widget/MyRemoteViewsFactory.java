@@ -62,7 +62,7 @@ public class MyRemoteViewsFactory implements RemoteViewsFactory {
 		// ??????????????  
         rv.setTextViewText(R.id.widget_title, title);  
         rv.setTextViewText(R.id.widget_artist, artist);  
-        if(MainService.isPlay && position == MainActivity.getcurrentposition()){
+        if(MainService.isPlay && position == MainActivity.getCurrentPosition()){
         	rv.setTextColor(android.R.id.text1, mContext.getResources().getColor(R.color.playingcolor));
         }
         else{

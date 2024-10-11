@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sec.connection.R;
@@ -18,15 +19,14 @@ import java.util.ArrayList;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Audio> mValues;
-    private final String mAlumbName;
-    private Context mContext;
+    private final Context mContext;
 
-    public MyItemRecyclerViewAdapter(ArrayList<Audio> items, String alumbname, Context context) {
+    public MyItemRecyclerViewAdapter(ArrayList<Audio> items, Context context) {
         mValues = items;
-        mAlumbName = alumbname;
         mContext = context;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -39,7 +39,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.mItem = mValues.get(position).getTitle();
         holder.mIdView.setText(mValues.get(position).getTitle());
         holder.mContentView.setText(mValues.get(position).getArtist());
-        if(MainService.isPlay && position == MainActivity.getcurrentposition()){
+        if(MainService.isPlay && position == MainActivity.getCurrentPosition()){
             holder.mContentView.setTextColor(mContext.getResources().getColor(R.color.playingcolor));
         }else{
             holder.mContentView.setTextColor(mContext.getResources().getColor(R.color.noplaycolor));
@@ -49,7 +49,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
                 int pos = holder.getLayoutPosition();
-                mOnItemClickLitener.onItemClick(holder.itemView, pos);
+                mOnItemClickListener.onItemClick(holder.itemView, pos);
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
@@ -58,23 +58,18 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             public boolean onLongClick(View v)
             {
                 int pos = holder.getLayoutPosition();
-                mOnItemClickLitener.onItemLongClick(holder.itemView, pos);
+                mOnItemClickListener.onItemLongClick(holder.itemView, pos);
                 return false;
             }
         });
 
     }
 
-    public interface OnItemClickLitener{
-        void onItemClick(View view, int postiton);
-        void onItemLongClick(View view, int postiton);
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
-    private OnItemClickLitener mOnItemClickLitener;
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
-    {
-        this.mOnItemClickLitener = mOnItemClickLitener;
-    }
-
+    private OnItemClickListener mOnItemClickListener;
 
 
     @Override
@@ -82,7 +77,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return mValues.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final TextView mIdView;
         final TextView mContentView;
@@ -95,6 +90,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

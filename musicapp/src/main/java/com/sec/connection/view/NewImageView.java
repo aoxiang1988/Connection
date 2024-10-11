@@ -1,5 +1,6 @@
 package com.sec.connection.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -34,7 +35,7 @@ public class NewImageView extends AppCompatImageView {
     private int height;
     // 定义 Bitmap 的默认配置
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
-    private static final int COLORDRAWABLE_DIMENSION = 1;
+    private static final int COLOR_DRAW_ABLE_DIMENSION = 1;
     // 边框颜色
     private int borderColor;
     // 边框宽度
@@ -75,6 +76,7 @@ public class NewImageView extends AppCompatImageView {
         shapeType = 2;
         // 获取控件的属性值
         if (attrs != null) {
+            @SuppressLint("CustomViewStyleable")
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MLImageView);
             borderColor = array.getColor(R.styleable.MLImageView_ml_border_color, borderColor);
             borderWidth = array.getDimensionPixelOffset(R.styleable.MLImageView_ml_border_width, borderWidth);
@@ -142,7 +144,7 @@ public class NewImageView extends AppCompatImageView {
         canvas.saveLayer(0, 0, width, height, null, saveFlags);
         if (shapeType == 1) {
             // 画遮罩，画出来就是一个和空间大小相匹配的圆（这里在半径上 -1 是为了不让图片超出边框）
-            canvas.drawCircle(width / 2, height / 2, (width - StrokeWidth)  / 2 - 1, paint);
+            canvas.drawCircle((float) width / 2, (float) height / 2, (width - StrokeWidth)  / 2 - 1, paint);
         } else if (shapeType == 2) {
             // 当ShapeType == 2 时 图片为圆角矩形 （这里在宽高上 -1 是为了不让图片超出边框）
             RectF rectf = new RectF(1, 1, getWidth() - 1, getHeight() - 1);
@@ -169,7 +171,7 @@ public class NewImageView extends AppCompatImageView {
         // 这里根据类型判断绘制的效果是圆形还是矩形
         if (shapeType == 1) {
             // 当ShapeType == 1 时 图片为圆形 （这里在半径上 -1 是为了不让图片超出边框）
-            canvas.drawCircle(width / 2, height / 2, width / 2 - 1, pressPaint);
+            canvas.drawCircle((float) width / 2, (float) height / 2, (float) width / 2 - 1, pressPaint);
         } else if (shapeType == 2) {
             // 当ShapeType == 2 时 图片为圆角矩形 （这里在宽高上 -1 是为了不让图片超出边框）
             RectF rectF = new RectF(1, 1, width - 1, height - 1);
@@ -189,12 +191,12 @@ public class NewImageView extends AppCompatImageView {
             paint.setAntiAlias(true);
             // 根据控件类型的属性去绘制圆形或者矩形
             if (shapeType == 1) {
-                canvas.drawCircle(width / 2, height / 2, (width - borderWidth) / 2, paint);
-                canvas.drawCircle(width / 2, height / 2, (width - borderWidth) / 5, paint);
+                canvas.drawCircle((float) width / 2, (float) height / 2, (float) (width - borderWidth) / 2, paint);
+                canvas.drawCircle((float) width / 2, (float) height / 2, (float) (width - borderWidth) / 5, paint);
             } else if (shapeType == 2) {
                 // 当ShapeType = 1 时 图片为圆角矩形
-                RectF rectf = new RectF(borderWidth / 2, borderWidth / 2, getWidth() - borderWidth / 2,
-                        getHeight() - borderWidth / 2);
+                RectF rectf = new RectF((float) borderWidth / 2, (float) borderWidth / 2, getWidth() - (float) borderWidth / 2,
+                        getHeight() - (float) borderWidth / 2);
                 canvas.drawRoundRect(rectf, radius, radius, paint);
             }
         }
@@ -216,10 +218,8 @@ public class NewImageView extends AppCompatImageView {
     }
     /*
      * 重写 onTouchEvent 监听方法，用来监听自定义控件是否被触摸
-     *
-     * @param event
-     * @return
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -255,7 +255,7 @@ public class NewImageView extends AppCompatImageView {
             if (drawable instanceof BitmapDrawable) {
                 return ((BitmapDrawable) drawable).getBitmap();
             } else if (drawable instanceof ColorDrawable) {
-                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(COLOR_DRAW_ABLE_DIMENSION, COLOR_DRAW_ABLE_DIMENSION, BITMAP_CONFIG);
             } else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
                         BITMAP_CONFIG);
@@ -327,8 +327,6 @@ public class NewImageView extends AppCompatImageView {
     }
     /*
      * 设置图片按下的颜色
-     *
-     * @param pressColor
      */
     public void setPressColor(int pressColor) {
         this.pressColor = pressColor;

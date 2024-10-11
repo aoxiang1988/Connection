@@ -13,9 +13,9 @@ import java.util.List;
 
 public class MySelfDateBase extends SQLiteOpenHelper {
 
-    private static String mDateBaseName = "MyMusicDB.db";
+    private static final String mDateBaseName = "MyMusicDB.db";
     private static MySelfDateBase dateBase = null;
-    private static int ALL_MUSIC = 1;
+    private static final int ALL_MUSIC = 1;
 
     public MySelfDateBase(Context context, SQLiteDatabase.CursorFactory factory) {
         super(context, mDateBaseName, factory, 1);

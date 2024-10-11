@@ -31,11 +31,11 @@ import java.util.Map;
 
 public class FMInfoOnLineActivity extends AppCompatActivity {
 
+    private static final String TAG = "FMInfoOnLineActivity";
     private static final int DRAW_LIST = 1;
     Thread thread;
-    private List<LocalInfo> mOnlineInfo = new ArrayList<>();
-    private Map<String,List<Program>> mMap = new HashMap<>();
-    private List<Program> mPrograms = null;
+    private final List<LocalInfo> mOnlineInfo = new ArrayList<>();
+    private final Map<String,List<Program>> mMap = new HashMap<>();
 
     Bundle bundle = new Bundle();
 
@@ -43,15 +43,13 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
-            switch (msg.what) {
-                case DRAW_LIST:
-//                    for(int i=0;i<onlineinfo.size();i++){
-//                        Log.d("bin1111.yang","info : "+"\n"
-//                                +onlineinfo.get(i).getstationname()+"\n"
-//                                +onlineinfo.get(i).getsrc()+"\n"
-//                                +onlineinfo.get(i).getradio_ID());
-//                    }
-                    break;
+            if (msg.what == DRAW_LIST) {
+                for (int i = 0; i < mOnlineInfo.size(); i++) {
+                    Log.d("bin1111.yang", "info : " + "\n"
+                            + mOnlineInfo.get(i).getStationName() + "\n"
+                            + mOnlineInfo.get(i).getSrc() + "\n"
+                            + mOnlineInfo.get(i).getRadioID());
+                }
             }
         }
     };
@@ -118,14 +116,14 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
                     Elements FMTitles = document.select("a.nVFQ");
                     System.out.println(" " + FMTitles);
                     for (Element fm : FMTitles){
-                        String fmtitle = fm.select("img").attr("alt");
+                        String title = fm.select("img").attr("alt");
                         String src = fm.select("img").attr("src");
                         String radio_ID = fm.attr("href");
-                        bundle.putString("TITLE", fmtitle);
+                        bundle.putString("TITLE", title);
                         bundle.putString("PICTURE", src);
                         bundle.putString("NETURL", radio_ID);
-                        Log.d("bin1111.yang","info : "+fmtitle);
-                        getProgram(fmtitle, radio_ID);
+                        Log.d(TAG,"info : "+title);
+                        getProgram(title, radio_ID);
 
                         LocalInfo localInfo = new LocalInfo(bundle,getApplicationContext());
                         mOnlineInfo.add(localInfo);
@@ -143,8 +141,8 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
     };
 
     private void getProgram(String fmtitle, String radio_ID) throws IOException {
-        
-        mPrograms = new ArrayList<>();
+
+        List<Program> mPrograms = new ArrayList<>();
         Document document_program;
         String search_program = "http://www.qingting.fm"+radio_ID;
         document_program = Jsoup.connect(search_program).data("query", "Java").timeout(5000).get();
@@ -156,11 +154,11 @@ public class FMInfoOnLineActivity extends AppCompatActivity {
             String content = p.select("div").text();
             String time = p.select("span._1DvZ").text();
             String new_path = time.replace(" - ", "@");
-            String splitPath[] = new_path.split("@");
-            program.setcontent(content);
-            program.settime(time);
+            String[] splitPath = new_path.split("@");
+            program.setContent(content);
+            program.setTime(time);
             mPrograms.add(program);
-            Log.d("bin1111.yang","program : "+content+" "+splitPath[0]+"~"+splitPath[1]);
+            Log.d(TAG,"program : "+content+" "+splitPath[0]+"~"+splitPath[1]);
         }
         mMap.put(fmtitle , mPrograms);
     }

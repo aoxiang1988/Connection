@@ -35,22 +35,18 @@ public class FilterSettings extends Activity {
     private SeekBar firstfilterseekbar;
     private SeekBar secondfilterseekbar;
     private Button thridfilterbutton;
-    private TextView mindirectiontext;
-    private TextView minsizetext;
+    private TextView mMinDirectionText;
+    private TextView mMinSizeText;
 
     public static FilterSettings _inActivity;
 
-    private String SET_FILTER_ACTION = "com.example.action.SET_FILTER_ACTION";
+    private final String SET_FILTER_ACTION = "com.example.action.SET_FILTER_ACTION";
     private static final String IS_SET_SIZE_VALUE = "is set size value";
     private static final String IS_SET_DURATION_VALUE = "is set duration value";
     private static final String IS_SET_FILTER_FOLDER = "is set filter folder";
     private static final String SET_SIZE_VALUE = "set size value";
     private static final String SET_DURATION_VALUE = "set duration value";
 
-    private SeekBar.OnSeekBarChangeListener mSeekBarChangeListener;
-
-    private int MaxSize = 2097152;
-    private int MaxDuration = 300000;
     public static FolderPathData mFolderPathData;
 
     //设置限制值
@@ -60,7 +56,7 @@ public class FilterSettings extends Activity {
     private int mSetSizeValue = 0;
     private int mSetDurationValue = 0;
 
-    private String TAG = "FilterSettings";
+    private final String TAG = "FilterSettings";
     private SharedPreferences preferences;
 
     @Override
@@ -94,10 +90,10 @@ public class FilterSettings extends Activity {
 
         mFolderPathData = new FolderPathData(BaseListInfo.getInstance().getList());
 
-        initview();
+        initView();
         setSwitchSelectOn();
 
-        mSeekBarChangeListener = new SeekBarChangeListener();
+        SeekBar.OnSeekBarChangeListener mSeekBarChangeListener = new SeekBarChangeListener();
         firstfilterseekbar.setOnSeekBarChangeListener(mSeekBarChangeListener);
         secondfilterseekbar.setOnSeekBarChangeListener(mSeekBarChangeListener);
 
@@ -105,7 +101,7 @@ public class FilterSettings extends Activity {
             @Override
             public void onClick(View v) {
                 List<String> mPathListForDialog = mFolderPathData.getPathList();
-                opendialog(PlayerDialog.FOLDER_PATH, mPathListForDialog);
+                openDialog(mPathListForDialog);
             }
         });
     }
@@ -129,32 +125,33 @@ public class FilterSettings extends Activity {
         }
     }
 
-    private void opendialog(int type,
-                            List<String> mPathListForDialog) {
+    private void openDialog(List<String> mPathListForDialog) {
         PlayerDialog playerDialog;
-        playerDialog = PlayerDialog.newInstance(type,
+        playerDialog = PlayerDialog.newInstance(PlayerDialog.FOLDER_PATH,
                 mPathListForDialog);
         playerDialog.setStyle(R.style.ActionBar ,0);
-        playerDialog.show(getFragmentManager(), String.valueOf(type));
+        playerDialog.show(getFragmentManager(), String.valueOf(PlayerDialog.FOLDER_PATH));
     }
 
-    private void initview() {
+    private void initView() {
         firstfilterswitch = findViewById(R.id.first_filter_switch);
 
         secondfilterswitch = findViewById(R.id.second_filter_switch);
 
         firstfilterseekbar = findViewById(R.id.first_filter_seekbar);
-        firstfilterseekbar.setMax(MaxSize);
+        int maxSize = 2097152;
+        firstfilterseekbar.setMax(maxSize);
         firstfilterseekbar.setEnabled(false);
 
         secondfilterseekbar = findViewById(R.id.second_filter_seekbar);
-        secondfilterseekbar.setMax(MaxDuration);
+        int maxDuration = 300000;
+        secondfilterseekbar.setMax(maxDuration);
         secondfilterseekbar.setEnabled(false);
 
         thridfilterbutton = findViewById(R.id.thrid_filter_button);
 
-        mindirectiontext = findViewById(R.id.set_min_direction_text);
-        minsizetext = findViewById(R.id.set_min_size_text);
+        mMinDirectionText = findViewById(R.id.set_min_direction_text);
+        mMinSizeText = findViewById(R.id.set_min_size_text);
     }
 
     private void setSwitchSelectOn() {
@@ -196,7 +193,7 @@ public class FilterSettings extends Activity {
             }
             if (seekBar.getId() == R.id.second_filter_seekbar) {
                     mSetDurationValue = progress;
-                    getMinDerection(mSetDurationValue);
+                    getMinDirection(mSetDurationValue);
             }
         }
 
@@ -255,31 +252,31 @@ public class FilterSettings extends Activity {
         editor.apply();
     }
 
-    private void getMinDerection(int DurationValue){
+    private void getMinDirection(int DurationValue){
         int min = (DurationValue / 1000) / 60;
         int sec = (DurationValue / 1000) % 60;
-        String stringmin;
-        String stringsec;
+        String stringMin;
+        String stringSec;
         if (min < 10) {
-            stringmin = String.format("0%s", min);
+            stringMin = String.format("0%s", min);
         } else {
-            stringmin = String.format("%s", min);
+            stringMin = String.format("%s", min);
         }
         if (sec < 10) {
-            stringsec = String.format("0%s", sec);
+            stringSec = String.format("0%s", sec);
         } else {
-            stringsec = String.format("%s", sec);
+            stringSec = String.format("%s", sec);
         }
-        mindirectiontext.setText(String.format("%s:%s", stringmin, stringsec));
+        mMinDirectionText.setText(String.format("%s:%s", stringMin, stringSec));
     }
     private void getMinSize(int SizeValue){
         int size = SizeValue/1024;
-        String stringsize;
-        stringsize = String.format("%s", size);
-        minsizetext.setText(String.format("%sKB", stringsize));
+        String stringSize;
+        stringSize = String.format("%s", size);
+        mMinSizeText.setText(String.format("%sKB", stringSize));
     }
-    public void setfilterFolder(boolean isset){
-        isSetFilterFolder = isset;
+    public void setFilterFolder(boolean isSet){
+        isSetFilterFolder = isSet;
         savePreferences(IS_SET_FILTER_FOLDER, isSetFilterFolder);
     }
 }

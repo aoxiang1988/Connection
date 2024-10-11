@@ -1,10 +1,11 @@
 package com.sec.connection.setting;
 
-/**
+/* *
  * Created by SRC-TJ-MM-BinYang on 2017/10/9.
  * media effect test
  */
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -54,8 +55,8 @@ public class MediaPlayerTest extends Activity
     // 定义系统的预设音场控制器
     private PresetReverb mPresetReverb;
     private LinearLayout layout;
-    private List<Short> reverbNames = new ArrayList<Short>();
-    private List<String> reverbVals = new ArrayList<String>();
+    private final List<Short> reverbNames = new ArrayList<Short>();
+    private final List<String> reverbVales = new ArrayList<String>();
 
     View actionBar;
 
@@ -68,6 +69,7 @@ public class MediaPlayerTest extends Activity
         layout = new LinearLayout(this);//代码创建布局
         layout.setOrientation(LinearLayout.VERTICAL);//设置为线性布局-上下排列
         setContentView(layout);//将布局添加到 Activity
+        @SuppressLint("InflateParams")
         View view_1 = LayoutInflater.from(this).inflate(R.layout.mediasetting,null);
 
         layout.addView(view_1);
@@ -143,6 +145,7 @@ public class MediaPlayerTest extends Activity
     /**
      * 初始化均衡控制器
      */
+    @SuppressLint("DefaultLocale")
     private void setupEqualizer()
     {
         // 以MediaPlayer的AudioSessionId创建Equalizer
@@ -162,17 +165,18 @@ public class MediaPlayerTest extends Activity
         final short minEQLevel = mEqualizer.getBandLevelRange()[0];//第一个下标为最低的限度范围
         short maxEQLevel = mEqualizer.getBandLevelRange()[1];  // 第二个下标为最高的限度范围
 
-        LinearLayout eqTextViewlayout = new LinearLayout(this);//代码创建布局
-        eqTextViewlayout.setOrientation(LinearLayout.HORIZONTAL);//设置为线性布局-上下排列
-        eqTextViewlayout.setGravity(Gravity.CENTER);
-        eqTextViewlayout.setLayoutParams(params);
+        LinearLayout eqTextViewLayout = new LinearLayout(this);//代码创建布局
+        eqTextViewLayout.setOrientation(LinearLayout.HORIZONTAL);//设置为线性布局-上下排列
+        eqTextViewLayout.setGravity(Gravity.CENTER);
+        eqTextViewLayout.setLayoutParams(params);
 
-        LinearLayout brandslayout = new LinearLayout(this);//代码创建布局
-        brandslayout.setOrientation(LinearLayout.HORIZONTAL);//设置为线性布局-上下排列
-        brandslayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        LinearLayout brandsLayout = new LinearLayout(this);//代码创建布局
+        brandsLayout.setOrientation(LinearLayout.HORIZONTAL);//设置为线性布局-上下排列
+        brandsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        @SuppressLint("InflateParams")
         View view_2 =LayoutInflater.from(this).inflate(R.layout.db_layout,null);
         view_2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        brandslayout.addView(view_2);
+        brandsLayout.addView(view_2);
         // 获取均衡控制器支持的所有频率
         short brands = mEqualizer.getNumberOfBands();
         for (short i = 0; i < brands; i++) {
@@ -185,8 +189,8 @@ public class MediaPlayerTest extends Activity
             // 设置该均衡控制器的频率
             eqTextView.setTextSize(10);
             eqTextView.setTextColor(Color.BLACK);
-            eqTextView.setText((mEqualizer.getCenterFreq(i) / 1000) + " Hz");
-//            eqTextViewlayout.addView(eqTextView);
+            eqTextView.setText(String.format("%d Hz", mEqualizer.getCenterFreq(i) / 1000));
+//            eqTextViewLayout.addView(eqTextView);
 //             创建一个水平排列组件的LinearLayout
             LinearLayout tmpLayout = new LinearLayout(this);
             tmpLayout.setOrientation(LinearLayout.VERTICAL);
@@ -225,9 +229,9 @@ public class MediaPlayerTest extends Activity
             tmpLayout.addView(bar);
             tmpLayout.addView(eqTextView);
             // 将水平排列组件的LinearLayout添加到myLayout容器中
-            brandslayout.addView(tmpLayout);
+            brandsLayout.addView(tmpLayout);
         }
-        layout.addView(brandslayout);
+        layout.addView(brandsLayout);
     }
 
     /**
@@ -289,12 +293,12 @@ public class MediaPlayerTest extends Activity
         // 获取系统支持的所有预设音场
         for (short i = 0; i < mEqualizer.getNumberOfPresets(); i++) {
             reverbNames.add(i);
-            reverbVals.add(mEqualizer.getPresetName(i));
+            reverbVales.add(mEqualizer.getPresetName(i));
         }
         // 使用Spinner做为音场选择工具
         Spinner sp = new Spinner(this);
         sp.setAdapter(new ArrayAdapter<String>(MediaPlayerTest.this,
-                android.R.layout.simple_spinner_item, reverbVals));
+                android.R.layout.simple_spinner_item, reverbVales));
         // 为Spinner的列表项选中事件设置监听器
         sp.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
@@ -353,8 +357,8 @@ public class MediaPlayerTest extends Activity
         // bytes数组保存了波形抽样点的值
         private byte[] bytes;
         private float[] points;
-        private Paint paint = new Paint();
-        private Rect rect = new Rect();
+        private final Paint paint = new Paint();
+        private final Rect rect = new Rect();
         private byte type = 0;
         public MyVisualizerView(Context context) {
             super(context);
@@ -372,6 +376,7 @@ public class MediaPlayerTest extends Activity
             invalidate();
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent me) {
             // 当用户触碰该组件时，切换波形类型
@@ -399,10 +404,10 @@ public class MediaPlayerTest extends Activity
                 // -------绘制块状的波形图-------
                 case 0:
                     for (int i = 0; i < bytes.length - 1; i++) {
-                        float left = getWidth() * i / (bytes.length - 1);
+                        float left = (float) (getWidth() * i) / (bytes.length - 1);
                         // 根据波形值计算该矩形的高度
-                        float top = rect.height()-(byte)(bytes[i+1]+128)
-                                * rect.height() / 128;
+                        float top = rect.height()- (float) ((byte) (bytes[i + 1] + 128)
+                                * rect.height()) / 128;
                         float right = left + 1;
                         float bottom = rect.height();
                         canvas.drawRect(left, top, right, bottom, paint);
@@ -411,10 +416,10 @@ public class MediaPlayerTest extends Activity
                 // -------绘制柱状的波形图（每隔18个抽样点绘制一个矩形）-------
                 case 1:
                     for (int i = 0; i < bytes.length - 1; i += 15) {
-                        float left = rect.width()*i/(bytes.length - 1);
+                        float left = (float) (rect.width() * i) /(bytes.length - 1);
                         // 根据波形值计算该矩形的高度
-                        float top = rect.height()-(byte)(bytes[i+1]+128)
-                                * rect.height() / 128;
+                        float top = rect.height()- (float) ((byte) (bytes[i + 1] + 128)
+                                * rect.height()) / 128;
                         float right = left + 6;
                         float bottom = rect.height();
                         canvas.drawRect(left, top, right, bottom, paint);
@@ -428,18 +433,18 @@ public class MediaPlayerTest extends Activity
                     }
                     for (int i = 0; i < bytes.length - 1; i++) {
                         // 计算第i个点的x坐标
-                        points[i * 4] = rect.width()*i/(bytes.length - 1);
+                        points[i * 4] = (float) (rect.width() * i) /(bytes.length - 1);
                         // 根据bytes[i]的值（波形点的值）计算第i个点的y坐标
-                        points[i * 4 + 1] = (rect.height() / 2)
-                                + ((byte) (bytes[i] + 128)) * 128
-                                / (rect.height() / 2);
+                        points[i * 4 + 1] = ((float) rect.height() / 2)
+                                + (float) (((byte) (bytes[i] + 128)) * 128)
+                                / ((float) rect.height() / 2);
                         // 计算第i+1个点的x坐标
-                        points[i * 4 + 2] = rect.width() * (i + 1)
+                        points[i * 4 + 2] = (float) (rect.width() * (i + 1))
                                 / (bytes.length - 1);
                         // 根据bytes[i+1]的值（波形点的值）计算第i+1个点的y坐标
-                        points[i * 4 + 3] = (rect.height() / 2)
-                                + ((byte) (bytes[i + 1] + 128)) * 128
-                                / (rect.height() / 2);
+                        points[i * 4 + 3] = ((float) rect.height() / 2)
+                                + (float) (((byte) (bytes[i + 1] + 128)) * 128)
+                                / ((float) rect.height() / 2);
                     }
                     // 绘制波形曲线
                     canvas.drawLines(points, paint);

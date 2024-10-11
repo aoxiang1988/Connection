@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import com.sec.connection.BaseListInfo;
-import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
 import com.sec.connection.data.CharacterParser;
@@ -22,6 +23,7 @@ import com.sec.connection.view.SideBar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,13 +46,10 @@ public class AllListFragment extends BaseFragment {
     private String mParam1;
     private String mParam2;
 
-    private String[] mMusicName;
     private ListView talmudic1;
-    private SideBar sidebar;
     private SortAdapter tablespace;
     private CharacterParser characterParser;
     private List<SortModel> SourceDateList;
-    private PinyinComparator pinyinComparator;
 
     public AllListFragment() {
         // Required empty public constructor
@@ -82,17 +81,17 @@ public class AllListFragment extends BaseFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mList = BaseListInfo.getInstance().getList();
-        mMusicName = new String[mList.size()];
+        String[] mMusicName = new String[mList.size()];
 
-        List<String> artists1 = new ArrayList<>();
+        AtomicReference<List<String>> artists1 = new AtomicReference<>(new ArrayList<>());
         for (int a = 0; a < mList.size(); a++) {
-            artists1.add( mList.get(a).getArtist());
+            artists1.get().add( mList.get(a).getArtist());
             mMusicName[a] = mList.get(a).getTitle();
         }
 
         //实例化汉字转拼音类
         characterParser = CharacterParser.getInstance();
-        pinyinComparator = new PinyinComparator();
+        PinyinComparator pinyinComparator = new PinyinComparator();
         SourceDateList = filledData(mMusicName);
         Collections.sort(SourceDateList, pinyinComparator);
     }
@@ -103,7 +102,7 @@ public class AllListFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank2, container, false);
         talmudic1 = (ListView) view.findViewById(R.id.tab_music_list);
-        sidebar = new SideBar(mContext);
+        SideBar sidebar = new SideBar(mContext);
         sidebar = (SideBar) view.findViewById(R.id.side_bar);
 
         tablespace = new SortAdapter(mContext, SourceDateList);
@@ -169,13 +168,13 @@ public class AllListFragment extends BaseFragment {
             MainActivity.mService.isPause = false;
             MainActivity._inActivity.isFirstTime = false;
             MainActivity._inActivity.isPlaying = true;
-            MainActivity.mService.playmusic(0, SourceDateList.get(position).getAudio().getPath(),true);
+            MainActivity.mService.playMusic(0, SourceDateList.get(position).getAudio().getPath(),true);
 
-            updateAllAlumbSingleRow(position);
+            updateAllAlbumSingleRow(position);
         }
     }
 
-    private void updateAllAlumbSingleRow(int position) {
+    private void updateAllAlbumSingleRow(int position) {
         // TODO Auto-generated method stub
         if (talmudic1 != null) {
             int start = talmudic1.getFirstVisiblePosition();

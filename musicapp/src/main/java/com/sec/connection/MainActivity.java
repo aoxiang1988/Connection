@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 	private static final String CURRENT_ID = "com.example.action.CURRENT_ID";
 
 	public static MainService mService = null;
+	@SuppressLint("StaticFieldLeak")
 	public static MainActivity _inActivity;
 	public static LrcView mLrcView;
 
@@ -134,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
 					ItemPlay(mListPosition);
 					break;
 				case SHOW_NOTIFICATION:
-					mNotificationManager.shownotification(mList.get(mListPosition));
+					mNotificationManager.showNotification(mList.get(mListPosition));
 					break;
 				case REMOVE_NOTIFICATION:
-					mNotificationManager.removenotification(mService.getBaseContext());
+					mNotificationManager.reMoveNotification(mService.getBaseContext());
 					break;
 				case QUICK_RIGHT:
 					if (mCurrentTime < mList.get(mListPosition).getDuration()) {
@@ -174,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
 		}
 	});
 
-	public static void initservice(MainService service) {
+	public static void initService(MainService service) {
 		mService = service;
 	}
 
-	public static int getcurrentposition() {
+	public static int getCurrentPosition() {
 		return mListPosition;
 	}
 
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		isActivity = true;
-		onmycreate();
+		onMyCreate();
 		mNotificationManager = PlayerNotificationManager.instance();
 		mHomeReceiver = new HomeReceiver();
 		IntentFilter intentFilter = new IntentFilter();
@@ -220,38 +221,38 @@ public class MainActivity extends AppCompatActivity {
 		_inActivity = this;
 		actionmode_callback = new ActionMode_CallBack();
 		mRepeatState = restorePreferences();
-		setstatus(mRepeatState);
+		setStatus(mRepeatState);
 		mActionBar = findViewById(R.id.action_bar);
 		mActionBar.setBackgroundColor(getResources().getColor(R.color.playingcolor));
 //		mActionBar.setVisibility(View.GONE);
     }
 
-	private void onmycreate() {
+	private void onMyCreate() {
 		setContentView(R.layout.activity_main);
 		try {
 			
 			InputStream is = getAssets().open("TianJin.xml");
 			Log.d(TAG,"info : "+is);
 			PullLocalInfoParser parser = new PullLocalInfoParser();
-			List<LocalInfo> localInfos = parser.parse(is);
+			List<LocalInfo> localAllInfo = parser.parse(is);
 			Map<Integer,List<Program>> map = parser.getmap();
 			Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
 			int minute = c.get(Calendar.MINUTE);
 			Log.d(TAG,"time : "+hour+":"+minute);
-			for (int i=0;i<localInfos.size();i++) {
+			for (int i=0;i<localAllInfo.size();i++) {
 				Log.d(TAG,"info : "
-						+localInfos.get(i).getpostion()+" "
-						+localInfos.get(i).gettag()+" "
-						+localInfos.get(i).getstationname()+" "
-						+localInfos.get(i).getchannel() +" "
-						+localInfos.get(i).getradio_ID());
+						+localAllInfo.get(i).getPosition()+" "
+						+localAllInfo.get(i).getTag()+" "
+						+localAllInfo.get(i).getStationName()+" "
+						+localAllInfo.get(i).getChannel() +" "
+						+localAllInfo.get(i).getRadioID());
 				for(int j = 0; j< Objects.requireNonNull(
-						map.get(localInfos.get(i).getchannel())
+						map.get(localAllInfo.get(i).getChannel())
 				).size(); j++){
 					Log.d(TAG,"progrem : "
-							+ localInfos.get(i).getchannel()+" "
-							+ map.get(localInfos.get(i).getchannel()).get(j).getcontent()+" "
+							+ localAllInfo.get(i).getChannel()+" "
+							+ map.get(localAllInfo.get(i).getChannel()).get(j).getContent()+" "
 
 					);
 				}
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
 		mList = MainService.list;
 		mFlingView = findViewById(R.id.fling_view);
 		mFlingViewBack = findViewById(R.id.fling_view_back);
-		FindViewbyId();
+		FindViewById();
 		SetOnClickListener();
 		SetOnLongClickListener();
 //		mLrcView = (LrcView) findViewById(R.id.textView1);
@@ -301,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			opendialog(PlayerDialog.EXIT);
+			openDialog(PlayerDialog.EXIT);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -310,11 +311,11 @@ public class MainActivity extends AppCompatActivity {
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			onmycreate();
+			onMyCreate();
 			onResume();
 		}
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-			onmycreate();
+			onMyCreate();
 			onResume();
 		}
 	}
@@ -333,10 +334,10 @@ public class MainActivity extends AppCompatActivity {
 			mPlayBar.setEnabled(true);
 		}
 		mRepeatState = restorePreferences();
-		setstatus(mRepeatState);
+		setStatus(mRepeatState);
 		mMusicNameView.setText(mList.get(mListPosition).getTitle());
 //		mFlingView.setToScreen(mListPosition, true);
-		setcurrentmusic(mListPosition);
+		setCurrentMusic(mListPosition);
 
 		if(!mService.isAdded){
 			try {
@@ -348,13 +349,13 @@ public class MainActivity extends AppCompatActivity {
 				mService.createFloatView();
 				mLrcOnOff.setBackground(getResources().getDrawable(R.drawable.lrc_on));
 			}catch (SecurityException s){
-				Toast.makeText(this,"check the premission",Toast.LENGTH_SHORT);
+				Toast.makeText(this,"check the premission",Toast.LENGTH_SHORT).show();
 			}
 		}
 		mService.initLrc(mList.get(mListPosition).getPath());
 		mFlingView.setToScreen(mListPosition, false);
 		if (MainService.isPlay)
-			startplayanim(mListPosition);
+			startPlayAnim(mListPosition);
 //		mHandler.sendEmptyMessage(REMOVE_NOTIFICATION);
 	}
 
@@ -371,11 +372,11 @@ public class MainActivity extends AppCompatActivity {
 		editor.putInt("status", status);
 		editor.apply();
 	}
-	public int getstatus(){
+	public int getStatus(){
 		return mRepeatState;
 	}
 
-	public void setstatus(int status) {
+	public void setStatus(int status) {
 		if (status == 1) {
 			mRepeatState = 1;
 			mCurrentStatusView.setText(R.string.signal_round);
@@ -437,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
 			if (action.equals(PLAY_STATUE)) {
 				isPlaying = intent.getBooleanExtra("isplay", false);
 				if (!isPlaying) {
-					if (mService.getplayerstatus()) {
+					if (mService.getPlayerStatus()) {
 						stop();
 					}
 				}
@@ -445,9 +446,9 @@ public class MainActivity extends AppCompatActivity {
 			if (action.equals(UPDATE_LIST_ACTIVITY_ACTION)) {
 				mList = MainService.list;
 				mListPosition = intent.getIntExtra("current_music", 0);
-				mUserAdapter.addItems(mList,true);
+				mUserAdapter.addItems(mList);
 				mFlingView.setToScreen(mListPosition,false);
-				PlayMusicUIUpdata(mListPosition);
+				PlayMusicUIUpdate(mListPosition);
 			}
 			if (action.equals(UPDATE_ACTION)) {
 				mListPosition = intent.getIntExtra("current_music", -1);
@@ -459,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
 				mAllTimeView.setText(String.format("%s:%s", text(min), text(sec)));
 				mPlayBar.setMax(mDuration);
 				updateSingleRow(mUserAdapter.getItemId(mListPosition));
-				PlayMusicUIUpdata(mListPosition);
+				PlayMusicUIUpdate(mListPosition);
 			}
 			if (action.equals(MUSIC_DURATION)) {
 				mDuration = intent.getIntExtra("mDuration", -1);
@@ -493,10 +494,10 @@ public class MainActivity extends AppCompatActivity {
 			} else {
 				CheckBox box = arg1.findViewById(R.id.checkBox1);
 				if(mList.get(arg2).getSelected()) {
-					mList.get(arg2).setSeleted(false);
+					mList.get(arg2).setSelected(false);
 					box.setChecked(false);
 				} else {
-					mList.get(arg2).setSeleted(true);
+					mList.get(arg2).setSelected(true);
 					box.setChecked(true);
 				}
 			}
@@ -515,15 +516,15 @@ public class MainActivity extends AppCompatActivity {
 //		sendBroadcast(intent);
 		Thread t  = new Thread(() -> mService.play(0, pos));
 		t.start();
-		PlayMusicUIUpdata(pos);
+		PlayMusicUIUpdate(pos);
 	}
 
-	private void roate(int progress) {
+	private void route(int progress) {
 		mFlingView.getChildAt(mListPosition).setPivotX(
-				mFlingView.getChildAt(mListPosition).getWidth() / 2);
+				(float) mFlingView.getChildAt(mListPosition).getWidth() / 2);
 		mFlingView.getChildAt(mListPosition).setPivotY(
-				mFlingView.getChildAt(mListPosition).getHeight() / 2);
-		mFlingView.getChildAt(mListPosition).setRotation(progress / 360);
+				(float) mFlingView.getChildAt(mListPosition).getHeight() / 2);
+		mFlingView.getChildAt(mListPosition).setRotation((float) progress / 360);
 //		mFlingView.getChildAt(mListPosition).getRotation();
 	}
 
@@ -535,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
 			// TODO Auto-generated method stub
 			if (fromUser) {
 				mService.progress(progress);
-				roate(progress);
+				route(progress);
 			}
 		}
 
@@ -553,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
 
 	}
 
-	private void FindViewbyId() {
+	private void FindViewById() {
 		// TODO Auto-generated method stub
 		mPlayBar = findViewById(R.id.playBar);
 		mPreBut = findViewById(R.id.pre);
@@ -578,7 +579,7 @@ public class MainActivity extends AppCompatActivity {
 		mCurrentStatusView = findViewById(R.id.current_status);
 	}
 
-	public void setcurrentmusic(int position) {
+	public void setCurrentMusic(int position) {
 		mListView.setSelection(position);
 	}
 
@@ -589,13 +590,13 @@ public class MainActivity extends AppCompatActivity {
 				if (id == mUserAdapter.getItemId(i)) {
 					//View view = mListView.getChildAt(i - mStartBut);
 					mUserAdapter.notifyDataSetChanged();
-					setcurrentmusic(i);
+					setCurrentMusic(i);
 					break;
 				}
 		}
 	}
 
-	public void startplayanim(final int pos) {
+	public void startPlayAnim(final int pos) {
 		if(mRotateAnimation == null) {
 			mRotateAnimation = new RotateAnimation(0, 360,
 					Animation.RELATIVE_TO_SELF, 0.5f,
@@ -609,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
 		mFlingView.getChildAt(pos).startAnimation(mRotateAnimation);
 	}
 
-	public void stopplayanim() {
+	public void stopPlayAnim() {
 		if (mRotateAnimation != null) {
 			mFlingView.getChildAt(mListPosition).setRotation(0);
 			mRotateAnimation.cancel();
@@ -618,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private void PlayMusicUIUpdata(int position) {
+	private void PlayMusicUIUpdate(int position) {
 		// TODO Auto-generated method stub
 		mFlingView.setToScreen(position, false);
 		mFlingView.snapToScreen(position, true);
@@ -641,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
 		else{
 			mNextBut.setBackground(getResources().getDrawable(R.drawable.next_button_ripple, null));
 		}
-		startplayanim(position);
+		startPlayAnim(position);
 	}
 
 	private void SetOnLongClickListener() {
@@ -676,7 +677,7 @@ public class MainActivity extends AppCompatActivity {
 		// TODO Auto-generated method stub
 		mHandler.sendEmptyMessage(QUICK_LEFT);
 	}
-//	private boolean isrecord = false;
+//	private boolean is record = false;
 	private void SetOnClickListener() {
 		// TODO Auto-generated method stub
 		OnClickListener clickListener = new OnClickListener() {
@@ -717,11 +718,11 @@ public class MainActivity extends AppCompatActivity {
 
 				if (v.getId() == R.id.start) {
 					if (isFirstTime) {
-						PlayMusicUIUpdata(mListPosition);
+						PlayMusicUIUpdate(mListPosition);
 						mService.play(0, mListPosition);
 						isFirstTime = false;
 					} else {
-						PlayMusicUIUpdata(mListPosition);
+						PlayMusicUIUpdate(mListPosition);
 						mService.play(0, mListPosition);
 					}
 				}
@@ -758,11 +759,11 @@ public class MainActivity extends AppCompatActivity {
 	public void previous() {
 		mService.isPause = false;
 		if(mListPosition - 1>= 0)
-			stopplayanim();
+			stopPlayAnim();
 		mListPosition = mListPosition - 1;
 		if (mListPosition >= 0) {
-			mService.playpre();
-			PlayMusicUIUpdata(mListPosition);
+			mService.playPre();
+			PlayMusicUIUpdate(mListPosition);
 		} else {
 			Toast.makeText(this, "fist one", Toast.LENGTH_SHORT).show();
 		}
@@ -771,11 +772,11 @@ public class MainActivity extends AppCompatActivity {
 	public void next() {
 		mService.isPause = false;
 		if(mListPosition +1 != mList.size())
-			stopplayanim();
+			stopPlayAnim();
 		mListPosition = mListPosition + 1;
 		if (mListPosition < mList.size()) {
-			mService.playnext();
-			PlayMusicUIUpdata(mListPosition);
+			mService.playNext();
+			PlayMusicUIUpdate(mListPosition);
 		} else {
 			Toast.makeText(this, "last one", Toast.LENGTH_SHORT).show();
 		}
@@ -786,13 +787,13 @@ public class MainActivity extends AppCompatActivity {
 		mStopBut.setVisibility(View.GONE);
 		mPauseBut.setVisibility(View.VISIBLE);
 		mService.pause();
-		stopplayanim();
+		stopPlayAnim();
 	}
 
 	public void stop() {
 		//mHandler.removeCallbacks(doupdatecurrenttime);
 		mPlayBar.setEnabled(false);
-		stopplayanim();
+		stopPlayAnim();
 		mService.stop();
 		mStartBut.setVisibility(View.VISIBLE);
 		mStopBut.setVisibility(View.GONE);
@@ -813,7 +814,7 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 
-	void opendialog(int type) {
+	void openDialog(int type) {
 		PlayerDialog playerDialog;
 		playerDialog = PlayerDialog.newInstance(type);
 		playerDialog.setStyle(R.style.ActionBar ,0);
@@ -827,7 +828,7 @@ public class MainActivity extends AppCompatActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			opendialog(PlayerDialog.STATUE);
+			openDialog(PlayerDialog.STATUE);
 			return true;
 		}
 		if (id == R.id.Media_seting) {
@@ -837,7 +838,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		if (id == R.id.searchmusic) {
-			opendialog(PlayerDialog.SEARCH);
+			openDialog(PlayerDialog.SEARCH);
 		}
 		if(id == R.id.filter_settings){
 			Intent intent = new Intent();
@@ -857,10 +858,10 @@ public class MainActivity extends AppCompatActivity {
 				List<LocalInfo> localInfos = parser.parse(is);
 				for (LocalInfo local : localInfos) {
 					Log.d(TAG,"info : "
-							+local.getpostion()+" "
-							+local.gettag()+" "
-							+local.getstationname()+" "
-							+local.getchannel());
+							+local.getPosition()+" "
+							+local.getTag()+" "
+							+local.getStationName()+" "
+							+local.getChannel());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -930,7 +931,7 @@ public class MainActivity extends AppCompatActivity {
 			mIsActionMode = false;
 			mActionMode = null;
 			for(int i = 0; i< mList.size(); i++){
-				mList.get(i).setSeleted(false);
+				mList.get(i).setSelected(false);
 			}
 			mActionBar.setVisibility(View.VISIBLE);
 			mUserAdapter.notifyDataSetChanged();

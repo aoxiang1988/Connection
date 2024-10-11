@@ -24,6 +24,8 @@ import android.graphics.BitmapFactory
 import com.sec.myonlinefm.dbdata.MySQLHelper
 
 class OnLineFaredActivity : AppCompatActivity() {
+
+    private final var TAG = "OnLineFaredActivity";
     private var mFavListView: ListView? = null
     private var mFavList: MutableList<FavData?>? = null
     private var db: SQLiteDatabase? = null
@@ -57,7 +59,7 @@ class OnLineFaredActivity : AppCompatActivity() {
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("channel_name"))
                 val url = cursor.getString(cursor.getColumnIndexOrThrow("channel_them_url"))
                 val podCasterName = cursor.getString(cursor.getColumnIndexOrThrow("pod_caster_name"))
-                Log.d("bin1111.yang", "favData : $name $cid $url")
+                Log.d(TAG, "favData : $name $cid $url")
                 favData.channelID = cid
                 favData.categoryID = category_id
                 favData.channelName = name
@@ -203,7 +205,7 @@ class OnLineFaredActivity : AppCompatActivity() {
             bm = BitmapFactory.decodeStream(bis)
             bis.close()
             `is`.close() // 关闭流
-            Log.d("bin1111.yang", "getBitmap : $url")
+            Log.d(TAG, "getBitmap : $url")
         } catch (e: Exception) {
             e.printStackTrace()
         }

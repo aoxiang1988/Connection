@@ -5,7 +5,7 @@ package com.sec.connection.data;
  */
 
 public class EventBusType {
-    private String type;
+    private final String type;
     public EventBusType (String type) {
         this.type = type;
     }

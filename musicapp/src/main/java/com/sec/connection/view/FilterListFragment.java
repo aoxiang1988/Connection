@@ -1,5 +1,6 @@
 package com.sec.connection.view;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,10 +33,10 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private Context mContext = null;
-    private static String IS_SET_SIZE_VALUE = "is set size value";
-    private static String IS_SET_DURATION_VALUE = "is set duration value";
-    private static String SET_SIZE_VALUE = "set size value";
-    private static String SET_DURATION_VALUE = "set duration value";
+    private static final String IS_SET_SIZE_VALUE = "is set size value";
+    private static final String IS_SET_DURATION_VALUE = "is set duration value";
+    private static final String SET_SIZE_VALUE = "set size value";
+    private static final String SET_DURATION_VALUE = "set duration value";
 
     private List<Audio> filterDurationList;
 
@@ -102,12 +103,13 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
         View view = inflater.inflate(R.layout.fragment_filter_list, container, false);
         LinearLayout scrollView = view.findViewById(R.id.filter_scroll_view);
         for(int i = 0; i< filterDurationList.size(); i++){
-            Log.d(TAG,""+ filterDurationList.get(i).getTitle());
+            Log.d(TAG,"onCreateView "+ filterDurationList.get(i).getTitle());
         }
         for(int i = 0; i< filterDurationList.size(); i++){
+            @SuppressLint("InflateParams")
             View view_1 = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,null);
-            TextView infomusictitle = view_1.findViewById(android.R.id.text1);
-            infomusictitle.setText(filterDurationList.get(i).getTitle());
+            TextView infoMusicTitle = view_1.findViewById(android.R.id.text1);
+            infoMusicTitle.setText(filterDurationList.get(i).getTitle());
             scrollView.addView(view_1);
         }
         view.invalidate();
@@ -125,6 +127,7 @@ public class FilterListFragment extends Fragment implements View.OnTouchListener
         super.onDetach();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return false;

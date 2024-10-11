@@ -1,9 +1,11 @@
 package com.sec.connection.view;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
@@ -17,7 +19,8 @@ public class MusicImageResource {
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");  
     private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
     
-	public static Bitmap getArtwork(Context context,long song_id,long album_id){
+	@SuppressLint("SuspiciousIndentation")
+    public static Bitmap getArtwork(Context context, long song_id, long album_id){
 		if (album_id < 0) {  
             // This is something that is not in the database, so get the album art directly  
             // from the file.  
@@ -30,26 +33,27 @@ public class MusicImageResource {
         }  
         ContentResolver res = context.getContentResolver();  
         Uri uri = ContentUris.withAppendedId(sArtworkUri, album_id);  
-        if (uri != null) {  
-            InputStream in = null;  
-            try {  
+        if (uri != null) {
+            InputStream in = null;
+            try {
                 in = res.openInputStream(uri);
                 sBitmapOptions.inJustDecodeBounds = true;
-                int hight = sBitmapOptions.outHeight/2;
-                int width = sBitmapOptions.outWidth/2;
-                sBitmapOptions.inSampleSize = calculateInSampleSize(sBitmapOptions, width, hight);
+                int height = sBitmapOptions.outHeight / 2;
+                int width = sBitmapOptions.outWidth / 2;
+                sBitmapOptions.inSampleSize = calculateInSampleSize(sBitmapOptions, width, height);
                 sBitmapOptions.inJustDecodeBounds = false;
                 bm = BitmapFactory.decodeStream(in, null, sBitmapOptions);
                 bm.setConfig(Bitmap.Config.ARGB_4444);
         	    return bm;
-            } catch (FileNotFoundException ignored) {}
-            finally {  
-            	try {  
-                    if (in != null) {  
-                        in.close();  
-                    }  
-                } catch (IOException ignored) {}
-            }  
+            } catch (FileNotFoundException ignored) {
+            } finally {
+            	try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException ignored) {
+                }
+            }
         }  
 		return null;
 	}

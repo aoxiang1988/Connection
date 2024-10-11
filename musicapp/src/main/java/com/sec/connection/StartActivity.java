@@ -1,16 +1,14 @@
 package com.sec.connection;
 
 import android.Manifest;
-import android.app.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sec.connection.data.MediaUtile;
+import com.sec.connection.data.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +37,7 @@ public class StartActivity extends AppCompatActivity {
 
 	Message mStartMainActivity = new Message();
 
+	@SuppressLint("SuspiciousIndentation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)  {
 		super.onCreate(savedInstanceState);
@@ -83,26 +82,26 @@ public class StartActivity extends AppCompatActivity {
 			}
 			return false;
 		});
-		String[] permession = {
+		String[] permission = {
 				Manifest.permission.WRITE_EXTERNAL_STORAGE,
 				Manifest.permission.READ_EXTERNAL_STORAGE,
 		};
 
 		boolean needRequestPermissions = false;
-		List<String> stringList = new ArrayList<>(Arrays.asList(permession));
+		List<String> stringList = new ArrayList<>(Arrays.asList(permission));
 
-		for (int i = 0; i < permession.length; i++) {
-			Log.d(TAG, "检查" + permession[i] + "权限，in before ");
-			if (ContextCompat.checkSelfPermission(this,
-					permession[i])
-					!= PackageManager.PERMISSION_GRANTED) {
-				Log.d(TAG, "没有" + permession[i] + "权限，正在申请权限 in before");
-				needRequestPermissions = true;
-			} else {
-				Log.d(TAG, "已经有" + permession[i] + "权限， in before");
-				stringList.remove(permession[i]);//不用申请这个权限，移除掉
-			}
-		}
+        for (String s : permission) {
+            Log.d(TAG, "检查" + s + "权限，in before ");
+            if (ContextCompat.checkSelfPermission(this,
+                    s)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "没有" + s + "权限，正在申请权限 in before");
+                needRequestPermissions = true;
+            } else {
+                Log.d(TAG, "已经有" + s + "权限， in before");
+                stringList.remove(s);//不用申请这个权限，移除掉
+            }
+        }
 		if (needRequestPermissions) {
 			Log.d(TAG, "needRequestPermissions " + needRequestPermissions);
 			String[] needToRequestPermission = new String[stringList.size()];
@@ -111,7 +110,7 @@ public class StartActivity extends AppCompatActivity {
 					MY_PERMISSIONS_REQUEST_PERMISSION);
 		} else {
 			t = new Thread(() -> {
-				BaseListInfo.getInstance().setList(MediaUtile.getAudioList(getApplicationContext()));
+				BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 				startMainService();
 				mHandler.sendEmptyMessageDelayed(0, 10000);
 			});
@@ -128,7 +127,7 @@ public class StartActivity extends AppCompatActivity {
 			}
 
 			t = new Thread(() -> {
-				BaseListInfo.getInstance().setList(MediaUtile.getAudioList(getApplicationContext()));
+				BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 				startMainService();
 				if(!BaseListInfo.getInstance().getList().isEmpty()) {
 					Log.d(TAG, "has music");

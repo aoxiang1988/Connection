@@ -1,10 +1,11 @@
 package com.sec.connection.view;
 
-/**
+/* *
  * @author lzg
  * 2014/4/13
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,31 +19,25 @@ import android.view.View;
 
 import com.sec.connection.R;
 
-/**
+/* *
  * The Class CircularSeekBar.
  */
 public class NewSeekbar extends View {
 	/** The context */
-	private Context mContext;
+	private final Context mContext;
 	/** seekbar变化监听 */
 	private OnSeekChangeListener mListener;
 	/** 画圆环的paint */
-	private Paint circleColor;
+	private final Paint circleColor;
 	/** 画内圆的paint */
-	private Paint innerColor;
+	private final Paint innerColor;
 	/** 圆环的Paint，其实是画弧形 */
-	private Paint circleRing;
+	private final Paint circleRing;
 	/** 移动之后的角度 */
 	private int angle = 0;
-	/** 12点位置的开始角度 */
-	private int startAngle = 270;
-	/** 圆环宽度 */
+    /** 圆环宽度 */
 	private int barWidth = 7;
-	/** view的宽 */
-	private int width;
-	/** view的高 */
-	private int height;
-	/** seekbar总值 */
+    /** seekbar总值 */
 	private int maxProgress = 10000;
 	/** 当前的百分值 */
 	private int progress;
@@ -56,31 +51,11 @@ public class NewSeekbar extends View {
 	private float cx;
 	/** 圆心Y坐标 */
 	private float cy;
-	/** 画圆图层左边边距 */
-	private float left;
-	/** 画圆图层右边边距 */
-	private float right;
-	/** T画圆图层顶端边距 */
-	private float top;
-	/** 画圆图层底边边距 */
-	private float bottom;
-	/** 背景图左边边距 */
-	private float bgLeft;
-	/** 背景图右边边距 */
-	private float bgRight;
-	/** 背景图顶端边距 */
-	private float bgTop;
-	/** 背景图底边边距 */
-	private float bgBottom;
-	/** progressMark X坐标 */
+    /** progressMark X坐标 */
 	private float dx;
 	/** progressMark Y坐标 */
 	private float dy;
-	/** 12点钟位置的X坐标 */
-	private float startPointX;
-	/** 12点钟位置的Y坐标 */
-	private float startPointY;
-	/**
+    /**
 	 * 标记的seekbar当前位置的X坐标，预设置值为12点位置
 	 */
 	private float markPointX;
@@ -108,7 +83,7 @@ public class NewSeekbar extends View {
 	 */
 	private Paint paint = null;
 	/** 画圆图层. */
-	private RectF rect = new RectF();
+	private final RectF rect = new RectF();
 	/** 背景图层 */
 	RectF rectBg = new RectF();
 	{
@@ -150,10 +125,6 @@ public class NewSeekbar extends View {
 
 	/**
 	 * MCircleSeekBar的构造方法.
-	 * 
-	 * @param context
-	 * @param attrs
-	 * @param defStyle
 	 */
 	public NewSeekbar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -163,9 +134,6 @@ public class NewSeekbar extends View {
 
 	/**
 	 * MCircleSeekBar的构造方法.
-	 * 
-	 * @param context
-	 * @param attrs
 	 */
 	public NewSeekbar(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -175,8 +143,6 @@ public class NewSeekbar extends View {
 
 	/**
 	 * MCircleSeekBar的构造方法.
-	 * 
-	 * @param context
 	 */
 	public NewSeekbar(Context context) {
 		super(context);
@@ -196,7 +162,7 @@ public class NewSeekbar extends View {
 				R.drawable.ic_launcher_round);
 	}
 
-	/*
+	/**
 	 * 重写view的计算方法
 	 * 
 	 * @see android.view.View#onMeasure(int, int)
@@ -204,26 +170,35 @@ public class NewSeekbar extends View {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		width = getWidth(); // Get View Width
-		height = getHeight();// Get View Height
-		int size = (width > height) ? height : width; // Choose the smaller
-		cx = width / 2; // Center X for circle
-		cy = height / 2; // Center Y for circle
-		outerRadius = size / 2 * 80 / 100; // Radius of the outer circle
+        int width = getWidth(); // Get View Width
+        int height = getHeight();// Get View Height
+        int size = Math.min(width, height); // Choose the smaller
+		cx = (float) width / 2; // Center X for circle
+		cy = (float) height / 2; // Center Y for circle
+		outerRadius = (float) size / 2 * 80 / 100; // Radius of the outer circle
 		innerRadius = outerRadius - barWidth; // Radius of the inner circle
-		left = cx - outerRadius; // Calculate left bound of our rect
-		right = cx + outerRadius;// Calculate right bound of our rect
-		top = cy - outerRadius;// Calculate top bound of our rect
-		bottom = cy + outerRadius;// Calculate bottom bound of our rect
-		bgLeft = cx - innerRadius;
-		bgRight = cx + innerRadius;
-		bgTop = cy - innerRadius;
-		bgBottom = cy + innerRadius;
-
-		startPointX = getXByProgress(progress);
-		startPointY = getYByProgress(progress);
-		markPointX = startPointX;// Initial locatino of the marker X coordinate
-		markPointY = startPointY;// Initial locatino of the marker Y coordinate
+        /* * 画圆图层左边边距 */
+        float left = cx - outerRadius; // Calculate left bound of our rect
+        /* * 画圆图层右边边距 */
+        float right = cx + outerRadius;// Calculate right bound of our rect
+        /* * T画圆图层顶端边距 */
+        float top = cy - outerRadius;// Calculate top bound of our rect
+        /* * 画圆图层底边边距 */
+        float bottom = cy + outerRadius;// Calculate bottom bound of our rect
+        /* * 背景图左边边距 */
+        float bgLeft = cx - innerRadius;
+        /* * 背景图右边边距 */
+        float bgRight = cx + innerRadius;
+        /* * 背景图顶端边距 */
+        float bgTop = cy - innerRadius;
+        /* * 背景图底边边距 */
+        float bgBottom = cy + innerRadius;
+        /* * 12点钟位置的X坐标 */
+        float startPointX = getXByProgress(progress);
+        /* * 12点钟位置的Y坐标 */
+        float startPointY = getYByProgress(progress);
+		markPointX = startPointX;// Initial location of the marker X coordinate
+		markPointY = startPointY;// Initial location of the marker Y coordinate
 		rect.set(left, top, right, bottom); // assign size to rect
 		rectBg.set(bgLeft, bgTop, bgRight, bgBottom);
 	}
@@ -240,7 +215,9 @@ public class NewSeekbar extends View {
 		/*
 		 * 画圆弧
 		 */
-		canvas.drawArc(rect, startAngle, angle, true, circleRing);
+        /* * 12点位置的开始角度 */
+        int startAngle = 270;
+        canvas.drawArc(rect, startAngle, angle, true, circleRing);
 		/*
 		 * 画内圆
 		 */
@@ -266,9 +243,8 @@ public class NewSeekbar extends View {
 
 	/**
 	 * 画progressMark(seek)在圆环上的位置.
-	 * 
-	 * @param canvas
-	 */
+	 *
+     */
 	public void drawMarkerAtProgress(Canvas canvas) {
 		if (IS_PRESSED) {
 			canvas.drawBitmap(progressMarkPressed, dx, dy, null);
@@ -279,14 +255,13 @@ public class NewSeekbar extends View {
 
 	/**
 	 * 获取seek点X坐标
-	 * 
-	 * @return
-	 */
+	 *
+     */
 	public float getXFromAngle() {
 		int size1 = progressMark.getWidth();
 		int size2 = progressMarkPressed.getWidth();
-		int adjust = (size1 > size2) ? size1 : size2;
-		float x = markPointX - (adjust / 2);
+		int adjust = Math.max(size1, size2);
+		float x = markPointX - ((float) adjust / 2);
 		return x;
 	}
 
@@ -298,9 +273,8 @@ public class NewSeekbar extends View {
 	public float getYFromAngle() {
 		int size1 = progressMark.getHeight();
 		int size2 = progressMarkPressed.getHeight();
-		int adjust = (size1 > size2) ? size1 : size2;
-		float y = markPointY - (adjust / 2);
-		return y;
+		int adjust = Math.max(size1, size2);
+        return markPointY - ((float) adjust / 2);
 	}
 
 	/**
@@ -461,6 +435,7 @@ public class NewSeekbar extends View {
 	/**
 	 * 重写onTouch方法
 	 */
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		float x = event.getX();
@@ -468,12 +443,10 @@ public class NewSeekbar extends View {
 		boolean up = false;
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			moved(x, y, up);
+            case MotionEvent.ACTION_MOVE:
+                moved(x, y, up);
 			break;
-		case MotionEvent.ACTION_MOVE:
-			moved(x, y, up);
-			break;
-		case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP:
 			up = true;
 			moved(x, y, up);
 			break;
@@ -508,7 +481,7 @@ public class NewSeekbar extends View {
 			float degrees = (float) ((float) ((Math.toDegrees(Math.atan2(
 					x - cx, cy - y)) + 360.0)) % 360.0);
 			if (degrees < 0) {
-				degrees += 2 * Math.PI;
+				degrees += (float) (2 * Math.PI);
 			}
 			setAngle(Math.round(degrees));
 			invalidate();

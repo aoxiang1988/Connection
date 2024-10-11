@@ -8,7 +8,7 @@ import android.os.Bundle;
  */
 
 public class LocalInfo {
-    private String postion;
+    private String position;
     private int channel;
     private String name;
     private int tag;
@@ -25,39 +25,39 @@ public class LocalInfo {
         radio_ID = bundle.getString("NETURL");
     }
 
-    public void setpostion(String postion) {
-        this.postion = postion;
+    public void setPosition(String postion) {
+        this.position = postion;
     }
-    public void setchannel(int channel) {
+    public void setChannel(int channel) {
         this.channel = channel;
     }
 
-    public void setstationname(String name) {
+    public void setStationName(String name) {
         this.name = name;
     }
-    public void settag(int tag) {
+    public void setTag(int tag) {
         this.tag = tag;
     }
 
-    public String getpostion() {
-        return postion;
+    public String getPosition() {
+        return position;
     }
-    public int getchannel() {
+    public int getChannel() {
         return channel;
     }
 
-    public String getradio_ID() {
+    public String getRadioID() {
         return radio_ID;
     }
 
-    public String getsrc() {
+    public String getSrc() {
         return src;
     }
 
-    public String getstationname() {
+    public String getStationName() {
         return name;
     }
-    public int gettag() {
+    public int getTag() {
         return tag;
     }
 }

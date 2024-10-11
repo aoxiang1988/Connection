@@ -7,15 +7,15 @@ public class MusicApplication extends Application {
 	public static String PREF_NAME = "CURRENT_MUSIC"; // .xml
 	//private ConnectMainManager mMainManager;
 	private BaseListInfo mInfo;
-	private MySelfDateBase mySelfDateBase;
-	@Override
+
+    @Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		//mMainManager = new ConnectMainManager(getApplicationContext());
 		PlayerNotificationManager mNotifyManger = PlayerNotificationManager.instance();
 		mInfo = new BaseListInfo();
 		mNotifyManger.initialize(this);
-		mySelfDateBase = new MySelfDateBase(this, null);
+        MySelfDateBase mySelfDateBase = new MySelfDateBase(this, null);
 		super.onCreate();
 	}
 

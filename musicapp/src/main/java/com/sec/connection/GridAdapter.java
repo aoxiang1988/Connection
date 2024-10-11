@@ -22,14 +22,14 @@ import java.util.Map;
      */
 public class GridAdapter extends BaseAdapter {
 
-    private List<String> alumblist;
-    private Context mContext;
-    private Map<String, List<Audio>> map_alumb = null;
+    private final List<String> alumblist;
+    private final Context mContext;
+    private Map<String, List<Audio>> mapAlbum = null;
 
     public GridAdapter(Context context,List<String> alumblist,Map<String, List<Audio>> map_alumb){
         this.mContext = context;
         this.alumblist = alumblist;
-        this.map_alumb = map_alumb;
+        this.mapAlbum = map_alumb;
     }
 
     @Override
@@ -54,25 +54,21 @@ public class GridAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.grid_item_layout, null);
             View convertView1 = convertView;
         }
-        ImageView alumb_image = (ImageView)convertView.findViewById(R.id.alumb_imageView);
-        if(map_alumb.get(alumblist.get(position)).get(0).getBitmap() != null){
-            alumb_image.setImageBitmap(map_alumb.get(alumblist.get(position)).get(0).getBitmap());
+        ImageView album_image = (ImageView)convertView.findViewById(R.id.alumb_imageView);
+        if(mapAlbum.get(alumblist.get(position)).get(0).getBitmap() != null){
+            album_image.setImageBitmap(mapAlbum.get(alumblist.get(position)).get(0).getBitmap());
         }else{
-            alumb_image.setImageResource(R.drawable.ic);
+            album_image.setImageResource(R.drawable.ic);
         }
 
-        TextView alumb_text = (TextView)convertView.findViewById(R.id.alumb_text);
-        alumb_text.setText(alumblist.get(position));
+        TextView album_text = (TextView)convertView.findViewById(R.id.alumb_text);
+        album_text.setText(alumblist.get(position));
 
         return convertView;
     }
 
     public void setItemHide(int i) {
-        switch (i){
-            case -1:
-                break;
-            default:
-                break;
+        if (i == -1) {
         }
     }
 }

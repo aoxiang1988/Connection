@@ -16,13 +16,11 @@ import java.util.Map;
 
 public class PullLocalInfoParser implements LocalInfoParser {
 
-    private List<Program> programs = null;
-    private Program program = null;
-    private Map<Integer,List<Program>> map = new HashMap<>();
+    private final Program program = null;
+    private final Map<Integer,List<Program>> map = new HashMap<>();
 
-    private List<LocalInfo> localInfos = null;
-    private LocalInfo localInfo = null;
-    private String postion = null;
+    private List<LocalInfo> localAllInfo = null;
+    private String position = null;
 
     @Override
     public List<LocalInfo> parse(InputStream is) throws Exception {
@@ -33,21 +31,21 @@ public class PullLocalInfoParser implements LocalInfoParser {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             switch (eventType){
                 case XmlPullParser.START_DOCUMENT:
-                    postion = null;
+                    position = null;
                     break;
                 case XmlPullParser.START_TAG:
                     if(parser.getName().equals("item")){
-                        localInfos = new ArrayList<>();
-                        postion = parser.getAttributeValue(0);
+                        localAllInfo = new ArrayList<>();
+                        position = parser.getAttributeValue(0);
                     }
                     if(parser.getName().equals("station")) {
-                        localInfo = new LocalInfo();
-                        programs = new ArrayList<>();
-                        localInfo.setpostion(postion);
-                        localInfo.settag(Integer.parseInt(parser.getAttributeValue(0)));
-                        localInfo.setstationname(parser.getAttributeValue(1));
-                        localInfo.setchannel(Integer.parseInt(parser.getAttributeValue(2)));
-                        localInfos.add(localInfo);
+                        LocalInfo localInfo = new LocalInfo();
+                        List<Program> programs = new ArrayList<>();
+                        localInfo.setPosition(position);
+                        localInfo.setTag(Integer.parseInt(parser.getAttributeValue(0)));
+                        localInfo.setStationName(parser.getAttributeValue(1));
+                        localInfo.setChannel(Integer.parseInt(parser.getAttributeValue(2)));
+                        localAllInfo.add(localInfo);
                     }
 //                    if(parser.getName().equals("program")) {
 //                        program = new Program();
@@ -66,11 +64,11 @@ public class PullLocalInfoParser implements LocalInfoParser {
             }
             eventType = parser.next();
         }
-            return localInfos;
+            return localAllInfo;
     }
 
     @Override
-    public String serialize(List<LocalInfo> localInfos) throws Exception {
+    public String serialize(List<LocalInfo> localAllInfo) throws Exception {
         return null;
     }
 

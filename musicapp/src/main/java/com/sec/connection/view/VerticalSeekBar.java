@@ -17,7 +17,6 @@ import android.widget.SeekBar;
 public class VerticalSeekBar extends SeekBar {
     private Drawable mThumb;
     private int height;
-    private int width;
 
     public interface OnSeekBarChangeListener {
         void onProgressChanged(VerticalSeekBar VerticalSeekBar, int progress,
@@ -99,7 +98,7 @@ public class VerticalSeekBar extends SeekBar {
     protected synchronized void onMeasure(int widthMeasureSpec,
                                           int heightMeasureSpec) {
         height = MeasureSpec.getSize(heightMeasureSpec) / 2;
-        width = mThumb.getIntrinsicWidth();
+        int width = mThumb.getIntrinsicWidth();
         this.setMeasuredDimension(width, height);
     }
 
@@ -113,6 +112,7 @@ public class VerticalSeekBar extends SeekBar {
         super.onSizeChanged(h, w, oldw, oldh);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public boolean onTouchEvent(MotionEvent event) {
         if (!isEnabled()) {
             return false;

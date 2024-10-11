@@ -1,5 +1,6 @@
 package com.sec.connection.vpview.FragmentViewPager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,8 +12,9 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.sec.connection.BaseListInfo;
-import com.sec.connection.MusicApplication;
 import com.sec.connection.R;
 import com.sec.connection.data.Audio;
 import com.sec.connection.MainActivity;
@@ -41,10 +43,9 @@ public class ArtistMusicListFragment extends BaseFragment {
 
     private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
     private List<Audio> mList;
-    private String[] mMusicName;
+    String[] mMusicName;
     private int n_groupPosition;
     private int n_childPosition;
-    private boolean isgroupopen = false;
     private Context mContext;
 
     List<String> artists = new ArrayList<>();
@@ -88,7 +89,7 @@ public class ArtistMusicListFragment extends BaseFragment {
         }
         mList = BaseListInfo.getInstance().getList();
         mMusicName = new String[mList.size()];
-        getartist_map();
+        getArtistMap();
     }
 
     @Override
@@ -157,6 +158,7 @@ public class ArtistMusicListFragment extends BaseFragment {
         }
 
 
+        @SuppressLint("InflateParams")
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -180,27 +182,27 @@ public class ArtistMusicListFragment extends BaseFragment {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.child_item_layout, null);
             }
-            TextView childmusicname = (TextView) convertView.findViewById(R.id.child_music_name);
-            childmusicname.setText(map_artist.get(key).get(childPosition).getTitle());
+            TextView childMusicName = (TextView) convertView.findViewById(R.id.child_music_name);
+            childMusicName.setText(map_artist.get(key).get(childPosition).getTitle());
 
             TextView textView = (TextView) convertView.findViewById(R.id.child_music_time);
             int min = ((map_artist.get(key).get(childPosition).getDuration())/1000)/60;
             int sec = ((map_artist.get(key).get(childPosition).getDuration())/1000)%60;
             textView.setText(String.format("%s:%s",text(min),text(sec)));
 
-            ImageView childlistmusicpicture = (ImageView) convertView.findViewById(R.id.child_listmusicpicture);
+            ImageView childListMusicPicture = (ImageView) convertView.findViewById(R.id.child_listmusicpicture);
             if((map_artist.get(key).get(childPosition).getBitmap() != null))
-                childlistmusicpicture.setImageBitmap((map_artist.get(key).get(childPosition).getBitmap()));
+                childListMusicPicture.setImageBitmap((map_artist.get(key).get(childPosition).getBitmap()));
             else
-                childlistmusicpicture.setImageResource(R.drawable.ic);
+                childListMusicPicture.setImageResource(R.drawable.ic);
             if(MainService.isPlay && n_groupPosition == groupPosition && n_childPosition == childPosition){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    childmusicname.setTextColor(getResources().getColor(R.color.playingcolor, null));
+                    childMusicName.setTextColor(getResources().getColor(R.color.playingcolor, null));
                     textView.setTextColor(getResources().getColor(R.color.playingcolor, null));
                 }
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    childmusicname.setTextColor(getResources().getColor(R.color.noplaycolor, null));
+                    childMusicName.setTextColor(getResources().getColor(R.color.noplaycolor, null));
                     textView.setTextColor(getResources().getColor(R.color.noplaycolor, null));
                 }
             }
@@ -220,11 +222,9 @@ public class ArtistMusicListFragment extends BaseFragment {
                 if(parent.isGroupExpanded(groupPosition)) {
 //                    v.setBackgroundColor(getResources().getColor(R.color.group_item_defult, null));
                     parent.collapseGroup(groupPosition);
-                    isgroupopen = false;
                 } else {
 //                    v.setBackgroundColor(getResources().getColor(R.color.playingcolor, null));
                     parent.expandGroup(groupPosition);
-                    isgroupopen = true;
                 }
                 locallist.notifyDataSetChanged();
                 return true;
@@ -239,7 +239,7 @@ public class ArtistMusicListFragment extends BaseFragment {
                 MainActivity._inActivity.isFirstTime = false;
                 MainActivity._inActivity.isPlaying = true;
 
-                MainActivity.mService.playmusic(0, map_artist.get(
+                MainActivity.mService.playMusic(0, map_artist.get(
                         artists.get(groupPosition)).get(childPosition).getPath(),true);
                 n_groupPosition = groupPosition;
                 n_childPosition = childPosition;
@@ -250,7 +250,7 @@ public class ArtistMusicListFragment extends BaseFragment {
         });
     }
 
-    private void getartist_map () {
+    private void getArtistMap() {
         /*get the list we need like get the artist->title**/
         map_artist = new HashMap<>();
         List<String> artists1 = new ArrayList<>();

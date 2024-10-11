@@ -1,6 +1,6 @@
 package com.sec.connection.view;
 
-/**
+/* *
  * Created by SRC-TJ-MM-BinYang on 2017/9/14.
  */
 import android.content.Context;
@@ -22,12 +22,9 @@ public class SideBar extends View {
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z", "#" };
     private int choose = -1;// 选中
-    private Paint paint = new Paint();
-    private boolean ispress = false;
+    private final Paint paint = new Paint();
 
     private TextView mTextDialog;
-
-    private Context mContext;
 
     /**
      * 为SideBar设置显示字母的TextView
@@ -48,7 +45,6 @@ public class SideBar extends View {
 
     public SideBar(Context context) {
         super(context);
-        mContext = context;
     }
 
     /**
@@ -74,7 +70,7 @@ public class SideBar extends View {
                 paint.setTextSize(80);
             }
             // x坐标等于中间-字符串宽度的一半.
-            float xPos = width / 2 - paint.measureText(b[i]) / 2;
+            float xPos = (float) width / 2 - paint.measureText(b[i]) / 2;
             float yPos = singleHeight * i + singleHeight;
             canvas.drawText(b[i], xPos, yPos, paint);
             paint.reset();// 重置画笔

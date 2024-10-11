@@ -10,10 +10,10 @@
       </SelectionState>
       <SelectionState runConfigName="musicapp">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-10-08T04:54:10.658857600Z">
+        <DropdownSelection timestamp="2024-10-08T07:50:58.038658500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\yangb\.android\avd\Automotive_1080p_landscape_API_33.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\yangb\.android\avd\Pixel_API_31.avd" />
             </handle>
           </Target>
         </DropdownSelection>

@@ -17,12 +17,12 @@ public class LrcViewDisplay {
 
     private List<LrcContent> lrcContents = new ArrayList<>();
     private int index = 0;
-    private Handler handler;
-    private MediaPlayer mediaPlayer;
+    private final Handler handler;
+    private final MediaPlayer mediaPlayer;
     private int c_duration;
     private int duration;
-    private LrcView lrcView;
-    private LrcProcess lrcProcess;
+    private final LrcView lrcView;
+    private final LrcProcess lrcProcess;
 
     public LrcViewDisplay (int c_duration, MediaPlayer mediaPlayer,LrcView lrcView,Handler handler) {
         this.c_duration = c_duration;
@@ -65,16 +65,16 @@ public class LrcViewDisplay {
         if(c_duration < duration) {
             for (int i = 0; i < lrcContents.size(); i++) {
                 if (i < lrcContents.size() - 1) {
-                    if (c_duration < lrcContents.get(i).getlrctime() && i == 0) {
+                    if (c_duration < lrcContents.get(i).getLrcTime() && i == 0) {
                         index = i;
                     }
-                    if (c_duration > lrcContents.get(i).getlrctime()
-                            && c_duration < lrcContents.get(i + 1).getlrctime()) {
+                    if (c_duration > lrcContents.get(i).getLrcTime()
+                            && c_duration < lrcContents.get(i + 1).getLrcTime()) {
                         index = i;
                     }
                 }
                 if (i == lrcContents.size() - 1
-                        && c_duration > lrcContents.get(i).getlrctime()) {
+                        && c_duration > lrcContents.get(i).getLrcTime()) {
                     index = i;
                 }
             }

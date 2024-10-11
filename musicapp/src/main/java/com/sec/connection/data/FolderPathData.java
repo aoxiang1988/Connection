@@ -15,9 +15,9 @@ import java.util.Set;
 
 public class FolderPathData {
     private List<Audio> mAllList;
-    private List<String> mPathList;
-    private Map<String, List<Audio>> mPathMap;
-    private Map<String, Boolean> mPathSelected;
+    private final List<String> mPathList;
+    private final Map<String, List<Audio>> mPathMap;
+    private final Map<String, Boolean> mPathSelected;
     private static FolderPathData mPathData;
 
     public FolderPathData (List<Audio> mAllList){
@@ -48,8 +48,7 @@ public class FolderPathData {
 
     /**去重**/
     private static List<String> removeDuplicate(List<String> list) {
-        Set<String> set = new LinkedHashSet<>();
-        set.addAll(list);
+        Set<String> set = new LinkedHashSet<>(list);
         list.clear();
         list.addAll(set);
         return list;
@@ -112,9 +111,7 @@ public class FolderPathData {
         for (int b = 0; b < mPathList.size(); b++) {
             String key = mPathList.get(b);
             if(mPathSelected.get(key)) {
-                for (int i=0; i<mPathMap.get(key).size(); i++){
-                    filterlist.add(mPathMap.get(key).get(i));
-                }
+                filterlist.addAll(mPathMap.get(key));
             }
         }
         return filterlist;

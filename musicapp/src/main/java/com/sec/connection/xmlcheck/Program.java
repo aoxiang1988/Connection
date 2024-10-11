@@ -9,40 +9,31 @@ public class Program {
     private int data;
     private String content;
 
-    String splitpath[];
-    int systemtime[];
+    String[] mSplitPath;
 
-    public void settime(String time) {
+    public void setTime(String time) {
         this.time = time;
-        stringto(time);
+        stringTo(time);
     }
-    public void setdata(int data) {
-        this.data = data;
-    }
-    public void setcontent(String content) {
+
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public String gettime() {
-        return time;
-    }
-    public int getdata() {
-        return data;
-    }
-    public String getcontent() {
+    public String getContent() {
         return content;
     }
 
-    private void stringto(String time){
+    private void stringTo(String time){
         String new_path = time.replace(" - ", "@");
-        splitpath = new_path.split("@");
+        mSplitPath = new_path.split("@");
     }
 
-    public int getstarttime(){
-        return Integer.valueOf(splitpath[0]);
+    public int getStartTime(){
+        return Integer.parseInt(mSplitPath[0]);
     }
 
-    public int getfinishtime(){
-        return Integer.valueOf(splitpath[1]);
+    public int getFinishTime(){
+        return Integer.parseInt(mSplitPath[1]);
     }
 }

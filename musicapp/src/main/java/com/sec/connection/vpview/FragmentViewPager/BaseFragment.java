@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment;
  * Activities that contain this fragment must implement the
  * {@link BaseFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BaseFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
-public class BaseFragment extends Fragment {
+class BaseFragment extends Fragment {
     private static final String TAG = "BaseFragment";
     public BaseFragment() {
         // Required empty public constructor

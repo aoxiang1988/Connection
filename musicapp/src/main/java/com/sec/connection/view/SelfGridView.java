@@ -1,5 +1,6 @@
 package com.sec.connection.view;
 //SelfGridView
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,12 +21,6 @@ import android.widget.ImageView;
 import com.sec.connection.GridAdapter;
 import com.sec.connection.vpview.TestViewPagerActivity;
 
-/**
- * @blog http://blog.csdn.net/xiaanming
- *
- * @author xiaanming
- *
- */
 public class SelfGridView extends GridView{
     /**
      * DragGridView的item长按响应的时间， 默认是1000毫秒，也可以自行设置
@@ -56,7 +51,7 @@ public class SelfGridView extends GridView{
      * 震动器
      */
     private Vibrator mVibrator;
-    private WindowManager mWindowManager;
+    private final WindowManager mWindowManager;
     /**
      * item镜像的布局参数
      */
@@ -84,7 +79,7 @@ public class SelfGridView extends GridView{
     /**
      * 状态栏的高度
      */
-    private int mStatusHeight;
+    private final int mStatusHeight;
     /**
      * DragGridView自动向下滚动的边界值
      */
@@ -122,10 +117,10 @@ public class SelfGridView extends GridView{
 
     }
 
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
 
     //用来处理是否为长按的Runnable
-    private Runnable mLongClickRunnable = new Runnable() {
+    private final Runnable mLongClickRunnable = new Runnable() {
 
         @Override
         public void run() {
@@ -247,6 +242,7 @@ public class SelfGridView extends GridView{
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if(isDrag && mDragImageView != null){
@@ -275,6 +271,7 @@ public class SelfGridView extends GridView{
      * @param downY
      * 			按下的点相对父控件的X坐标
      */
+    @SuppressLint("RtlHardcoded")
     private void createDragImage(Bitmap bitmap, int downX , int downY){
         mWindowLayoutParams = new WindowManager.LayoutParams();
         mWindowLayoutParams.format = PixelFormat.TRANSLUCENT; //图片之外的其他地方透明
@@ -322,7 +319,7 @@ public class SelfGridView extends GridView{
      * 当moveY的值小于向下滚动的边界值，触犯GridView自动向下滚动
      * 否则不进行滚动
      */
-    private Runnable mScrollRunnable = new Runnable() {
+    private final Runnable mScrollRunnable = new Runnable() {
         @Override
         public void run() {
             int scrollY;
@@ -380,6 +377,7 @@ public class SelfGridView extends GridView{
      * @param context
      * @return
      */
+    @SuppressLint("PrivateApi")
     private static int getStatusHeight(Context context){
         int statusHeight = 0;
         Rect localRect = new Rect();

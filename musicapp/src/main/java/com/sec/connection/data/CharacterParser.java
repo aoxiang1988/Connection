@@ -9,7 +9,7 @@ package com.sec.connection.data;
  *
  */
 public class CharacterParser {
-    private static int[] pyvalue = new int[] {-20319, -20317, -20304, -20295, -20292, -20283, -20265, -20257, -20242, -20230, -20051, -20036, -20032,
+    private static final int[] pyValue = new int[] {-20319, -20317, -20304, -20295, -20292, -20283, -20265, -20257, -20242, -20230, -20051, -20036, -20032,
             -20026, -20002, -19990, -19986, -19982, -19976, -19805, -19784, -19775, -19774, -19763, -19756, -19751, -19746, -19741, -19739, -19728,
             -19725, -19715, -19540, -19531, -19525, -19515, -19500, -19484, -19479, -19467, -19289, -19288, -19281, -19275, -19270, -19263, -19261,
             -19249, -19243, -19242, -19238, -19235, -19227, -19224, -19218, -19212, -19038, -19023, -19018, -19006, -19003, -18996, -18977, -18961,
@@ -33,7 +33,7 @@ public class CharacterParser {
             -11340, -11339, -11324, -11303, -11097, -11077, -11067, -11055, -11052, -11045, -11041, -11038, -11024, -11020, -11019, -11018, -11014,
             -10838, -10832, -10815, -10800, -10790, -10780, -10764, -10587, -10544, -10533, -10519, -10331, -10329, -10328, -10322, -10315, -10309,
             -10307, -10296, -10281, -10274, -10270, -10262, -10260, -10256, -10254};
-    public static String[] pystr = new String[] {"a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian",
+    public static String[] pyStr = new String[] {"a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian",
             "biao", "bie", "bin", "bing", "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "ceng", "cha", "chai", "chan", "chang", "chao", "che",
             "chen", "cheng", "chi", "chong", "chou", "chu", "chuai", "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan",
             "cui", "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "deng", "di", "dian", "diao", "die", "ding", "diu", "dong", "dou", "du",
@@ -55,9 +55,8 @@ public class CharacterParser {
             "yin", "ying", "yo", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha",
             "zhai", "zhan", "zhang", "zhao", "zhe", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui",
             "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"};
-    private StringBuilder buffer;
     private String resource;
-    private static CharacterParser characterParser = new CharacterParser();
+    private static final CharacterParser characterParser = new CharacterParser();
 
     public static CharacterParser getInstance() {
         return characterParser;
@@ -83,9 +82,9 @@ public class CharacterParser {
                 asc = bytes[0];
             }
             if (bytes.length == 2) {
-                int hightByte = 256 + bytes[0];
+                int heightByte = 256 + bytes[0];
                 int lowByte = 256 + bytes[1];
-                asc = (256 * hightByte + lowByte) - 256 * 256;
+                asc = (256 * heightByte + lowByte) - 256 * 256;
             }
         } catch (Exception e) {
             System.out.println("ERROR:ChineseSpelling.class-getChsAscii(String chs)" + e);
@@ -100,9 +99,9 @@ public class CharacterParser {
         if (ascii > 0 && ascii < 160) {
             result = String.valueOf((char) ascii);
         } else {
-            for (int i = (pyvalue.length - 1); i >= 0; i--) {
-                if (pyvalue[i] <= ascii) {
-                    result = pystr[i];
+            for (int i = (pyValue.length - 1); i >= 0; i--) {
+                if (pyValue[i] <= ascii) {
+                    result = pyStr[i];
                     break;
                 }
             }
@@ -113,7 +112,7 @@ public class CharacterParser {
     /** * 词组解析 * * @param chs * @return */
     public String getSelling(String chs) {
         String key, value;
-        buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < chs.length(); i++) {
             key = chs.substring(i, i + 1);
             if (key.getBytes().length >= 2) {

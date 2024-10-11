@@ -22,8 +22,8 @@ import java.util.List;
 @SuppressLint("NewApi")
 public class SortAdapter extends BaseAdapter implements SectionIndexer{
     private List<SortModel> list = null;
-    private Context mContext;
-    private int playingposition = 0;
+    private final Context mContext;
+    private int mPlayingPosition = 0;
 
     public SortAdapter(Context mContext, List<SortModel> list) {
         this.mContext = mContext;
@@ -51,6 +51,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
         return position;
     }
 
+    @SuppressLint("InflateParams")
     public View getView(final int position, View view, ViewGroup arg2) {
         ViewHolder viewHolder = null;
         final SortModel mContent = list.get(position);
@@ -112,7 +113,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
                 }
                 viewHolder.side_musictime.setText(String.format("%s:%s", stringmin, stringsec));
             }
-            if(MainService.isPlay && position == playingposition){
+            if(MainService.isPlay && position == mPlayingPosition){
                 viewHolder.side_musictitle.setTextColor(mContext.getResources().getColor(R.color.playingcolor, null));
                 viewHolder.side_musicartist.setTextColor(mContext.getResources().getColor(R.color.playingcolor, null));
                 viewHolder.side_musictime.setTextColor(mContext.getResources().getColor(R.color.playingcolor, null));
@@ -139,7 +140,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
     }
 
     public void setPlayingPosition(int playingposition){
-        this.playingposition = playingposition;
+        this.mPlayingPosition = playingposition;
     }
 
     /**

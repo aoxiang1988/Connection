@@ -26,22 +26,12 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
-public class FMProgremActivity extends AppCompatActivity {
+public class FMProgramActivity extends AppCompatActivity {
 
-    private ImageView mStationPic;
-    private TextView mStationName;
-    private TextView mStationFreq;
-    private ListView mProgremList;
-
-    private String get_name;
-    private String get_freq;
-    private String get_src;
-
-    private Bitmap bitmap = null;
-    private Map<String,List<Program>> map = null;
+    private final Map<String,List<Program>> map = null;
     List<Program> programs = null;
 
-    private String GTE_STATION_INFO = "fm.action.GTE_STATION_INFO";
+    private final String GTE_STATION_INFO = "fm.action.GTE_STATION_INFO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +39,22 @@ public class FMProgremActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fm_progrem);
 
         Intent i = getIntent();
-        get_name = i.getStringExtra("name");
-        get_freq = i.getStringExtra("channel");
-        get_src = i.getStringExtra("src");
+        String get_name = i.getStringExtra("name");
+        String get_freq = i.getStringExtra("channel");
+        String get_src = i.getStringExtra("src");
 
-        mStationPic = (ImageView)findViewById(R.id.station_pic);
-        mStationName = (TextView)findViewById(R.id.station_name);
-        mStationFreq = (TextView)findViewById(R.id.station_freq);
-        mProgremList = (ListView)findViewById(R.id.progrem_list);
+        ImageView mStationPic = (ImageView) findViewById(R.id.station_pic);
+        TextView mStationName = (TextView) findViewById(R.id.station_name);
+        TextView mStationFreq = (TextView) findViewById(R.id.station_freq);
+        ListView mProgramList = (ListView) findViewById(R.id.progrem_list);
 
         programs = map.get(get_name);
 
-        bitmap = getBitmap(get_src);
+        Bitmap bitmap = getBitmap(get_src);
         mStationPic.setImageBitmap(bitmap);
         mStationName.setText(get_name);
         mStationFreq.setText(get_freq);
-        mProgremList.setAdapter(new ProgremList(this));
+        mProgramList.setAdapter(new ProgramList(this));
     }
 
     private Bitmap getBitmap(String url) {
@@ -90,10 +80,10 @@ public class FMProgremActivity extends AppCompatActivity {
         return bm;
     }
 
-    private class ProgremList extends BaseAdapter {
+    private class ProgramList extends BaseAdapter {
 
         Context mContext ;
-        public ProgremList(Context context) {
+        public ProgramList(Context context) {
             this.mContext = context;
         }
 
@@ -119,14 +109,14 @@ public class FMProgremActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.progrem_item_layout, null);
             }
-            TextView mProgremName = convertView.findViewById(R.id.progrem_name);
-            TextView mProgremer = convertView.findViewById(R.id.progremer);
+            TextView mProgramName = convertView.findViewById(R.id.progrem_name);
+            TextView mProgrammer = convertView.findViewById(R.id.progremer);
             TextView mStartTime = convertView.findViewById(R.id.start_time);
             TextView mFinishTime = convertView.findViewById(R.id.finish_time);
 
-            mProgremName.setText(programs.get(position).getcontent());
-            mStartTime.setText(programs.get(position).getstarttime());
-            mFinishTime.setText(programs.get(position).getfinishtime());
+            mProgramName.setText(programs.get(position).getContent());
+            mStartTime.setText(programs.get(position).getStartTime());
+            mFinishTime.setText(programs.get(position).getFinishTime());
             return convertView;
         }
     }

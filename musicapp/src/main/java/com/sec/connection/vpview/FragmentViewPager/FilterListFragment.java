@@ -98,7 +98,7 @@ public class FilterListFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank_fragment4, container, false);
-        filterlistshow(view);
+        filterListShow(view);
         return view;
     }
 
@@ -113,11 +113,10 @@ public class FilterListFragment extends BaseFragment {
         super.onDetach();
     }
 
-    private SharedPreferences preferences;
-    private Object restorePreferences(String SetValuse) {
-        preferences = mContext.getSharedPreferences(MusicApplication.PREF_NAME, Context.MODE_PRIVATE);
+    private Object restorePreferences(String SetValues) {
+        SharedPreferences preferences = mContext.getSharedPreferences(MusicApplication.PREF_NAME, Context.MODE_PRIVATE);
         Object status = null;
-        switch (SetValuse) {
+        switch (SetValues) {
             case IS_SET_SIZE_VALUE:
                 status = preferences.getBoolean(IS_SET_SIZE_VALUE, false);
                 break;
@@ -137,7 +136,7 @@ public class FilterListFragment extends BaseFragment {
         return status;
     }
 
-    private void filterlistshow(View view){
+    private void filterListShow(View view){
         List<Audio> mFilterList;
         if(isSetFilterFolder){
             mFilterList = FolderPathData.getInstance().getfilterlist();

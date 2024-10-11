@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -45,28 +45,21 @@ public class TestViewPagerActivity extends AppCompatActivity {
     private static final String MUSIC_DURATION = "com.example.action.MUSIC_DURATION";
     private static final String CURRENT_ID = "com.example.action.CURRENT_ID";
 
-    private String TAG = "TestViewPagerActivity";
+    private final String TAG = "TestViewPagerActivity";
     private ViewPager viewPager = null;
-    private List<Fragment> viewContainter = new ArrayList<Fragment>();   //存放容器
-    private ViewPagerAdapter viewPagerAdapter = null;   //声明适配器
-    private TabHost mTabHost = null;
+    private final List<Fragment> viewContainer = new ArrayList<Fragment>();   //存放容器
     private TabWidget mTabWidget = null;
+    @SuppressLint("StaticFieldLeak")
     public static TestViewPagerActivity _activity;
     private int count;
 
     /*controller*/
-    private NewImageView listmusicview;
-    private Button listpre;
-    private Button listnext;
-    private Button liststart;
-    private Button liststop;
-    private Button listpause;
-    private TextView listmusicname;
-
-    private Fragment f1;
-    private Fragment f2;
-    private Fragment f3;
-    private Fragment f4;
+    private NewImageView listMusicView;
+    private Button mListPre;
+    private Button mListNext;
+    private Button mListStart;
+    private Button mListStop;
+    private TextView mListMusicName;
 
     View actionBar;
     private ViewReceiver mViewReceiver;
@@ -98,7 +91,8 @@ public class TestViewPagerActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 //        initViewPagerContainer();  //初始viewPager
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), viewContainter);//);
+        //声明适配器
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), viewContainer);//);
         //设置adapter的适配器
         viewPager.setAdapter(viewPagerAdapter);
         //设置viewPager的监听器
@@ -121,7 +115,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
             }
         });
         viewPager.setPageTransformer(true, new NewView());
-        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+        TabHost mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
         mTabWidget = mTabHost.getTabWidget();
         for (int i = 0; i < mTabWidget.getChildCount(); i++){
@@ -180,11 +174,11 @@ public class TestViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(MainService.list.get(MainActivity.getcurrentposition()).getBitmap() != null)
-            listmusicview.setImageBitmap(NewImageView.createReflectedImage(
-                    MainService.list.get(MainActivity.getcurrentposition()).getBitmap()
+        if(MainService.list.get(MainActivity.getCurrentPosition()).getBitmap() != null)
+            listMusicView.setImageBitmap(NewImageView.createReflectedImage(
+                    MainService.list.get(MainActivity.getCurrentPosition()).getBitmap()
             ));
-        listmusicname.setText(MainService.list.get(MainActivity.getcurrentposition()).getTitle());
+        mListMusicName.setText(MainService.list.get(MainActivity.getCurrentPosition()).getTitle());
     }
 
     @Override
@@ -209,18 +203,18 @@ public class TestViewPagerActivity extends AppCompatActivity {
     //初始化viewPager
     public void initViewPagerContainer(){
         //加入ViewPage的容器
-        f1 = AllListFragment.newInstance("All_List_Fragment", "new_Instance");
-        f2 = ArtistMusicListFragment.newInstance("Artist_Music_List_Fragment", "new_Instance");
-        f3 = AlbumListFragment.newInstance("Album_List_Fragment", "new_Instance");
-        f4 = FilterListFragment.newInstance("Filter_Fragment", "new_Instance");
+        Fragment f1 = AllListFragment.newInstance("All_List_Fragment", "new_Instance");
+        Fragment f2 = ArtistMusicListFragment.newInstance("Artist_Music_List_Fragment", "new_Instance");
+        Fragment f3 = AlbumListFragment.newInstance("Album_List_Fragment", "new_Instance");
+        Fragment f4 = FilterListFragment.newInstance("Filter_Fragment", "new_Instance");
 
-        viewContainter.add(f1);
-        viewContainter.add(f2);
-        viewContainter.add(f3);
-        viewContainter.add(f4);
+        viewContainer.add(f1);
+        viewContainer.add(f2);
+        viewContainer.add(f3);
+        viewContainer.add(f4);
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
+    private static class ViewPagerAdapter extends FragmentPagerAdapter {
 
         List<Fragment> viewContainer;
         ViewPagerAdapter(FragmentManager fm, List<Fragment> viewContainer) {
@@ -240,7 +234,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
         }
 
         @Override
-        public int getItemPosition(Object object) {
+        public int getItemPosition(@NonNull Object object) {
             return PagerAdapter.POSITION_NONE;
         }
     }
@@ -248,48 +242,48 @@ public class TestViewPagerActivity extends AppCompatActivity {
     private View.OnClickListener listener;
 
     private void initcontrollerview(){
-        listmusicview = (NewImageView) findViewById(R.id.list_ac_p);
-        listmusicview.setShapeType(2);
-        listmusicview.setRadius(15);
-        listmusicview.setBorderWidth(5);
-        listmusicview.setStrokeWidth(160);
-        listmusicview.setClickable(true);
+        listMusicView = (NewImageView) findViewById(R.id.list_ac_p);
+        listMusicView.setShapeType(2);
+        listMusicView.setRadius(15);
+        listMusicView.setBorderWidth(5);
+        listMusicView.setStrokeWidth(160);
+        listMusicView.setClickable(true);
 //        listmusicview.setBorderColor(getResources().getColor(R.color.flingview_borad));
-        listmusicview.setPressColor(getResources().getColor(R.color.flingview_press));
-        listmusicview.setImageBitmap(NewImageView.createReflectedImage(
+        listMusicView.setPressColor(getResources().getColor(R.color.flingview_press));
+        listMusicView.setImageBitmap(NewImageView.createReflectedImage(
                 ((BitmapDrawable) getResources().getDrawable(R.drawable.ic)).getBitmap()));
-        listmusicview.setOnClickListener(new View.OnClickListener() {
+        listMusicView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TestViewPagerActivity.this.finish();
             }
         });
 
-        listpre = (Button) findViewById(R.id.st_ac_pre);
-        listpre.setOnClickListener(listener);
+        mListPre = (Button) findViewById(R.id.st_ac_pre);
+        mListPre.setOnClickListener(listener);
 
-        listnext = (Button)findViewById(R.id.st_ac_next);
-        listnext.setOnClickListener(listener);
+        mListNext = (Button)findViewById(R.id.st_ac_next);
+        mListNext.setOnClickListener(listener);
 
-        liststart = (Button)findViewById(R.id.st_ac_start);
-        liststart.setOnClickListener(listener);
+        mListStart = (Button)findViewById(R.id.st_ac_start);
+        mListStart.setOnClickListener(listener);
 
-        liststop = (Button)findViewById(R.id.st_ac_stop);
-        liststop.setOnClickListener(listener);
+        mListStop = (Button)findViewById(R.id.st_ac_stop);
+        mListStop.setOnClickListener(listener);
 
-        listpause = (Button)findViewById(R.id.st_ac_pause);
-        listpause.setOnClickListener(listener);
+        Button listPause = (Button) findViewById(R.id.st_ac_pause);
+        listPause.setOnClickListener(listener);
 
-        listmusicname = (TextView) findViewById(R.id.list_ac_musicname);
+        mListMusicName = (TextView) findViewById(R.id.list_ac_musicname);
 
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (v.getId() == R.id.st_ac_start) {
-                    PlayMusicUIUpdate(MainActivity.getcurrentposition());
+                    PlayMusicUIUpdate(MainActivity.getCurrentPosition());
                 } else if (v.getId() == R.id.st_ac_stop) {
-                    PlayMusicUIUpdate(MainActivity.getcurrentposition());
+                    PlayMusicUIUpdate(MainActivity.getCurrentPosition());
                 }
 
                 /*switch (v.getId()) {
@@ -312,40 +306,24 @@ public class TestViewPagerActivity extends AppCompatActivity {
 
     private void PlayMusicUIUpdate(int position) {
         // TODO Auto-generated method stub
-        liststart.setVisibility(View.GONE);
-        liststop.setVisibility(View.VISIBLE);
-        listmusicname.setText(BaseListInfo.getInstance().getList().get(position).getTitle());
+        mListStart.setVisibility(View.GONE);
+        mListStop.setVisibility(View.VISIBLE);
+        mListMusicName.setText(BaseListInfo.getInstance().getList().get(position).getTitle());
 
         if(position == 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                listpre.setBackground(getResources().getDrawable(R.drawable.disable_pre, null));
-            } else {
-                listpre.setBackgroundDrawable(getResources().getDrawable(R.drawable.disable_pre));
-            }
+            mListPre.setBackground(getResources().getDrawable(R.drawable.disable_pre, null));
         }
         else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                listpre.setBackground(getResources().getDrawable(R.drawable.previous_button_ripple, null));
-            } else {
-                listpre.setBackgroundDrawable(getResources().getDrawable(R.drawable.previous_button_ripple));
-            }
+            mListPre.setBackground(getResources().getDrawable(R.drawable.previous_button_ripple, null));
         }
         if(position+1 == BaseListInfo.getInstance().getList().size()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                listnext.setBackground(getResources().getDrawable(R.drawable.disable_next, null));
-            } else {
-                listpre.setBackgroundDrawable(getResources().getDrawable(R.drawable.disable_next));
-            }
+            mListNext.setBackground(getResources().getDrawable(R.drawable.disable_next, null));
         }
         else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                listnext.setBackground(getResources().getDrawable(R.drawable.next_button_ripple, null));
-            } else {
-                listpre.setBackgroundDrawable(getResources().getDrawable(R.drawable.next_button_ripple));
-            }
+            mListNext.setBackground(getResources().getDrawable(R.drawable.next_button_ripple, null));
         }
     }
-    private static int listPosition = 0;
+
     public boolean isPlaying = false;
 
     private class ViewReceiver extends BroadcastReceiver {
@@ -354,12 +332,13 @@ public class TestViewPagerActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (action.equals(PLAY_STATUE)) {
                 isPlaying = intent.getBooleanExtra("isplay", false);
-                if (!isPlaying) {
+//                if (!isPlaying) {
 //                    if (mService.getplayerstatus()) {
 //                        stop();
 //                    }
-                }
+//                }
             }
+            int listPosition = 0;
             if (action.equals(UPDATE_LIST_ACTIVITY_ACTION)) {
                 listPosition = intent.getIntExtra("current_music", 0);
                 PlayMusicUIUpdate(listPosition);
@@ -367,7 +346,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
             if (action.equals(UPDATE_ACTION)) {
                 listPosition = intent.getIntExtra("current_music", -1);
                 String title = MainService.list.get(listPosition).getTitle();
-                listmusicname.setText(title);
+                mListMusicName.setText(title);
                 PlayMusicUIUpdate(listPosition);
             }
             if (action.equals(CURRENT_ID)) {

@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
-
+import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sec.connection.R;
@@ -26,6 +24,8 @@ import java.net.URLConnection;
 import java.util.Objects;
 
 public class PlayWebActivity extends AppCompatActivity {
+
+    private static final String TAG = "PlayWebActivity";
     private static String ACTION_START_WEB_PLAY = "com.example.action.ACTION_START_WEB_PLAY";
     private static String current_url = null;
 //    private WebView playweb;
@@ -33,21 +33,19 @@ public class PlayWebActivity extends AppCompatActivity {
     private Bitmap bitmap = null;
     private static final int SET_MAIN_VIEW = 1;
 
-    Handler handler = new Handler(){
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            switch(msg.what){
-                case SET_MAIN_VIEW:
-                    mWebMusicPic.setImageBitmap(bitmap);
-                    thread.interrupt();
-                    thread = null;
-                    break;
-            }
+    private Thread thread;
+    Handler handler = new Handler(msg -> {
+        if (msg.what == SET_MAIN_VIEW) {
+            mWebMusicPic.setImageBitmap(bitmap);
+            thread.interrupt();
+            thread = null;
+            return true;
         }
-    };
+        return false;
+    });
 
     /**read the URL**/
-    private Runnable dosearchmusic = new Runnable() {
+    private final Runnable doSearchMusic = new Runnable() {
 
         Document document = null;
         @Override
@@ -57,15 +55,15 @@ public class PlayWebActivity extends AppCompatActivity {
                 Elements picture = document.select("div.main-body-cont");
 
                 String picture_url = picture.select("img").first().attr("src");
-                Log.d("bin1111.yang", "picture_url : "+picture_url);
+                Log.d(TAG, "picture_url : "+picture_url);
                 bitmap = getBitmap(picture_url);
                 handler.sendEmptyMessage(SET_MAIN_VIEW);
             } catch (IOException e) {
-                e.printStackTrace();
+                e.addSuppressed(new IOException("document error!"));
             }
         }
     };
-    private Thread thread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +74,7 @@ public class PlayWebActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(Objects.equals(intent.getAction(), ACTION_START_WEB_PLAY)){
             current_url = intent.getStringExtra("music_url");
-            Log.d("bin1111.yang","url : "+current_url);
+            Log.d(TAG,"url : "+current_url);
         }
 //        playweb = (WebView)findViewById(R.id.play_web);
 //        //启用支持javascript
@@ -84,7 +82,7 @@ public class PlayWebActivity extends AppCompatActivity {
 //        settings.setJavaScriptEnabled(true);
 //        playweb.loadUrl(current_url);
 
-        thread = new Thread(dosearchmusic);
+        thread = new Thread(doSearchMusic);
         thread.start();
     }
 
@@ -107,7 +105,7 @@ public class PlayWebActivity extends AppCompatActivity {
             is.close();// 关闭流
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.addSuppressed(new IOException("bitmap error!"));
         }
         return bm;
     }

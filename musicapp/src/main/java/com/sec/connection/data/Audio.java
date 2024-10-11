@@ -1,5 +1,6 @@
 package com.sec.connection.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,37 +13,38 @@ import java.io.Serializable;
 public class Audio implements Serializable {
 
     public String[] info = new String[6];
-	private String mTitle , 
-				   mTitleKey,
-				   mArtist,
-				   mArtistKey, 
-				   mComposer, 
-				   mAlbum, 
-				   mAlbumKey, 
-				   mDisplayName, 
-				   mMimeType, 
-				   mPath,
-                   mFolderPath,
-				   mNetTitle,
-				   mNetArtist,
-				   mNetUrl;
-	private int mId, 
+	private final String mTitle;
+    private final String mTitleKey;
+    private final String mArtist;
+    private final String mArtistKey;
+    private final String mComposer;
+    private final String mAlbum;
+    private final String mAlbumKey;
+    private final String mDisplayName;
+    private final String mMimeType;
+    private final String mPath;
+    private final String mFolderPath;
+    private final String mNetTitle;
+    private final String mNetArtist;
+    private final String mNetUrl;
+	private final int mId,
 				mArtistId,
 				mAlbumId,
 				mYear, 
 				mTrack;
-	private int mDuration = 0,
-				mSize = 0,
-                mPosition = 0;
+	private int mDuration = 0;
+    private int mSize = 0;
+    private final int mPosition = 0;
 	private boolean isSelected = false;
-    private int isRingtone,
+    private final int isRingtone,
                     isPodcast,
             		isAlarm,
             		isMusic ,
             		isNotification ;
 
 	private Bitmap mAlbumbitmap = null;
-	public Audio(Bundle bundle,Context context){
+	@SuppressLint("SuspiciousIndentation")
+    public Audio(Bundle bundle, Context context){
 		mId = bundle.getInt(MediaStore.Audio.Media._ID);
 		mTitle = bundle.getString(MediaStore.Audio.Media.TITLE);
 		mTitleKey = bundle.getString(MediaStore.Audio.Media.TITLE_KEY);
@@ -70,7 +72,7 @@ public class Audio implements Serializable {
 		mNetArtist = bundle.getString("ARTIST");
 		mNetUrl = bundle.getString("NETURL");
 		mAlbumbitmap = MusicImageResource.getArtwork(context, mId, mAlbumId);
-        addtoinfo();
+        addToInfo();
 	}
 	public int getId() {  
         return mId;  
@@ -175,7 +177,7 @@ public class Audio implements Serializable {
         position = mPosition;
     }
 
-    public void setSeleted(boolean isSelected){
+    public void setSelected(boolean isSelected){
         this.isSelected = isSelected;
     }
 
@@ -183,7 +185,7 @@ public class Audio implements Serializable {
         return isSelected;
     }
 
-    private void addtoinfo(){
+    private void addToInfo(){
         info[0] = mTitle;
         info[1] = mArtist;
         info[2] = mFolderPath;
@@ -196,7 +198,7 @@ public class Audio implements Serializable {
         String mFolderPath = null;
         if(mPath != null) {
             String new_path = mPath.replace(".", "@");
-            String splitpath[] = new_path.split("@");
+            String[] splitpath = new_path.split("@");
             mFolderPath = splitpath[0].substring(0, splitpath[0].lastIndexOf("/"));
         }
         return mFolderPath;

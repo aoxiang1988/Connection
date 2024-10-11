@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Scroller;
 import android.widget.Toast;
 
+import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.MainService;
 
@@ -186,7 +187,8 @@ public class FlingView extends ViewGroup {
 	}
 
 	// 设定childView的Touch事件返回true，这样可以在parentView中截获touch（即onInterceptTouchEvent）的move,up等事件
-	private OnTouchListener childTouchListener = new OnTouchListener() {
+	private final OnTouchListener childTouchListener = new OnTouchListener() {
+		@SuppressLint("ClickableViewAccessibility")
 		public boolean onTouch(View v, MotionEvent event) {
 			return true;
 		}
@@ -244,6 +246,7 @@ public class FlingView extends ViewGroup {
 		return mTouchState != TOUCH_STATE_REST;
 	}
 
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		try {
