@@ -681,4 +681,27 @@ public class MainService extends Service{
 			}
 		}
 	}
+	private short mBassBoostPriority = 0;
+
+	public short getBassBoostPriority() {
+		Log.d(TAG,"getBassBoostPriority " + mBassBoostPriority);
+		return mBassBoostPriority;
+	}
+
+	public void setBassBoostPriority(short bassBoostPriority) {
+		this.mBassBoostPriority = bassBoostPriority;
+		Log.d(TAG,"setBassBoostPriority " + mBassBoostPriority);
+	}
+
+	private short mPresetReverbPriority = 0;
+
+	public short getPresetReverbPriority() {
+		Log.d(TAG,"getPresetReverbPriority " + mPresetReverbPriority);
+		return mPresetReverbPriority;
+	}
+
+	public void setPresetReverbPriority(short presetReverbPriority) {
+		this.mPresetReverbPriority = presetReverbPriority;
+		Log.d(TAG,"setPresetReverbPriority " + mPresetReverbPriority);
+	}
 }

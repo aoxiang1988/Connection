@@ -235,11 +235,12 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
     /**
      * 初始化重低音控制器
      */
+    private short mBassBoostPriority = 0;
     private void setupBassBoost()
     {
         // 以MediaPlayer的AudioSessionId创建BassBoost
         // 相当于设置BassBoost负责控制该MediaPlayer
-        mBass = new BassBoost(0, mPlayer.getAudioSessionId());
+        mBass = new BassBoost(mBassBoostPriority, mPlayer.getAudioSessionId());
         // 设置启用重低音效果
         mBass.setEnabled(true);
         TextView bbTitle = new TextView(this);
@@ -252,17 +253,19 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(10,10,10,10);
 
-        bar.setThumb(getResources().getDrawable(R.drawable.scrubber_control_selector_holo,null));
+        bar.setThumb(getResources().getDrawable(R.drawable.record_easyicon,null));
         // 重低音的范围为0～1000
         bar.setMax(1000);
         bar.setLayoutParams(params);
-        bar.setProgress(0);
+        bar.setProgress(mBassBoostPriority);
         // 为SeekBar的拖动事件设置事件监听器
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // 设置重低音的强度
-                mBass.setStrength((short) progress);
+                mBassBoostPriority = (short) progress;
+                mBass.setStrength(mBassBoostPriority);
+                mService.setBassBoostPriority(mBassBoostPriority);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -277,11 +280,12 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
     /**
      * 初始化预设音场控制器
      */
+    private short mPresetReverbPriority = 0;
     private void setupPresetReverb()
     {
         // 以MediaPlayer的AudioSessionId创建PresetReverb
         // 相当于设置PresetReverb负责控制该MediaPlayer
-        mPresetReverb = new PresetReverb(0,
+        mPresetReverb = new PresetReverb(mPresetReverbPriority,
                 mPlayer.getAudioSessionId());
         // 设置启用预设音场控制
         mPresetReverb.setEnabled(true);
@@ -302,7 +306,9 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 // 设定音场
-                mPresetReverb.setPreset(reverbNames.get(arg2));
+                mPresetReverbPriority = reverbNames.get(arg2);
+                mPresetReverb.setPreset(mPresetReverbPriority);
+                mService.setPresetReverbPriority(mPresetReverbPriority);
             }
 
             @Override
@@ -310,6 +316,7 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
             }
         });
         layout.addView(sp);
+        sp.setSelection(mPresetReverbPriority);
     }
 
     @Override
@@ -358,6 +365,8 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
         mService = binder.getService();
         isBind = true;
         Log.d(TAG, "onServiceConnected " + mService);
+        mBassBoostPriority = mService.getBassBoostPriority();
+        mPresetReverbPriority = mService.getPresetReverbPriority();
 
         try {
             mPlayer = mService.getMediaPlayer();
@@ -370,8 +379,6 @@ public class MediaPlayerTest extends Activity implements ServiceConnection {
             setupBassBoost();
             // 初始化预设音场控制器
             setupPresetReverb();
-            // 开发播放音乐
-//        mPlayer.start();
         } catch (NullPointerException n) {
             n.printStackTrace();
         }
