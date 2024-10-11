@@ -1,6 +1,7 @@
 package com.sec.connection;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -60,9 +61,10 @@ public class PlayerDialog extends DialogFragment {
 	PlayerNotificationManager notificationManager = PlayerNotificationManager.instance();
 	public static final String DELETE_ITEM = "com.example.action.DELETE_ITEM";
 
-	public static PlayerDialog newInstance(int type) {
+	private static Context mContext = null;
+	public static PlayerDialog newInstance(Context context, int type) {
 		// TODO Auto-generated method stub
-		
+		mContext = context;
 		PlayerDialog dialogFragment = new PlayerDialog();
 		Bundle bundle = new Bundle();
 		bundle.putInt(KEY_TYPE, type);
@@ -97,7 +99,7 @@ public class PlayerDialog extends DialogFragment {
 		int type = getArguments().getInt(KEY_TYPE);
 		switch (type) {
 		case STATUE:
-			mCustomDialog();
+			mCustomDialog(mContext);
 			break;
 		case EXIT:
 			dialog = new AlertDialog.Builder(getActivity()).setPositiveButton(R.string.exit, new OnClickListener() {
@@ -229,14 +231,15 @@ public class PlayerDialog extends DialogFragment {
 	}
 
 	/**音乐播放顺序设置(map数组序列化)**/
-	private void mCustomDialog() {
-		final AlertDialog builder = new AlertDialog.Builder(getActivity(),R.style.CreatDialog).create();
-		builder.show();
-		builder.getWindow().setContentView(R.layout.custom_dialog_layout);
+	private void mCustomDialog(Context context) {
+		dialog = new AlertDialog.Builder(context, R.style.CreateDialog).create();
+		dialog.show();
+		dialog.getWindow().setContentView(R.layout.custom_dialog_layout);
 		LayoutInflater factory = LayoutInflater.from(getActivity());
+		@SuppressLint("InflateParams")
 		View view = factory.inflate(R.layout.custom_dialog_layout, null);
-		builder.getWindow().setContentView(view);
-		Window dialogWindow = builder.getWindow();
+		dialog.getWindow().setContentView(view);
+		Window dialogWindow = dialog.getWindow();
 		dialogWindow.setGravity( Gravity.BOTTOM);//显示在底部
 		dialogWindow.setBackgroundDrawableResource(R.drawable.status_dialog_bg);
 		dialogWindow.setWindowAnimations(R.style.take_photo_anim);

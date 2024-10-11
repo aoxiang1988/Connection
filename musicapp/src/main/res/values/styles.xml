@@ -18,7 +18,7 @@
         <item name="android:textColor">@android:color/holo_blue_bright</item>
     </style>
 
-    <style name="CreatDialog" parent="Base.ThemeOverlay.AppCompat.Dark">
+    <style name="CreateDialog" parent="Base.ThemeOverlay.AppCompat.Dark">
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
         <item name="android:backgroundDimEnabled">false</item><!-- 模糊 -->

@@ -177,7 +177,7 @@ public class AlbumListFragment extends BaseFragment implements View.OnTouchListe
     }
 
     private void mCustomDialog(String album_name, ArrayList<Audio> album_name_list) {
-        final AlertDialog builder = new AlertDialog.Builder(getActivity(),R.style.CreatDialog).create();
+        final AlertDialog builder = new AlertDialog.Builder(getActivity(),R.style.CreateDialog).create();
         builder.show();
         builder.getWindow().setContentView(R.layout.custom_list_layout);
         LayoutInflater factory = LayoutInflater.from(getActivity());

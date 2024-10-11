@@ -816,7 +816,7 @@ public class MainActivity extends AppCompatActivity {
 
 	void openDialog(int type) {
 		PlayerDialog playerDialog;
-		playerDialog = PlayerDialog.newInstance(type);
+		playerDialog = PlayerDialog.newInstance(this, type);
 		playerDialog.setStyle(R.style.ActionBar ,0);
         playerDialog.show(getFragmentManager(), String.valueOf(type));
 	}
