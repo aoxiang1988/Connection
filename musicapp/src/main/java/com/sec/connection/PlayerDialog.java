@@ -166,14 +166,14 @@ public class PlayerDialog extends DialogFragment {
 	private void mFolderPathDialog(Map<String, List<Audio>> mPathMapForDialog,
 								   final List<String> mPathListForDialog,
 								   final Map<String, Boolean> mPathSelected){
-		final AlertDialog builder = new AlertDialog.Builder(getActivity()).create();
-		builder.show();
-		builder.getWindow().setContentView(R.layout.folder_paths_dialog_layout);
+		dialog = new AlertDialog.Builder(getActivity()).create();
+		dialog.show();
+		dialog.getWindow().setContentView(R.layout.folder_paths_dialog_layout);
 		LayoutInflater factory = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		final View view = factory.inflate(R.layout.folder_paths_dialog_layout, null);
-		builder.getWindow().setContentView(view);
-		final Window dialogWindow = builder.getWindow();
+		dialog.getWindow().setContentView(view);
+		final Window dialogWindow = dialog.getWindow();
 		dialogWindow.setGravity( Gravity.CENTER);//显示在底部
 //		dialogWindow.setBackgroundDrawableResource(R.drawable.status_dialog_bg);
 		dialogWindow.setWindowAnimations(R.style.take_photo_anim);
@@ -213,7 +213,7 @@ foldercheckBox.setChecked(FilterSettings.mFolderPathData.isPathSelected(position
 			public void onClick(View v) {
 				FilterSettings.mFolderPathData.setallpahtoff();
 				FilterSettings._inActivity.setFilterFolder(false);
-				builder.dismiss();
+				dialog.dismiss();
 			}
 		});
 
@@ -221,7 +221,7 @@ foldercheckBox.setChecked(FilterSettings.mFolderPathData.isPathSelected(position
 			@Override
 			public void onClick(View v) {
 				FilterSettings._inActivity.setFilterFolder(true);
-				builder.dismiss();
+				dialog.dismiss();
 			}
 		});
 

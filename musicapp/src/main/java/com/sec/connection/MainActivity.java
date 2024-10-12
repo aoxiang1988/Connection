@@ -7,11 +7,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.ActionMode;
@@ -126,6 +128,22 @@ public class MainActivity extends AppCompatActivity {
 	boolean mIsActionMode = false;
 	private RotateAnimation mRotateAnimation = null;
 
+	private boolean isBind = false;
+
+	ServiceConnection mServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			MainService.ServiceBinder binder = (MainService.ServiceBinder) service;
+			mService = binder.getService();
+			isBind = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			isBind = false;
+		}
+	};
+
 	@SuppressLint("HandlerLeak")
 	Handler mHandler = new Handler(new Handler.Callback() {
 		@Override
@@ -205,8 +223,12 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
+		bindService(
+				new Intent(this, MainService.class), mServiceConnection,
+				BIND_ALLOW_OOM_MANAGEMENT
+		);//绑定服务
 		isActivity = true;
-		onMyCreate();
+		onMyCreate("onCreate");
 		mNotificationManager = PlayerNotificationManager.instance();
 		mHomeReceiver = new HomeReceiver();
 		IntentFilter intentFilter = new IntentFilter();
@@ -227,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 //		mActionBar.setVisibility(View.GONE);
     }
 
-	private void onMyCreate() {
+	private void onMyCreate(String who) {
 		setContentView(R.layout.activity_main);
 		try {
 			
@@ -277,20 +299,19 @@ public class MainActivity extends AppCompatActivity {
 		} catch (Exception e) {
 			Log.e(TAG,"ConnectMainManager start failed");
 		}*/
-
-
-//		mFlingView = new FlingView(getBaseContext());
-		mList = MainService.list;
+		mFlingView = new FlingView(getBaseContext());
+		if (mService != null) {
+			mList = mService.getList();
+		}
+		Log.d(TAG, who);
 		mFlingView = findViewById(R.id.fling_view);
 		mFlingViewBack = findViewById(R.id.fling_view_back);
 		FindViewById();
 		SetOnClickListener();
 		SetOnLongClickListener();
-		mLrcView = (LrcView) findViewById(R.id.textView1);
+		mLrcView = findViewById(R.id.textView1);
 		mPlayBar.setOnSeekBarChangeListener(new SeekBarListener());
-		mUserAdapter = new UserAdapter(this, R.layout.listitem, mList);
-		Log.d(TAG, "list " + mList);
-		Log.d(TAG, "list size " + mList.size());
+		mUserAdapter = new UserAdapter(getBaseContext(), R.layout.listitem, mList);
 		mListView.setAdapter(mUserAdapter);
 		mListView.setOnItemClickListener(new ItemClickListener());
 		mListView.setOnItemLongClickListener(mLongClickListener);
@@ -313,11 +334,11 @@ public class MainActivity extends AppCompatActivity {
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			onMyCreate();
+			onMyCreate("onConfigurationChanged ORIENTATION_LANDSCAPE");
 			onResume();
 		}
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-			onMyCreate();
+			onMyCreate("onConfigurationChanged ORIENTATION_PORTRAIT");
 			onResume();
 		}
 	}

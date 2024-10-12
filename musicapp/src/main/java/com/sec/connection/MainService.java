@@ -704,4 +704,8 @@ public class MainService extends Service{
 		this.mPresetReverbPriority = presetReverbPriority;
 		Log.d(TAG,"setPresetReverbPriority " + mPresetReverbPriority);
 	}
+
+	public List<Audio> getList() {
+		return list;
+	}
 }

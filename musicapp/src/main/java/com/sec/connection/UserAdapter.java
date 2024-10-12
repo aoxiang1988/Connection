@@ -1,5 +1,6 @@
 package com.sec.connection;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -50,6 +51,7 @@ public class UserAdapter extends ArrayAdapter<Audio> {
 		ImageView imageView;
 		CheckBox checkBox;
 	}
+	@SuppressLint("SuspiciousIndentation")
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
