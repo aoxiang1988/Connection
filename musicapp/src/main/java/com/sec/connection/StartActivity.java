@@ -6,9 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -112,7 +114,7 @@ public class StartActivity extends AppCompatActivity {
 			t = new Thread(() -> {
 				BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 				startMainService();
-				mHandler.sendEmptyMessageDelayed(0, 10000);
+				mHandler.sendEmptyMessageDelayed(0, 2000);
 			});
 			t.start();
 		}
@@ -122,23 +124,29 @@ public class StartActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == MY_PERMISSIONS_REQUEST_PERMISSION) {
-			for (int i = 0; i < permissions.length; i++) {
-				Log.i("MainActivity", "申请的权限为：" + permissions[i] + ",申请结果：" + grantResults[i]);
-			}
-
-			t = new Thread(() -> {
-				BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
-				startMainService();
-				if(!BaseListInfo.getInstance().getList().isEmpty()) {
-					Log.d(TAG, "has music");
-					mStartMainActivity.what = 2;
-					mHandler.sendMessageDelayed(mStartMainActivity, 2000);
-				} else {
-					Log.d(TAG, "no music");
-					mHandler.sendEmptyMessage(1);
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				Log.d(TAG, "has got permission of window manager");
+				t = new Thread(() -> {
+					BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
+					startMainService();
+					if(!BaseListInfo.getInstance().getList().isEmpty()) {
+						mStartMainActivity.what = 2;
+						mHandler.sendMessageDelayed(mStartMainActivity, 2000);
+					} else {
+						mHandler.sendEmptyMessage(1);
+					}
+				});
+				t.start();
+			} else {
+				if (t != null && t.isAlive()) {
+					t.interrupt();
 				}
-			});
-			t.start();
+				Intent intent = new Intent(
+						Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+						Uri.fromParts("package", getPackageName(), null)
+				);
+				startActivity(intent);
+			}
 		}
 	}
 

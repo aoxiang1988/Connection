@@ -11,10 +11,12 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -43,6 +45,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sec.connection.data.Audio;
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 	private static final String MUSIC_CURRENT = "com.example.action.MUSIC_CURRENT";
 	private static final String MUSIC_DURATION = "com.example.action.MUSIC_DURATION";
 	private static final String CURRENT_ID = "com.example.action.CURRENT_ID";
+
+	private static final int MY_PERMISSIONS_REQUEST_PERMISSION = 1;
 
 	public static MainService mService = null;
 	@SuppressLint("StaticFieldLeak")
@@ -124,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
 	private static final int QUICK_LEFT = 4;
 	private static final int PLAY_NEXT_VIEW = 5;
 
+	private static final int MOVE_TO_SETTING_PERMISSION_VIEW = 10;
+
+
 	private ActionMode mActionMode = null;
 	boolean mIsActionMode = false;
 	private RotateAnimation mRotateAnimation = null;
@@ -149,6 +157,13 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		public boolean handleMessage(@NonNull Message msg) {
 			switch (msg.what) {
+				case MOVE_TO_SETTING_PERMISSION_VIEW:
+					Intent intent = new Intent(
+							Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+							Uri.fromParts("package", getPackageName(), null)
+					);
+					startActivity(intent);
+					break;
 				case PLAY_NEXT_VIEW:
 					ItemPlay(mListPosition);
 					break;
@@ -359,27 +374,41 @@ public class MainActivity extends AppCompatActivity {
 		mRepeatState = restorePreferences();
 		setStatus(mRepeatState);
 		mMusicNameView.setText(mList.get(mListPosition).getTitle());
-//		mFlingView.setToScreen(mListPosition, true);
+		mFlingView.setToScreen(mListPosition, true);
 		setCurrentMusic(mListPosition);
 
 		if(!mService.isAdded){
 			try {
-				if(ActivityCompat.checkSelfPermission(getApplicationContext(),
+				if(ContextCompat.checkSelfPermission(getBaseContext(),
 						Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED ) {
+					Log.d(TAG, "no permission of window manager");
 					ActivityCompat.requestPermissions(this,
-							new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, 0);
+							new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, MY_PERMISSIONS_REQUEST_PERMISSION);
 				}
 				mService.createFloatView();
 				mLrcOnOff.setBackground(getResources().getDrawable(R.drawable.lrc_on));
 			}catch (SecurityException s){
-				Toast.makeText(this,"check the premission",Toast.LENGTH_SHORT).show();
+				Toast.makeText(this,"check the permission",Toast.LENGTH_LONG).show();
 			}
 		}
 		mService.initLrc(mList.get(mListPosition).getPath());
 		mFlingView.setToScreen(mListPosition, false);
 		if (MainService.isPlay)
 			startPlayAnim(mListPosition);
-//		mHandler.sendEmptyMessage(REMOVE_NOTIFICATION);
+		mHandler.sendEmptyMessage(REMOVE_NOTIFICATION);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		if (requestCode == MY_PERMISSIONS_REQUEST_PERMISSION
+				&& grantResults.length > 0
+				&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+			Log.d(TAG, "has got permission of window manager");
+		} else {
+			mHandler.sendEmptyMessageDelayed(MOVE_TO_SETTING_PERMISSION_VIEW, 1000);
+		}
 	}
 
 	private SharedPreferences preferences;
