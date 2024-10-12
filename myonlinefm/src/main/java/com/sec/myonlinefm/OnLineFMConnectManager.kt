@@ -13,7 +13,6 @@ import android.os.Handler
 import android.os.Message
 import android.util.Log
 import com.sec.myonlinefm.OnLineFMPlayerListener.OberverOnLinePlayerManager
-
 import com.sec.myonlinefm.abstructObserver.RequestCallBack
 import com.sec.myonlinefm.classificationprogram.data.ChannelProgramPattern
 import com.sec.myonlinefm.classificationprogram.data.ClassifyRecommend
@@ -23,23 +22,23 @@ import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassify
 import com.sec.myonlinefm.classificationprogram.data.RequestProgramClassifyListPattern
 import com.sec.myonlinefm.classificationprogram.data.WaPiDataPattern
 import com.sec.myonlinefm.classificationprogram.dataimport.DemandChannelPattern
-import com.sec.myonlinefm.data.PropertyInfo
-import com.sec.myonlinefm.data.StationProgram
-import com.sec.myonlinefm.data.Station
 import com.sec.myonlinefm.data.ClassificationAttributePattern
-
+import com.sec.myonlinefm.data.PropertyInfo
+import com.sec.myonlinefm.data.Station
+import com.sec.myonlinefm.data.StationProgram
 import com.sec.myonlinefm.defineview.BitMapCache
 import com.sec.myonlinefm.onlineinfolistener.ObserverListenerManager
 import com.sec.myonlinefm.updataUIListener.ObserverUIListenerManager
 import com.sec.myonlinefmimport.OnLineWorkerThread
-
 import org.json.JSONException
 import java.io.BufferedInputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLConnection
-import java.util.*
+import java.util.Calendar
+import java.util.Objects
+import java.util.TimeZone
 
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/3/8.
@@ -281,7 +280,7 @@ class OnLineFMConnectManager constructor(context: Context) {
     private fun connectPrepare() {
         var mTokenResult : String? = null
         try {
-            mTokenResult = mHttpUtil!!.getAccess_Token()
+            mTokenResult = mHttpUtil!!.getAccessToken()
             Log.d(getTAG(), "result :$mTokenResult")
         } catch (e : NullPointerException) {
             if(mTokenResult == null)

@@ -42,13 +42,13 @@ class JsonStringConvert {
     fun getOAuthPermission(result: String?, mHttpUtil: HttpUtil?) {
         if (result != null) {
             val mOAuth_Pre = JSONObject(result)
-            mHttpUtil!!.access_token = mOAuth_Pre.getString("access_token")
-            mHttpUtil.token_type = mOAuth_Pre.getString("token_type")
-            mHttpUtil.expires_in = mOAuth_Pre.getInt("expires_in")
+            mHttpUtil!!.mAccessToken = mOAuth_Pre.getString("access_token")
+            mHttpUtil.mTokenType = mOAuth_Pre.getString("token_type")
+            mHttpUtil.mExpiresIn = mOAuth_Pre.getInt("expires_in")
             Log.d(TAG, """
-     token : ${mHttpUtil.access_token}
-     ${mHttpUtil.token_type}
-     ${mHttpUtil.expires_in}
+     token : ${mHttpUtil.mAccessToken}
+     ${mHttpUtil.mTokenType}
+     ${mHttpUtil.mExpiresIn}
      
      """.trimIndent())
         }

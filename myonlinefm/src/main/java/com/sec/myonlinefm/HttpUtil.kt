@@ -1,48 +1,44 @@
 package com.sec.myonlinefm
 
-import org.apache.http.message.BasicNameValuePair
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.entity.UrlEncodedFormEntity
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.params.CoreConnectionPNames
-import org.apache.http.util.EntityUtils
-import org.json.JSONObject
-import org.json.JSONException
-
 import android.util.Log
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
+import org.apache.http.client.entity.UrlEncodedFormEntity
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.message.BasicNameValuePair
+import org.apache.http.params.CoreConnectionPNames
+import org.apache.http.util.EntityUtils
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.lang.Exception
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.ArrayList
 
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/1/16.
  * ok-http connect to Qing Ting API.
  */
+@Suppress("DEPRECATION")
 class HttpUtil {
-    private val TAG: String? = "HttpUtil"
-    var access_token: String? = null
-    var token_type: String? = null
-    var expires_in = 0
+    private val TAG: String = "HttpUtil"
+    var mAccessToken: String? = null
+    var mTokenType: String? = null
+    var mExpiresIn = 0
     private var error: String? = null
 
     /**
      * ** OAuth2.0授权 ***
      */
-    fun getAccess_Token(): String? {
+    fun getAccessToken(): String? {
         // 设置HTTP POST请求参数必须用NameValuePair对象
-        val mToken_Url = "http://api.open.qingting.fm/access?&grant_type=client_credentials"
-        val nameValuePairs: ArrayList<BasicNameValuePair?>
-        nameValuePairs = ArrayList(2)
-        nameValuePairs.add(BasicNameValuePair("client_id", mClient_ID))
-        nameValuePairs.add(BasicNameValuePair("client_secret", mClient_Secret))
-        return httpPost(mToken_Url, nameValuePairs)
+        val tokenUrl = "http://api.open.qingting.fm/access?&grant_type=client_credentials"
+        val nameValuePairs: ArrayList<BasicNameValuePair?> = ArrayList(2)
+        nameValuePairs.add(BasicNameValuePair("client_id", CLIENT_ID))
+        nameValuePairs.add(BasicNameValuePair("client_secret", CLIENT_SECRET))
+        return httpPost(tokenUrl, nameValuePairs)
     }
 
     /**
@@ -61,7 +57,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(getProperty_Url(category_id), nameValuePairs)
     }
 
@@ -109,7 +105,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(getAll_Station_Url(category_id, curpage, attr_id_1, attr_id), nameValuePairs)
     }
 
@@ -123,7 +119,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost("http://api.open.qingting.fm/v6/media/mediacenterlist?", nameValuePairs)
     }
 
@@ -146,7 +142,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(getStationProgramUrl(channel_id, day_of_week), nameValuePairs)
     }
 
@@ -161,7 +157,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(3)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         nameValuePairs.add(BasicNameValuePair("curpage", Integer.toString(mCurrentPage)))
         nameValuePairs.add(BasicNameValuePair("pagesize", "20"))
         return httpPost(mSearch_URL, nameValuePairs)
@@ -178,7 +174,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mRequestUrl, nameValuePairs)
     }
 
@@ -192,7 +188,7 @@ class HttpUtil {
         }
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mCurrentDemandChannelUrl, nameValuePairs)
     }
 
@@ -210,13 +206,13 @@ class HttpUtil {
                 + "/pagesize/30?")
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mCurrentDemandProgramsUrl, nameValuePairs)
     }
 
     @JvmName("getAccess_token1")
     fun getAccess_token(): String? {
-        return access_token
+        return mAccessToken
     }
 
     private fun getError(error: String?): String? {
@@ -313,7 +309,7 @@ class HttpUtil {
                 + "?")
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mSectionProgramUrl, nameValuePairs)
     }
 
@@ -328,7 +324,7 @@ class HttpUtil {
                 + "/channels/order/0/curpage/1/pagesize/30?")
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mSectionProgramUrl, nameValuePairs)
     }
 
@@ -340,12 +336,12 @@ class HttpUtil {
         val mWapi_Data_Url = "http://api.open.qingting.fm/wapi/categories/$category_id/channels/billboard?"
         val nameValuePairs: ArrayList<BasicNameValuePair?>
         nameValuePairs = ArrayList(1)
-        nameValuePairs.add(BasicNameValuePair("access_token", access_token))
+        nameValuePairs.add(BasicNameValuePair("access_token", mAccessToken))
         return httpPost(mWapi_Data_Url, nameValuePairs)
     } //end by gaolin 4/19
 
     companion object {
-        private val mClient_ID: String? = "MjM2NDI4MzYtZmE3Mi0xMWU3LTkyM2YtMDAxNjNlMDAyMGFk"
-        private val mClient_Secret: String? = "YzhjNTljOWEtZTRlMS0zNDU1LTlhOGUtMTgyZTJjYzE3OGM5"
+        private const val CLIENT_ID: String = "MjM2NDI4MzYtZmE3Mi0xMWU3LTkyM2YtMDAxNjNlMDAyMGFk"
+        private const val CLIENT_SECRET: String = "YzhjNTljOWEtZTRlMS0zNDU1LTlhOGUtMTgyZTJjYzE3OGM5"
     }
 }

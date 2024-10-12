@@ -2,23 +2,22 @@ package com.sec.myonlinefm.classificationprogram.data
 
 
 import android.graphics.Bitmap
-import com.sec.myonlinefm.classificationprogram.data.DemandChannel.Detail
 import java.io.Serializable
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/4/17.
  */
 class DemandChannel : Serializable {
-    private var category_id //分类id
+    private var mCategoryId //分类id
             = 0
     private var id //专辑id
             = 0
     private var total //专辑总数
             = 0
-    private var program_count //节目数量
+    private var mProgramCount //节目数量
             = 0
-    private var sale_type //付费类型 0免费，1已购买，2未购买
+    private var mSaleType //付费类型 0免费，1已购买，2未购买
             = 0
-    private var is_finished = 0
+    private var isFinished = 0
     private var ordered = 0
     private var description //专辑简介
             : String? = null
@@ -28,15 +27,15 @@ class DemandChannel : Serializable {
             : String? = null
     private var type //类型：channel_ondemand表示专辑；channel_live表示电台
             : String? = null
-    private var update_time //更新时间
+    private var mUpdateTime //更新时间
             : String? = null
-    private var latest_program //最后一个节目
+    private var mLatestProgram //最后一个节目
             : String? = null
     private var tags: String? = null
     private var thumbs: String? = null
     private var thumbsUrl: String? = null
-    fun setCategoryId(category_id: Int) {
-        this.category_id = category_id
+    fun setCategoryId(categoryId: Int) {
+        this.mCategoryId = categoryId
     }
 
     fun setId(id: Int) {
@@ -47,16 +46,16 @@ class DemandChannel : Serializable {
         this.total = total
     }
 
-    fun setProgramCount(program_count: Int) {
-        this.program_count = program_count
+    fun setProgramCount(programCount: Int) {
+        this.mProgramCount = programCount
     }
 
-    fun setSaleType(sale_type: Int) {
-        this.sale_type = sale_type
+    fun setSaleType(saleType: Int) {
+        this.mSaleType = saleType
     }
 
-    fun setIsFinished(is_finished: Int) {
-        this.is_finished = is_finished
+    fun setIsFinished(isFinished1: Int) {
+        this.isFinished = isFinished1
     }
 
     fun setOrdered(ordered: Int) {
@@ -64,7 +63,7 @@ class DemandChannel : Serializable {
     }
 
     fun getCategoryId(): Int {
-        return category_id
+        return mCategoryId
     }
 
     fun getId(): Int {
@@ -76,15 +75,15 @@ class DemandChannel : Serializable {
     }
 
     fun getProgramCount(): Int {
-        return program_count
+        return mProgramCount
     }
 
     fun getSaleType(): Int {
-        return sale_type
+        return mSaleType
     }
 
     fun getIsFinished(): Int {
-        return is_finished
+        return isFinished
     }
 
     fun getOrdered(): Int {
@@ -95,8 +94,8 @@ class DemandChannel : Serializable {
         this.description = description
     }
 
-    fun setPlayCount(playcount: String?) {
-        this.playcount = playcount
+    fun setPlayCount(playCount: String?) {
+        this.playcount = playCount
     }
 
     fun setTitle(title: String?) {
@@ -107,12 +106,12 @@ class DemandChannel : Serializable {
         this.type = type
     }
 
-    fun setUpdateTime(update_time: String?) {
-        this.update_time = update_time
+    fun setUpdateTime(updateTime: String?) {
+        this.mUpdateTime = updateTime
     }
 
-    fun setLatestProgram(latest_program: String?) {
-        this.latest_program = latest_program
+    fun setLatestProgram(latestProgram: String?) {
+        this.mLatestProgram = latestProgram
     }
 
     fun setTags(tags: String?) {
@@ -140,11 +139,11 @@ class DemandChannel : Serializable {
     }
 
     fun getUpdateTime(): String? {
-        return update_time
+        return mUpdateTime
     }
 
     fun getLatestProgram(): String? {
-        return latest_program
+        return mLatestProgram
     }
 
     fun getTags(): String? {
@@ -155,7 +154,7 @@ class DemandChannel : Serializable {
         return thumbs
     }
 
-    private var purchase_item: PurchaseItem? = null
+    private var purchaseItem: PurchaseItem? = null
     internal var detail: Detail? = null
     private var podCasters: PodCasters? = null
     fun setPodCasters() {
@@ -167,11 +166,11 @@ class DemandChannel : Serializable {
     }
 
     fun setPurchaseItem() {
-        purchase_item = PurchaseItem()
+        purchaseItem = PurchaseItem()
     }
 
     fun getPurchaseItem(): PurchaseItem? {
-        return purchase_item
+        return purchaseItem
     }
 
     fun setDetail() {
@@ -192,7 +191,7 @@ class DemandChannel : Serializable {
 
     inner class PurchaseItem {
         private var fee = 0f
-        private var original_fee = 0f
+        private var originalFee = 0f
         fun setFee(fee: Float) {
             this.fee = fee
         }
@@ -201,33 +200,33 @@ class DemandChannel : Serializable {
             return fee
         }
 
-        fun setOriginalFee(original_fee: Float) {
-            this.original_fee = original_fee
+        fun setOriginalFee(originalFee1: Float) {
+            this.originalFee = originalFee1
         }
 
         fun getOriginalFee(): Float {
-            return original_fee
+            return originalFee
         }
     }
 
     inner class Detail {
-        private var program_count = 0
-        private var fav_count: String? = null
+        private var programCount = 0
+        private var favCount: String? = null
         private var playcount: String? = null
-        fun setProgramCount(program_count: Int) {
-            this.program_count = program_count
+        fun setProgramCount(programCount: Int) {
+            this.programCount = programCount
         }
 
         fun getProgramCount(): Int {
-            return program_count
+            return programCount
         }
 
         fun setFavCount(fav_count: String?) {
-            this.fav_count = fav_count
+            this.favCount = fav_count
         }
 
         fun getFavCount(): String? {
-            return fav_count
+            return favCount
         }
 
         fun setPlayCount(playcount: String?) {
@@ -349,12 +348,12 @@ class DemandChannel : Serializable {
             this.id = id
         }
 
-        fun setFanNum(fan_num: Int) {
-            this.fan_num = fan_num
+        fun setFanNum(fanNum: Int) {
+            this.fan_num = fanNum
         }
 
-        fun setUserId(user_id: Int) {
-            this.user_id = user_id
+        fun setUserId(userId: Int) {
+            this.user_id = userId
         }
 
         fun getId(): Int {
@@ -373,8 +372,8 @@ class DemandChannel : Serializable {
             this.desc = desc
         }
 
-        fun setImgUrl(img_url: String?) {
-            this.img_url = img_url
+        fun setImgUrl(imgUrl: String?) {
+            this.img_url = imgUrl
         }
 
         fun setNickName(nickname: String?) {
@@ -395,8 +394,8 @@ class DemandChannel : Serializable {
     }
 
     companion object {
-        val TYPE_CHANNEL_ON_DEMAND: String? = "channel_ondemand"
-        val TYPE_CHANNEL_LIVE: String? = "channel_live"
+        const val TYPE_CHANNEL_ON_DEMAND: String = "channel_ondemand"
+        const val TYPE_CHANNEL_LIVE: String = "channel_live"
         const val FREE_SALE_TYPE = 0
         const val BOUGHT_SALE_TYPE = 1
         const val UN_BOUGHT_SALE_TYPE = 2

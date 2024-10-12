@@ -7,12 +7,12 @@ import java.io.Serializable
  * Created by gaolin on 2018/4/20.
  */
 class ClassifyRecommendPattern private constructor() : Serializable {
-    fun addRecommendMap(section_id: Int, classifyRecommend: ClassifyRecommend?) {
-        classifyRecommendMap?.put(section_id, classifyRecommend)
+    fun addRecommendMap(sectionId: Int, classifyRecommend: ClassifyRecommend?) {
+        classifyRecommendMap?.put(sectionId, classifyRecommend)
     }
 
-    fun getClassifyRecommendItem(section_id: Int): ClassifyRecommend? {
-        return classifyRecommendMap?.get(section_id)
+    fun getClassifyRecommendItem(sectionId: Int): ClassifyRecommend? {
+        return classifyRecommendMap?.get(sectionId)
     }
 
     companion object {

@@ -3,16 +3,18 @@ package com.sec.myonlinefm
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.*
-import android.os.Bundle
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Handler
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.sec.myonlinefm.OnLineFMConnectManager.Companion.mMainInfoCode
 import com.sec.myonlinefm.xmlcheck.CharacterParser
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 /**
  * Created by SRC-TJ-MM-BinYang on 2018/1/31.
@@ -132,7 +134,7 @@ class GetGPSInfo(private val mContext: Context?) {
 
     fun getStringInfo(context: Context?, key: String?): String? {
         val sp = context!!.getSharedPreferences("list_demo", Context.MODE_PRIVATE)
-        return sp.getString(key, null)
+        return sp.getString(key, "北京")
     }
 
     fun saveStringInfo(context: Context?, key: String?, datas: String?) {
