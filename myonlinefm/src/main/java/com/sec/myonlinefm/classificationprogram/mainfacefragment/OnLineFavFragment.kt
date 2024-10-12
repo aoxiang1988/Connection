@@ -69,7 +69,7 @@ class OnLineFavFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         mContext = context
         super.onAttach(context)
     }

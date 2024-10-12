@@ -178,7 +178,7 @@ class RecommendFragment : Fragment(), Observer {
         return view
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }

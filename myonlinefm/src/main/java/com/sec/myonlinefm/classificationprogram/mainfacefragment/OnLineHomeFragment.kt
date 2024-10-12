@@ -192,7 +192,7 @@ class OnLineHomeFragment : Fragment() {
         main_view = null
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
     }
 
@@ -200,9 +200,9 @@ class OnLineHomeFragment : Fragment() {
         super.onDetach()
     }
 
-    private inner class ViewPagerAdapter(fm: FragmentManager?, var viewContainter: MutableList<Fragment?>?) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment? {
-            return viewContainter!!.get(position)
+    private inner class ViewPagerAdapter(fm: FragmentManager?, var viewContainter: MutableList<Fragment?>?) : FragmentPagerAdapter(fm!!) {
+        override fun getItem(position: Int): Fragment {
+            return viewContainter!![position]!!
         }
 
         //该方法 决定 并 返回 viewpager中组件的数量
