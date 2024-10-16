@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -379,14 +380,13 @@ public class MainActivity extends AppCompatActivity {
 
 		if(!mService.isAdded){
 			try {
-				if(ContextCompat.checkSelfPermission(getBaseContext(),
-						Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED ) {
-					Log.d(TAG, "no permission of window manager");
-					ActivityCompat.requestPermissions(this,
-							new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, MY_PERMISSIONS_REQUEST_PERMISSION);
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+					if(Settings.canDrawOverlays(this)) {
+						Log.d(TAG, "canDrawOverlays");
+						mService.createFloatView();
+						mLrcOnOff.setBackground(getResources().getDrawable(R.drawable.lrc_on));
+					}
 				}
-				mService.createFloatView();
-				mLrcOnOff.setBackground(getResources().getDrawable(R.drawable.lrc_on));
 			}catch (SecurityException s){
 				Toast.makeText(this,"check the permission",Toast.LENGTH_LONG).show();
 			}
@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onDestroy();
 		unregisterReceiver(mHomeReceiver);
 		mHandler.sendEmptyMessage(REMOVE_NOTIFICATION);
-//		unbindservice();
+		unbindService(mServiceConnection);
 //		stopMainService();
 	}
 

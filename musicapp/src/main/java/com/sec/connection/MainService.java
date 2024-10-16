@@ -618,7 +618,7 @@ public class MainService extends Service{
 		try {
 			wm.addView(child, params);
 		}catch (WindowManager.BadTokenException b){
-			Toast.makeText(this,"check the WindowManager Premission",Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,"界面异常",Toast.LENGTH_LONG).show();
 		}
 		isAdded = true;
 	}
