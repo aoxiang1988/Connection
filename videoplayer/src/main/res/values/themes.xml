@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.MyAutoApplication" parent="@style/Theme.Leanback" />
+</resources>
