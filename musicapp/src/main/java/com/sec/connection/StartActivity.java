@@ -1,16 +1,12 @@
 package com.sec.connection;
 
 import android.Manifest;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +23,8 @@ import com.sec.connection.data.MediaUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -35,88 +33,84 @@ public class StartActivity extends AppCompatActivity {
 	ProgressBar progressBar;
 	Handler mHandler ;
 	ImageView imageView;
-	Thread t;
 
-	Message mStartMainActivity = new Message();
+	private static final int MSG_CHECK_MUSIC = 0;
+	private static final int MSG_NO_MUSIC = 1;
+	private static final int MSG_START_MAIN_ACTIVITY = 2;
+	private static final long DELAY_TIME = 2000;
 
 	@SuppressLint("SuspiciousIndentation")
 	@Override
-	protected void onCreate(Bundle savedInstanceState)  {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
-		/*if (Build.VERSION.SDK_INT >= 23) {
-			if (!Settings.canDrawOverlays(this)) {
-				Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivityForResult(intent, 1);
-			}
-		}*/
 		progressBar = findViewById(R.id.progressBar1);
 		imageView = findViewById(R.id.imageView2);
 
 		imageView.setBackgroundResource(R.drawable.start);
-		AnimationDrawable animationDrawable = (AnimationDrawable)imageView.getBackground();
+		AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getBackground();
 		animationDrawable.start();
 
 		mHandler = new Handler(msg -> {
-			if (msg.what == 0) {
-				if(!BaseListInfo.getInstance().getList().isEmpty()) {
-					Log.d(TAG, "has music");
-					mStartMainActivity.what = 2;
-					mHandler.sendMessageDelayed(mStartMainActivity, 2000);
-				} else {
-					Log.d(TAG, "no music");
-					mHandler.sendEmptyMessage(1);
-				}
-			}
-			if(msg.what == 1){
-				Toast.makeText(getBaseContext(),"no music",Toast.LENGTH_LONG).show();
-				updateFace();
-				return true;
-			}
-			if (msg.what == 2) {
-				Intent intent = new Intent();
-				intent.setClass(getBaseContext(), MainActivity.class);
-				startActivity(intent);
-				finish();
-				return true;
+			switch (msg.what) {
+				case MSG_CHECK_MUSIC:
+					if (!BaseListInfo.getInstance().getList().isEmpty()) {
+						Log.d(TAG, "has music");
+						mHandler.postDelayed(() -> {
+							Intent intent = new Intent();
+							intent.setClass(getBaseContext(), MainActivity.class);
+							startActivity(intent);
+							finish();
+						}, DELAY_TIME);
+					} else {
+						Log.d(TAG, "no music");
+						mHandler.sendEmptyMessage(MSG_NO_MUSIC);
+					}
+					break;
+				case MSG_NO_MUSIC:
+					Toast.makeText(getBaseContext(), "no music", Toast.LENGTH_LONG).show();
+					updateFace();
+					return true;
+				case MSG_START_MAIN_ACTIVITY:
+					Intent intent = new Intent();
+					intent.setClass(getBaseContext(), MainActivity.class);
+					startActivity(intent);
+					finish();
+					return true;
 			}
 			return false;
 		});
-		String[] permission = {
+
+		String[] permissions = {
 				Manifest.permission.WRITE_EXTERNAL_STORAGE,
 				Manifest.permission.READ_EXTERNAL_STORAGE,
 		};
 
+		List<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions));
 		boolean needRequestPermissions = false;
-		List<String> stringList = new ArrayList<>(Arrays.asList(permission));
 
-        for (String s : permission) {
-            Log.d(TAG, "检查" + s + "权限，in before ");
-            if (ContextCompat.checkSelfPermission(this,
-                    s)
-                    != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "没有" + s + "权限，正在申请权限 in before");
-                needRequestPermissions = true;
-            } else {
-                Log.d(TAG, "已经有" + s + "权限， in before");
-                stringList.remove(s);//不用申请这个权限，移除掉
-            }
-        }
+		for (String permission : permissions) {
+			Log.d(TAG, "检查" + permission + "权限，in before ");
+			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+				Log.d(TAG, "没有" + permission + "权限，正在申请权限 in before");
+				needRequestPermissions = true;
+			} else {
+				Log.d(TAG, "已经有" + permission + "权限， in before");
+				permissionsToRequest.remove(permission); // 不用申请这个权限，移除掉
+			}
+		}
+
 		if (needRequestPermissions) {
 			Log.d(TAG, "needRequestPermissions " + needRequestPermissions);
-			String[] needToRequestPermission = new String[stringList.size()];
-			ActivityCompat.requestPermissions(this,
-					stringList.toArray(needToRequestPermission),
-					MY_PERMISSIONS_REQUEST_PERMISSION);
+			ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), MY_PERMISSIONS_REQUEST_PERMISSION);
 		} else {
-			t = new Thread(() -> {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			executorService.submit(() -> {
 				BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 				startMainService();
-				mHandler.sendEmptyMessageDelayed(0, 2000);
+				mHandler.sendEmptyMessageDelayed(MSG_CHECK_MUSIC, DELAY_TIME);
 			});
-			t.start();
 		}
 	}
 
@@ -124,31 +118,33 @@ public class StartActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == MY_PERMISSIONS_REQUEST_PERMISSION) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				Log.d(TAG, "has got permission of window manager");
-				t = new Thread(() -> {
+			boolean allPermissionsGranted = true;
+			for (int result : grantResults) {
+				if (result != PackageManager.PERMISSION_GRANTED) {
+					allPermissionsGranted = false;
+					break;
+				}
+			}
+			if (allPermissionsGranted) {
+				ExecutorService executorService = Executors.newSingleThreadExecutor();
+				executorService.submit(() -> {
 					BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 					startMainService();
-					if(!BaseListInfo.getInstance().getList().isEmpty()) {
-						mStartMainActivity.what = 2;
-						mHandler.sendMessageDelayed(mStartMainActivity, 2000);
-					} else {
-						mHandler.sendEmptyMessage(1);
-					}
+					mHandler.sendEmptyMessageDelayed(MSG_CHECK_MUSIC, DELAY_TIME);
 				});
-				t.start();
 			} else {
-				if (t != null && t.isAlive()) {
-					t.interrupt();
-				}
-				Intent intent = new Intent(
-						Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-						Uri.fromParts("package", getPackageName(), null)
-				);
-				startActivity(intent);
+				// Handle the case where some permissions are denied
+				Toast.makeText(this, "Some permissions are denied", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mHandler.removeCallbacksAndMessages(null);
+	}
+
 
 	private void updateFace() {
 		progressBar.setVisibility(View.GONE);
@@ -158,13 +154,6 @@ public class StartActivity extends AppCompatActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if(t.isAlive())
-			t.interrupt();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	public void startMainService() {

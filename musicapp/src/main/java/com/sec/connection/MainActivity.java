@@ -1,6 +1,5 @@
 package com.sec.connection;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -45,8 +44,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sec.connection.data.Audio;
@@ -296,7 +293,8 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			// 使用Log.e记录错误日志
+			Log.e(TAG, "Error parsing XML or processing data", e);
 		}
 
 		/*try {

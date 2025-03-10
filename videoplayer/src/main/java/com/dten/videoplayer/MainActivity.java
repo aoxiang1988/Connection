@@ -1,22 +1,13 @@
 package com.dten.videoplayer;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.dten.videoplayer.data.MediaUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import cn.cbg.exoplayer.BaseFactory;
-import cn.cbg.exoplayer.DownloadTracker;
-import cn.cbg.exoplayer.PlayerExo;
-import cn.cbg.exoplayer.utils.ExoDownloadService;
 
 /*
  * Main Activity class that loads {@link MainFragment}.
@@ -38,5 +29,6 @@ public class MainActivity extends FragmentActivity {
                 .replace(R.id.main_browse_fragment, new MainFragment())
                 .commitNow();
         }
+
     }
 }

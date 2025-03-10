@@ -35,6 +35,4 @@ dependencies {
     implementation("androidx.leanback:leanback:1.0.0")
     implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.fragment:fragment:1.5.6")
-    implementation(":exoplayer")
-    implementation(project(":exoplayer"))
 }
