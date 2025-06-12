@@ -7,7 +7,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.0'
+        classpath 'com.android.tools.build:gradle:8.10.1'
         classpath "org.aspectj:aspectjtools:1.9.0"
         classpath "org.aspectj:aspectjweaver:1.9.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"

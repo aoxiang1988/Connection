@@ -228,6 +228,7 @@ class FMProgramActivity : AppCompatActivity(), ServiceConnection, ObserverPlayer
         if (topBarActionBarView != null) topBarActionBarView!!.visibility = View.VISIBLE
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fm_program)
