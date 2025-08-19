@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -86,6 +88,7 @@ public class FirstFragment extends Fragment implements UpdateListener {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     public void onResume() {
@@ -93,7 +96,7 @@ public class FirstFragment extends Fragment implements UpdateListener {
         mFilter = new IntentFilter();
         mFilter.addAction("aaa");
         mFilter.addAction("bbb");
-        requireContext().registerReceiver(mReceiver, mFilter);
+        requireContext().registerReceiver(mReceiver, mFilter, Context.RECEIVER_NOT_EXPORTED);
 
         if (SecondActivity.mService != null && SecondActivity.mService.getIsVideoPlaying()) {
             mCurrentPosition = SecondActivity.mService.getCurVideoID();

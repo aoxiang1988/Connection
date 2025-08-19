@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @SuppressLint({"UnspecifiedRegisterReceiverFlag", "InlinedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         mIntentFilter.addAction(MyService.SERVICE_INTENT_ACTION);
         mIntentFilter.addAction(MyService.MEDIA_SOURCE_STOP_ACTION);
-        registerReceiver(mReceiver, mIntentFilter);
+        getBaseContext().registerReceiver(mReceiver, mIntentFilter, Context.RECEIVER_NOT_EXPORTED);
     }
 
     @Override
