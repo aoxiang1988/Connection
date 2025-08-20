@@ -252,7 +252,11 @@ public class MainActivity extends AppCompatActivity {
 		intentFilter.addAction(MUSIC_CURRENT);
 		intentFilter.addAction(CURRENT_ID);
 		intentFilter.addAction(UPDATE_LIST_ACTIVITY_ACTION);
-		registerReceiver(mHomeReceiver, intentFilter);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(mHomeReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(mHomeReceiver, intentFilter);
+		}
 		_inActivity = this;
 		actionmode_callback = new ActionMode_CallBack();
 		mRepeatState = restorePreferences();

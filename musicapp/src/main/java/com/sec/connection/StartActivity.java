@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,9 +21,6 @@ import androidx.core.content.ContextCompat;
 
 import com.sec.connection.data.MediaUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -82,12 +80,8 @@ public class StartActivity extends AppCompatActivity {
 			return false;
 		});
 
-		String[] permissions = {
-				Manifest.permission.WRITE_EXTERNAL_STORAGE,
-				Manifest.permission.READ_EXTERNAL_STORAGE,
-		};
+		String[] permissions = getStrings();
 
-		List<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions));
 		boolean needRequestPermissions = false;
 
 		for (String permission : permissions) {
@@ -97,13 +91,12 @@ public class StartActivity extends AppCompatActivity {
 				needRequestPermissions = true;
 			} else {
 				Log.d(TAG, "已经有" + permission + "权限， in before");
-				permissionsToRequest.remove(permission); // 不用申请这个权限，移除掉
 			}
 		}
 
 		if (needRequestPermissions) {
 			Log.d(TAG, "needRequestPermissions " + needRequestPermissions);
-			ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), MY_PERMISSIONS_REQUEST_PERMISSION);
+			ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST_PERMISSION);
 		} else {
 			ExecutorService executorService = Executors.newSingleThreadExecutor();
 			executorService.submit(() -> {
@@ -160,5 +153,21 @@ public class StartActivity extends AppCompatActivity {
 		// TODO Auto-generated method stub
 		Intent i = new Intent(this,MainService.class);
 		startService(i);
+	}
+
+	private static String[] getStrings() {
+		String[] permission = null;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			permission = new String[]{
+					Manifest.permission.READ_MEDIA_AUDIO,
+					Manifest.permission.READ_MEDIA_VIDEO,
+			};
+		} else {
+			permission = new String[]{
+					Manifest.permission.WRITE_EXTERNAL_STORAGE,
+					Manifest.permission.READ_EXTERNAL_STORAGE,
+			};
+		}
+		return permission;
 	}
 }

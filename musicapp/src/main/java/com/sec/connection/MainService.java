@@ -16,6 +16,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaScannerConnection;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -209,16 +210,26 @@ public class MainService extends Service{
 		widget_Receiver = new Widget_Receiver();
 		IntentFilter widget_filter = new IntentFilter();
 		widget_filter.addAction(COLLECTION_VIEW_ACTION);
-		registerReceiver(widget_Receiver, widget_filter);
 
-		mNotifyReceiver = new Notify_Receiver();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(widget_Receiver, widget_filter, Context.RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(widget_Receiver, widget_filter);
+		}
+
+        mNotifyReceiver = new Notify_Receiver();
 		IntentFilter notify_filter = new IntentFilter();
 		notify_filter.addAction(NOTIFY_NEXT);
 		notify_filter.addAction(NOTIFY_PLAY);
 		notify_filter.addAction(NOTIFY_STOP);
 		notify_filter.addAction(NOTIFY_PRE);
 		notify_filter.addAction(NOTIFY_REMOVE);
-		registerReceiver(mNotifyReceiver, notify_filter);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(mNotifyReceiver, notify_filter, Context.RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(mNotifyReceiver, notify_filter);
+		}
 
 		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 			@Override
@@ -277,7 +288,12 @@ public class MainService extends Service{
 		myReceiver = new MyReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MainActivity.CTL_ACTION);
-		registerReceiver(myReceiver, filter);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(myReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(myReceiver, filter);
+		}
 	}
 	protected int getRandomIndex(int i) {
 		// TODO Auto-generated method stub
@@ -626,13 +642,18 @@ public class MainService extends Service{
 	* */
 	ScanSdReceiver scanSdReceiver;
 	@SuppressLint("UnspecifiedRegisterReceiverFlag")
-	public void scanSdCard(){
+    public void scanSdCard(){
         IntentFilter intentfilter = new IntentFilter( Intent.ACTION_MEDIA_SCANNER_STARTED);
         intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         intentfilter.addDataScheme("file");
 		scanSdReceiver = new ScanSdReceiver();
-		registerReceiver(scanSdReceiver, intentfilter);
-		Log.d(TAG,"local storage: "+Environment.getExternalStorageDirectory().getAbsolutePath());
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(scanSdReceiver, intentfilter, Context.RECEIVER_NOT_EXPORTED);
+		} else {
+			registerReceiver(scanSdReceiver, intentfilter);
+		}
+        Log.d(TAG,"local storage: "+Environment.getExternalStorageDirectory().getAbsolutePath());
 //		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
 //				Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath())));
 		MediaScannerConnection.scanFile(getBaseContext(),

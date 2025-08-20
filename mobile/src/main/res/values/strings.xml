@@ -25,4 +25,5 @@
     <string name="down">down</string>
     <string name="todo">TODO</string>
     <string name="play_error_info">Can not play!!!</string>
+    <string name="no_permission">请到设置中打开APP相关权限</string>
 </resources>

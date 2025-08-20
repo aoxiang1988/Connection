@@ -1,7 +1,10 @@
 // MainActivity.java
 package com.example.myautoapplication;
 
+import static com.example.myautoapplication.toolutils.ToolUtils.MY_PERMISSIONS_REQUEST_PERMISSION;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         // 检查权限
         boolean hasPermission = ToolUtils.checkPermission(this);
+
+        // 所有权限都已授予
         viewModel.setPermissionGranted(hasPermission, this);
 
         // 初始化 UI 组件
@@ -113,4 +118,25 @@ public class MainActivity extends AppCompatActivity {
         serviceManager.unbindService();
         broadcastManager.unregisterReceiver();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_PERMISSION) {
+            // 处理权限申请结果
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+            if (allGranted) {
+
+            } else {
+                // 有权限被拒绝
+            }
+        }
+    }
+
 }

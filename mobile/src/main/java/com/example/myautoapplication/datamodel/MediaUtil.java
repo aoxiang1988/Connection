@@ -1,13 +1,10 @@
 package com.example.myautoapplication.datamodel;
 
-import android.Manifest;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import com.example.myautoapplication.aspectcode.PermissionCheck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +40,6 @@ public class MediaUtil {
             MediaStore.Audio.Media.IS_MUSIC,
             MediaStore.Audio.Media.IS_NOTIFICATION,
     };
-
-    @PermissionCheck(permession = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,})
     public static List<Audio> getAudioList(Context context){
 
         Log.d(TAG, "getAudioList start!!");
