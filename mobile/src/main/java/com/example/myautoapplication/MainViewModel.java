@@ -85,7 +85,7 @@ public class MainViewModel extends AndroidViewModel {
         }
     }
 
-    public void togglePlayPause() {
+    public void togglePlayPause(int id) {
         if (mService != null) {
             if (mService.getPlayState()) {
                 playButtonText.setValue(R.string.play_source);
@@ -94,8 +94,8 @@ public class MainViewModel extends AndroidViewModel {
                 playButtonText.setValue(R.string.pause_source);
                 List<Audio> list = audioList.getValue();
                 if (list != null && !list.isEmpty()) {
-                    Log.d(TAG, "MusicInfo:" + list.get(1).getTitle() + "--" + list.get(1).getArtist());
-                    mService.setSourcePath(list.get(1).getPath());
+                    Log.d(TAG, "MusicInfo:" + list.get(id).getTitle() + "--" + list.get(id).getArtist());
+                    mService.setSourcePath(list.get(id).getPath());
                     mService.playSource();
                 }
             }

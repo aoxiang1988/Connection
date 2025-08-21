@@ -66,14 +66,14 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
 	private static final String TAG = "MainActivity";
-	private static final String UPDATE_ACTION = "com.example.action.UPDATE_ACTION";
-	private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
+	private static final String UPDATE_ACTION = "UPDATE_ACTION";
+	private static final String UPDATE_LIST_ACTIVITY_ACTION = "UPDATE_LIST_ACTIVITY_ACTION";
 	//	public static final String DELETE_ITEM = "com.example.action.DELETE_ITEM";
-	private static final String PLAY_STATUE = "com.example.action.PLAY_STATUE";
-	public static final String CTL_ACTION = "com.example.action.CTL_ACTION";
-	private static final String MUSIC_CURRENT = "com.example.action.MUSIC_CURRENT";
-	private static final String MUSIC_DURATION = "com.example.action.MUSIC_DURATION";
-	private static final String CURRENT_ID = "com.example.action.CURRENT_ID";
+	private static final String PLAY_STATUE = "PLAY_STATUE";
+	public static final String CTL_ACTION = "CTL_ACTION";
+	private static final String MUSIC_CURRENT = "MUSIC_CURRENT";
+	private static final String MUSIC_DURATION = "MUSIC_DURATION";
+	private static final String CURRENT_ID = "CURRENT_ID";
 
 	private static final int MY_PERMISSIONS_REQUEST_PERMISSION = 1;
 
@@ -286,15 +286,12 @@ public class MainActivity extends AppCompatActivity {
 						+localAllInfo.get(i).getStationName()+" "
 						+localAllInfo.get(i).getChannel() +" "
 						+localAllInfo.get(i).getRadioID());
-				for(int j = 0; j< Objects.requireNonNull(
-						map.get(localAllInfo.get(i).getChannel())
-				).size(); j++){
-					Log.d(TAG,"progrem : "
-							+ localAllInfo.get(i).getChannel()+" "
-							+ map.get(localAllInfo.get(i).getChannel()).get(j).getContent()+" "
-
-					);
-				}
+//				for(int j = 0; j< Objects.requireNonNull(map.get(localAllInfo.get(i).getChannel())).size(); j++){
+//					Log.d(TAG,"progrem : "
+//							+ localAllInfo.get(i).getChannel()+" "
+//							+ map.get(localAllInfo.get(i).getChannel()).get(j).getContent()+" "
+//					);
+//				}
 			}
 		} catch (Exception e) {
 			// 使用Log.e记录错误日志
@@ -445,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
 			mCurrentStatusView.setText(R.string.random);
 		}
 		savePreferences(mRepeatState);
-		Intent intent = new Intent(CTL_ACTION);
+		Intent intent = new Intent(CTL_ACTION).setPackage(/* TODO: provide the application ID. For example: */ getPackageName());
 		intent.putExtra("control", status);
 		sendBroadcast(intent);
 	}

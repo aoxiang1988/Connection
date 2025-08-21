@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 34
     defaultConfig {
-        applicationId "com.example.myautoapplication"
+        applicationId "com.sec.connection.musicapp"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1

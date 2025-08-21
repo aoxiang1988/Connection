@@ -3,20 +3,34 @@ package com.example.myautoapplication;
 
 import static com.example.myautoapplication.toolutils.ToolUtils.MY_PERMISSIONS_REQUEST_PERMISSION;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myautoapplication.datamodel.Audio;
 import com.example.myautoapplication.media.SecondActivity;
+import com.example.myautoapplication.media.VideoItemViewHolder;
 import com.example.myautoapplication.toolutils.ToolUtils;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -29,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mChangeActivityBut;
     private Button mPlayBut;
     private Button mStopBut;
+    private ListView mListView;
+
+    private AudioListAdapter mAudioListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +84,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mPlayBut = findViewById(R.id.butPlay);
-        mPlayBut.setOnClickListener(v -> viewModel.togglePlayPause());
+        mPlayBut.setOnClickListener(v -> viewModel.togglePlayPause(0));
 
         mStopBut = findViewById(R.id.butStop);
         mStopBut.setOnClickListener(v -> viewModel.stopMedia());
+
+        mListView = findViewById(R.id.audioList);
+
+        mAudioListAdapter = new AudioListAdapter(this, null);
+        mListView.setAdapter(mAudioListAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "music info" + mAudioListAdapter.getItem(position).getTitle());
+                viewModel.togglePlayPause(position);
+                observeData();
+            }
+        });
 
         // 观察数据变化
         observeData();
@@ -90,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 for (Audio audio : audioList) {
                     Log.d(TAG, "MusicInfo:" + audio.getTitle() + "--" + audio.getArtist());
                 }
+                mAudioListAdapter.setAudioList(audioList);
+                mAudioListAdapter.notifyDataSetChanged();
             }
         });
 
@@ -98,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "no permission!!!");
             }
         });
+
     }
 
     @Override
@@ -132,9 +165,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (allGranted) {
-
+                viewModel.setPermissionGranted(allGranted, this);
+                observeData();
             } else {
-                // 有权限被拒绝
+                Toast.makeText(this, "请到设置中打开权限", Toast.LENGTH_SHORT).show();
             }
         }
     }
