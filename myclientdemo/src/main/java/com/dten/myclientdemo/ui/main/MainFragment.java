@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.dten.myclientdemo.R;
+import com.dten.myclientdemo.SecondActivity;
 import com.dten.myservicedemo.IMyService;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -32,6 +33,7 @@ public class MainFragment extends Fragment {
 
     private TextInputEditText mTextInputEditText;
     private Button mSendTextButton;
+    private Button mStartSecondActivityButton;
 
     private TextView mMessageText;
 
@@ -89,6 +91,8 @@ public class MainFragment extends Fragment {
         mSendTextButton = view.findViewById(R.id.button);
         mMessageText = view.findViewById(R.id.message);
         mSendTextButton.setOnClickListener(mClickListener);
+        mStartSecondActivityButton = view.findViewById(R.id.button2);
+        mStartSecondActivityButton.setOnClickListener(mClickListener);
         return view;
     }
 
@@ -103,6 +107,10 @@ public class MainFragment extends Fragment {
                     mViewModel.sendTextToService(mIMyService);
                     mMessageText.setText(mViewModel.getGetFromServiceText(mIMyService));
                 }
+            }
+            else if (view.getId() == R.id.button2) {
+                Intent intent = new Intent(getContext(), SecondActivity.class);
+                startActivity(intent);
             }
         }
     };
