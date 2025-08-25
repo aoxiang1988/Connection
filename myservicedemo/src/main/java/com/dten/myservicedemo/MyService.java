@@ -10,7 +10,6 @@ import android.util.Log;
 public class MyService extends Service {
 
     private static final String TAG = "MyService";
-//    private final MyServiceBinder mBinder = new MyServiceBinder();
 
     private String mName = "";
 
@@ -32,17 +31,10 @@ public class MyService extends Service {
 
     }
 
-//    public class MyServiceBinder extends Binder {
-//        public MyService getMyService() {
-//             return MyService.this;
-//        }
-//    }
-
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind");
         // TODO: Return the communication channel to the service.
-        //return mBinder;
         return mServiceStub;
     }
 
