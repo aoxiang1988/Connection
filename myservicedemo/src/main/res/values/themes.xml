@@ -1,0 +1,5 @@
+<resources>
+
+    <style name="Theme.MyAutoApplication" parent="Theme.AppCompat.DayNight" >
+    </style>
+</resources>

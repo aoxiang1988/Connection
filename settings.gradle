@@ -7,11 +7,13 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MyAutoApplication"
-include ':mobile'
-include ':musicapp'
+//include ':mobile'
+//include ':musicapp'
 //include ':app'
-include ':connecttoapilibrary'
-include ':myonlinefm'
-include ':testview2'
-include ':automusic'
-include ':videoplayer'
+//include ':connecttoapilibrary'
+//include ':myonlinefm'
+//include ':testview2'
+//include ':automusic'
+//include ':videoplayer'
+include ':myclientdemo'
+include ':myservicedemo'
