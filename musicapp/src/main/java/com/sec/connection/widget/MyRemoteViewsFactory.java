@@ -1,5 +1,7 @@
 package com.sec.connection.widget;
 
+import static com.sec.connection.MainService.COLLECTION_VIEW_ACTION;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -69,7 +71,7 @@ public class MyRemoteViewsFactory implements RemoteViewsFactory {
         	rv.setTextColor(android.R.id.text1, mContext.getResources().getColor(R.color.widget_no_play ));
         }
         Intent fillintent = new Intent();
-        fillintent.setAction(PlayWidget.COLLECTION_VIEW_ACTION);
+        fillintent.setAction(COLLECTION_VIEW_ACTION);
         fillintent.putExtra("widget_list_item", position);
         Log.d("bin1111.yang", "widget_item : "+position);
         rv.setOnClickFillInIntent(R.layout.widget_list_item, fillintent);

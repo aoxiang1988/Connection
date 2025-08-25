@@ -1,5 +1,13 @@
 package com.sec.connection;
 
+import static com.sec.connection.MainService.CTL_ACTION;
+import static com.sec.connection.MainService.CURRENT_ID;
+import static com.sec.connection.MainService.MUSIC_CURRENT;
+import static com.sec.connection.MainService.MUSIC_DURATION;
+import static com.sec.connection.MainService.PLAY_STATUE;
+import static com.sec.connection.MainService.UPDATE_ACTION;
+import static com.sec.connection.MainService.UPDATE_LIST_ACTIVITY_ACTION;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -66,14 +74,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
 	private static final String TAG = "MainActivity";
-	private static final String UPDATE_ACTION = "UPDATE_ACTION";
-	private static final String UPDATE_LIST_ACTIVITY_ACTION = "UPDATE_LIST_ACTIVITY_ACTION";
-	//	public static final String DELETE_ITEM = "com.example.action.DELETE_ITEM";
-	private static final String PLAY_STATUE = "PLAY_STATUE";
-	public static final String CTL_ACTION = "CTL_ACTION";
-	private static final String MUSIC_CURRENT = "MUSIC_CURRENT";
-	private static final String MUSIC_DURATION = "MUSIC_DURATION";
-	private static final String CURRENT_ID = "CURRENT_ID";
 
 	private static final int MY_PERMISSIONS_REQUEST_PERMISSION = 1;
 

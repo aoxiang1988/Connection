@@ -45,6 +45,7 @@
                 <item
                     android:id="@+id/test"
                     android:title="test"
+                    android:visible="false"
                     />
             </group>
         </menu>

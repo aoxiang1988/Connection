@@ -72,7 +72,8 @@ public class MainService extends Service{
 	public static final String NOTIFY_NEXT = "com.example.action.NOTIFY_NEXT";
 	public static final String NOTIFY_PRE = "com.example.action.NOTIFY_PRE";
 	public static final String NOTIFY_REMOVE = "com.example.action.NOTIFY_REMOVE";
-	private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
+	public static final String CTL_ACTION = "com.example.action.CTL_ACTION";
+	public static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
 
 	private static final String FILE_PATH = "/storage/emulated/0";
 
@@ -287,7 +288,7 @@ public class MainService extends Service{
 		});
 		myReceiver = new MyReceiver();
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(MainActivity.CTL_ACTION);
+		filter.addAction(CTL_ACTION);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			registerReceiver(myReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
@@ -427,6 +428,7 @@ public class MainService extends Service{
 			Intent intent = new Intent();
 			intent.setAction(MUSIC_DURATION);
 			duration = mediaPlayer.getDuration();
+			Log.d(TAG, "duration " + duration);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
 		}

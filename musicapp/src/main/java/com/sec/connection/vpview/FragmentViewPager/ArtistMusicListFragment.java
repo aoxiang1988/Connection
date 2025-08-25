@@ -41,7 +41,6 @@ public class ArtistMusicListFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
     private List<Audio> mList;
     String[] mMusicName;
     private int n_groupPosition;

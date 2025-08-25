@@ -1,5 +1,13 @@
 package com.sec.connection.vpview;
 
+import static com.sec.connection.MainService.CTL_ACTION;
+import static com.sec.connection.MainService.CURRENT_ID;
+import static com.sec.connection.MainService.MUSIC_CURRENT;
+import static com.sec.connection.MainService.MUSIC_DURATION;
+import static com.sec.connection.MainService.PLAY_STATUE;
+import static com.sec.connection.MainService.UPDATE_ACTION;
+import static com.sec.connection.MainService.UPDATE_LIST_ACTIVITY_ACTION;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,15 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestViewPagerActivity extends AppCompatActivity {
-
-    private static final String UPDATE_ACTION = "com.example.action.UPDATE_ACTION";
-    private static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
-    //	public static final String DELETE_ITEM = "com.example.action.DELETE_ITEM";
-    private static final String PLAY_STATUE = "com.example.action.PLAY_STATUE";
-    public static final String CTL_ACTION = "com.example.action.CTL_ACTION";
-    private static final String MUSIC_CURRENT = "com.example.action.MUSIC_CURRENT";
-    private static final String MUSIC_DURATION = "com.example.action.MUSIC_DURATION";
-    private static final String CURRENT_ID = "com.example.action.CURRENT_ID";
 
     private final String TAG = "TestViewPagerActivity";
     private ViewPager viewPager = null;

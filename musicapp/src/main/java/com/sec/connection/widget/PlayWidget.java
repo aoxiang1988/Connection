@@ -1,5 +1,9 @@
 package com.sec.connection.widget;
 
+import static com.sec.connection.MainService.COLLECTION_VIEW_ACTION;
+import static com.sec.connection.MainService.PLAY_STATUE;
+import static com.sec.connection.MainService.UPDATE_ACTION;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -25,9 +29,6 @@ import java.util.List;
  * ****
  * **/
 public class PlayWidget extends AppWidgetProvider {
-	public static final String PLAY_STATUE = "com.example.action.PLAY_STATUE";
-	public static final String COLLECTION_VIEW_ACTION = "com.example.play.COLLECTION_VIEW_ACTION";
-	public static final String UPDATE_ACTION = "com.example.action.UPDATE_ACTION";
 	private RemoteViews widget_view;
     private int mListItem = 0;
     List<Audio> list = BaseListInfo.getInstance().getList();

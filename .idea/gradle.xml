@@ -10,6 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/musicapp" />
             <option value="$PROJECT_DIR$/myclientdemo" />
             <option value="$PROJECT_DIR$/myservicedemo" />
           </set>
