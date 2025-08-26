@@ -502,10 +502,10 @@ public class MainActivity extends AppCompatActivity {
 				PlayMusicUIUpdate(mListPosition);
 			}
 			if (action.equals(UPDATE_ACTION)) {
-				mListPosition = intent.getIntExtra("current_music", -1);
+				mListPosition = intent.getIntExtra("current_music", 0);
 				mTitle = mList.get(mListPosition).getTitle();
 				mMusicNameView.setText(mTitle);
-				mDuration = intent.getIntExtra("mDuration", -1);
+				mDuration = intent.getIntExtra("duration", 0);
 				int min = (mDuration / 1000) / 60;
 				int sec = (mDuration / 1000) % 60;
 				mAllTimeView.setText(String.format("%s:%s", text(min), text(sec)));
@@ -514,14 +514,15 @@ public class MainActivity extends AppCompatActivity {
 				PlayMusicUIUpdate(mListPosition);
 			}
 			if (action.equals(MUSIC_DURATION)) {
-				mDuration = intent.getIntExtra("mDuration", -1);
+				mDuration = intent.getIntExtra("duration", 0);
+				//Log.d(TAG, "duration " + mDuration);
 				int min = (mDuration / 1000) / 60;
 				int sec = (mDuration / 1000) % 60;
 				mAllTimeView.setText(String.format("%s:%s", text(min), text(sec)));
 				mPlayBar.setMax(mDuration);
 			}
 			if (action.equals(MUSIC_CURRENT)) {
-				mCurrentTime = intent.getIntExtra("current_time", -1);
+				mCurrentTime = intent.getIntExtra("current_time", 0);
 				int min = (mCurrentTime / 1000) / 60;
 				int sec = (mCurrentTime / 1000) % 60;
 				mCurrentTimeView.setText(String.format("%s:%s", text(min), text(sec)));

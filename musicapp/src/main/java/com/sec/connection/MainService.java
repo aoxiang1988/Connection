@@ -425,10 +425,10 @@ public class MainService extends Service{
 			if(currentTime > 0){
 				mediaPlayer.seekTo(currentTime);
 			}
+			duration = mediaPlayer.getDuration();
+			//Log.d(TAG, "duration " + duration);
 			Intent intent = new Intent();
 			intent.setAction(MUSIC_DURATION);
-			duration = mediaPlayer.getDuration();
-			Log.d(TAG, "duration " + duration);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
 		}
