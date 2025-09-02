@@ -9,7 +9,11 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/defult" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/defult"
+        android:scaleX="1.2"
+        android:scaleY="1.2" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -18,11 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="63dp"
+        android:layout_marginBottom="30dp"
         android:max="1000" />
 
     <ImageView
         android:id="@+id/imageView2"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

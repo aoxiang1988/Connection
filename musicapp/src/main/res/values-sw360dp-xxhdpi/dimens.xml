@@ -6,6 +6,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="image_shapetype">1dp</dimen>
     <dimen name="image_borderwidth">3dp</dimen>
-    <dimen name="image_strokewidth">80dp</dimen>
+    <dimen name="image_strokewidth">110dp</dimen>
 
 </resources>

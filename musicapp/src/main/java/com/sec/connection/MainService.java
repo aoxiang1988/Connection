@@ -119,6 +119,7 @@ public class MainService extends Service{
 					if(mediaPlayer != null && isPlay){
 						c_duration = mediaPlayer.getCurrentPosition();
 						Intent intent = new Intent(MUSIC_CURRENT);
+						intent.setPackage(getPackageName());
 						intent.putExtra("current_time", c_duration);
 						sendBroadcast(intent);//??MainActive?????
 						handler.sendEmptyMessageDelayed(UPDATE_CURRENT_TIME, 500);
@@ -245,6 +246,7 @@ public class MainService extends Service{
 						c_music = 0;
 					}
 					Intent intent = new Intent(UPDATE_ACTION);
+					intent.setPackage(getPackageName());
 					intent.putExtra("current_music", c_music);
 					intent.putExtra("duration", duration);
 					sendBroadcast(intent);
@@ -255,6 +257,7 @@ public class MainService extends Service{
 					c_music++;
 					if(c_music <= list.size()-1){
 						Intent intent = new Intent(UPDATE_ACTION);
+						intent.setPackage(getPackageName());
 						intent.putExtra("current_music", c_music);
 						intent.putExtra("duration", duration);
 						sendBroadcast(intent);
@@ -264,6 +267,7 @@ public class MainService extends Service{
 						mediaPlayer.seekTo(0);
 						c_music = 0;
 						Intent intent = new Intent(UPDATE_ACTION);
+						intent.setPackage(getPackageName());
 						intent.putExtra("current_music", c_music);
 						intent.putExtra("duration", duration);
 						sendBroadcast(intent);
@@ -272,7 +276,8 @@ public class MainService extends Service{
 					MainActivity._inActivity.stopPlayAnim();
 					c_music = getRandomIndex(list.size() - 1);
                     System.out.println("currentIndex ->" + c_music);
-                    Intent sendIntent = new Intent(UPDATE_ACTION);  
+                    Intent sendIntent = new Intent(UPDATE_ACTION);
+					sendIntent.setPackage(getPackageName());
                     sendIntent.putExtra("current_music", c_music);  
                     sendIntent.putExtra("duration", duration);
                     // ???????????Activity????е?BroadcastReceiver?????  
@@ -281,6 +286,7 @@ public class MainService extends Service{
                     playMusic(0,list.get(c_music).getPath(), false);
 				}
 				Intent intent = new Intent(CURRENT_ID);
+				intent.setPackage(getPackageName());
 				intent.putExtra("current_id", c_music);
 				sendBroadcast(intent);
 				MainActivity._inActivity.startPlayAnim(c_music);
@@ -317,6 +323,7 @@ public class MainService extends Service{
 		Thread t ;
 		isPlay = true;
 		Intent intent = new Intent(PLAY_STATUE);
+		intent.setPackage(getPackageName());
 		intent.putExtra("isplay", isPlay);
 		intent.putExtra("current_music", c_music);
 		sendBroadcast(intent);
@@ -346,6 +353,7 @@ public class MainService extends Service{
 				if (path.equals(list.get(a).getPath())) {
 					c_music = a;
 					intent = new Intent(UPDATE_ACTION);
+					intent.setPackage(getPackageName());
 					intent.putExtra("isplay", isPlay);
 					intent.putExtra("current_music", c_music);
 					intent.putExtra("duration", list.get(c_music).getDuration());
@@ -376,6 +384,7 @@ public class MainService extends Service{
 			audioManager.abandonAudioFocus(AudioListener);
 			isPlay = false;
 			Intent intent = new Intent(PLAY_STATUE);
+			intent.setPackage(getPackageName());
 			intent.putExtra("isplay", isPlay);
 			intent.putExtra("current_music", c_music);  
 			intent.putExtra("duration", duration);
@@ -428,6 +437,7 @@ public class MainService extends Service{
 			duration = mediaPlayer.getDuration();
 			//Log.d(TAG, "duration " + duration);
 			Intent intent = new Intent();
+			intent.setPackage(getPackageName());
 			intent.setAction(MUSIC_DURATION);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
@@ -470,6 +480,7 @@ public class MainService extends Service{
 			mediaPlayer = null;
 			isPlay = false;
 			Intent intent = new Intent(PLAY_STATUE);
+			intent.setPackage(getPackageName());
 			intent.putExtra("isplay", isPlay);
 			sendBroadcast(intent);
 			audioManager.abandonAudioFocus(AudioListener);
@@ -506,6 +517,7 @@ public class MainService extends Service{
 				PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
 				isPlay = true;
 				Intent nintent = new Intent(PLAY_STATUE);
+				nintent.setPackage(getPackageName());
 				nintent.putExtra("isplay", isPlay);
 				nintent.putExtra("current_music", c_music);
 				nintent.putExtra("duration", list.get(c_music).getDuration());
@@ -535,6 +547,7 @@ public class MainService extends Service{
     	c_music = c_music - 1;
     	if(c_music >= 0){
     		Intent intent = new Intent(UPDATE_ACTION);
+			intent.setPackage(getPackageName());
     		intent.putExtra("current_music", c_music);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
@@ -549,6 +562,7 @@ public class MainService extends Service{
     	c_music = c_music + 1;
     	if(c_music <= list.size()){
     		Intent intent = new Intent(UPDATE_ACTION);
+			intent.setPackage(getPackageName());
     		intent.putExtra("current_music", c_music);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
@@ -697,6 +711,7 @@ public class MainService extends Service{
 							c_music = c_music - 1;
 					}
 					Intent intent1 = new Intent(UPDATE_LIST_ACTIVITY_ACTION);
+					intent1.setPackage(getPackageName());
 					intent1.putExtra("current_music",c_music);
 					sendBroadcast(intent1);
 				}

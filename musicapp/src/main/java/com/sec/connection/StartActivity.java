@@ -161,6 +161,8 @@ public class StartActivity extends AppCompatActivity {
 			permission = new String[]{
 					Manifest.permission.READ_MEDIA_AUDIO,
 					Manifest.permission.READ_MEDIA_VIDEO,
+					Manifest.permission.RECORD_AUDIO,
+					Manifest.permission.POST_NOTIFICATIONS,
 			};
 		} else {
 			permission = new String[]{

@@ -73,31 +73,36 @@ public class FlingView extends ViewGroup {
 		mTouchSlop = configuration.getScaledTouchSlop();
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		try {
-			Thread t = new Thread(() -> {
+			@SuppressLint("UseCompatLoadingForDrawables") Thread t = new Thread(() -> {
 				if (MainService.list == null) {
 					return;
 				}
-                int listMax = MainService.list.size();
+				int listMax = MainService.list.size();
 				Log.d(TAG, "MainService.list : " + MainService.list.size());
-                for(int i = 0; i < listMax; i++){
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    View view = inflater.inflate(R.layout.change_layout, null);
-                    imageView = (NewImageView) view.findViewById(R.id.imageView_change);
-                    if(MainService.list.get(i).getBitmap() != null){
-                        imageView.setImageBitmap(MainService.list.get(i).getBitmap());
-                    }else{
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic));
-                    }
+				for(int i = 0; i < listMax; i++){
+					final int index = i;
+					// 切换到UI线程更新UI
+					post(() -> {
+						LayoutInflater inflater = LayoutInflater.from(getContext());
+						View view = inflater.inflate(R.layout.change_layout, null);
+						NewImageView imageView = (NewImageView) view.findViewById(R.id.imageView_change);
+						if(MainService.list.get(index).getBitmap() != null){
+							imageView.setImageBitmap(MainService.list.get(index).getBitmap());
+						}else{
+							imageView.setImageDrawable(getResources().getDrawable(R.drawable.playing_music));
+						}
 
-                    imageView.setShapeType(1);
-                    imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
-                    imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
-                    imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
-                    imageView.setPressColor(getResources().getColor(R.color.flingview_press));
-                    addView(view);
-                }
-            });
+						imageView.setShapeType(1);
+						imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
+						imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
+						imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
+						imageView.setPressColor(getResources().getColor(R.color.flingview_press));
+						addView(view);
+					});
+				}
+			});
 			t.start();
+
 		} catch (NullPointerException e) {
 			Toast.makeText(getContext(),"list null",Toast.LENGTH_SHORT);
 		}

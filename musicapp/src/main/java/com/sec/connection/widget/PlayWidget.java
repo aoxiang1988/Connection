@@ -32,33 +32,39 @@ public class PlayWidget extends AppWidgetProvider {
 	private RemoteViews widget_view;
     private int mListItem = 0;
     List<Audio> list = BaseListInfo.getInstance().getList();
-	
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub	
-		AppWidgetManager appWidgetManger = AppWidgetManager.getInstance(context);  
-		int[] appIds = appWidgetManger.getAppWidgetIds(new ComponentName(context, PlayWidget.class));
-		mListItem = intent.getIntExtra("current_music", 0);
-        String TAG = "PlayWidget";
-        Log.d(TAG,"listitem : "+ mListItem);
-		String action = intent.getAction();
-		if(action.equals(PLAY_STATUE)){
-			intent.getBooleanExtra("isplay", false);
+		// TODO Auto-generated method stub
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
-			onUpdate(context,appWidgetManger,appIds);
+		// 添加空值检查
+		if (appWidgetManager == null) {
+			super.onReceive(context, intent);
+			return;
 		}
-		if(action.equals(COLLECTION_VIEW_ACTION)) {
-			int item = intent.getIntExtra("widget_item", 0);
-			Log.d(TAG,"listitem : "+item);
+
+		int[] appIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, PlayWidget.class));
+		mListItem = intent.getIntExtra("current_music", 0);
+		String TAG = "PlayWidget";
+		Log.d(TAG,"listitem : "+ mListItem);
+		String action = intent.getAction();
+
+		if(action != null) {
+			if(action.equals(PLAY_STATUE)){
+				intent.getBooleanExtra("isplay", false);
+				onUpdate(context, appWidgetManager, appIds);
+			}
+			if(action.equals(COLLECTION_VIEW_ACTION)) {
+				int item = intent.getIntExtra("widget_item", 0);
+				Log.d(TAG,"listitem : "+item);
+			}
+			if(action.equals(UPDATE_ACTION)){
+				onUpdate(context, appWidgetManager, appIds);
+			}
 		}
-		if(action.equals(UPDATE_ACTION)){
-//			listitem = intent.getIntExtra("current_music", 0);
-			onUpdate(context,appWidgetManger,appIds);
-		}
-		
 		super.onReceive(context, intent);
 	}
-
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
