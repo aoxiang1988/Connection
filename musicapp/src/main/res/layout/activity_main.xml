@@ -30,8 +30,8 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:text="@string/music_name"
-                android:textColor="#771177"
-                android:textSize="30sp"
+                android:textColor="@color/radiotext"
+                android:textSize="45sp"
                 android:layout_gravity="center"/>
 
             <TextView

@@ -262,8 +262,8 @@ public class MainActivity extends AppCompatActivity {
 		mRepeatState = restorePreferences();
 		setStatus(mRepeatState);
 		mActionBar = findViewById(R.id.action_bar);
-		mActionBar.setBackgroundColor(getResources().getColor(R.color.playingcolor));
-//		mActionBar.setVisibility(View.GONE);
+		mActionBar.setBackgroundColor(getResources().getColor(R.color.c_center));
+		//mActionBar.setVisibility(View.GONE);
     }
 
 	private void onMyCreate(String who) {
@@ -620,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
 		mAllTimeView = findViewById(R.id.alltime);
 		mMusicNameView = findViewById(R.id.musicname);
         mLrcOnOff = findViewById(R.id.lrc_on_off);
-		if (mMusicNameView != null) {
+        if (mMusicNameView != null) {
 			mMusicNameView.setFocusable(true);
 		}
 		mListView = findViewById(R.id.list);
