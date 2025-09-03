@@ -10,11 +10,14 @@ import static com.sec.connection.MainService.UPDATE_LIST_ACTIVITY_ACTION;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
@@ -63,10 +66,36 @@ public class TestViewPagerActivity extends AppCompatActivity {
     View actionBar;
     private ViewReceiver mViewReceiver;
 
+    private MainService mService = null;
+    private boolean isBind = false;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MainService.ServiceBinder binder = (MainService.ServiceBinder) iBinder;
+            mService = binder.getService();
+            isBind = true;
+            isPlaying = mService.getPlayerStatus();
+            PlayMusicUIUpdate(mService.getCurrentMusic());
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mService = null;
+            isBind = false;
+        }
+    };
+
     @SuppressLint({"MissingInflatedId", "UnspecifiedRegisterReceiverFlag"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isBind) {
+            bindService(
+                    new Intent(this, MainService.class), mServiceConnection,
+                    BIND_ALLOW_OOM_MANAGEMENT
+            );//绑定服务
+        }
         setContentView(R.layout.activity_test_view_pager);
 
         IntentFilter intentFilter = new IntentFilter();
@@ -86,7 +115,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
         initViewPagerContainer();
         _activity = this;
         count = 0;
-        initcontrollerview();
+        initControllerView();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 //        initViewPagerContainer();  //初始viewPager
@@ -173,17 +202,28 @@ public class TestViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(MainService.list.get(MainActivity.getCurrentPosition()).getBitmap() != null)
-            listMusicView.setImageBitmap(NewImageView.createReflectedImage(
-                    MainService.list.get(MainActivity.getCurrentPosition()).getBitmap()
-            ));
-        mListMusicName.setText(MainService.list.get(MainActivity.getCurrentPosition()).getTitle());
+        if (mService != null) {
+            isPlaying = mService.getPlayerStatus();
+            if(mService.getList().get(MainActivity.getCurrentPosition()).getBitmap() != null)
+                listMusicView.setImageBitmap(NewImageView.createReflectedImage(
+                        mService.getList().get(MainActivity.getCurrentPosition()).getBitmap()
+                ));
+            mListMusicName.setText(mService.getList().get(MainActivity.getCurrentPosition()).getTitle());
+            if (isPlaying) {
+                mListStart.setVisibility(View.GONE);
+                mListStop.setVisibility(View.VISIBLE);
+            } else {
+                mListStart.setVisibility(View.VISIBLE);
+                mListStop.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mViewReceiver);
+        unbindService(mServiceConnection);
     }
 
     public int getviewpageritem() {
@@ -240,7 +280,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
 
     private View.OnClickListener listener;
 
-    private void initcontrollerview(){
+    private void initControllerView(){
         listMusicView = (NewImageView) findViewById(R.id.list_ac_p);
         listMusicView.setShapeType(2);
         listMusicView.setRadius(15);
@@ -344,7 +384,7 @@ public class TestViewPagerActivity extends AppCompatActivity {
             }
             if (action.equals(UPDATE_ACTION)) {
                 listPosition = intent.getIntExtra("current_music", -1);
-                String title = MainService.list.get(listPosition).getTitle();
+                String title = mService.getList().get(listPosition).getTitle();
                 mListMusicName.setText(title);
                 PlayMusicUIUpdate(listPosition);
             }

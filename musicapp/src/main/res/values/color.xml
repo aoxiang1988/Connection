@@ -6,9 +6,9 @@
         <color name="group_item_defult">#7aa5ff62</color>
         <color name="windowBackground">#eaffbb33</color>
         <color name="radiotext">#0bbfd6</color>
-        <color name="c_start">#d9FFEBCD</color>
-        <color name="c_center">#d9FFDEAD</color>
-        <color name="c_end">#d9FFEBCD</color>
+        <color name="c_start">#F2FFEBCD</color>
+        <color name="c_center">#FFDEAD</color>
+        <color name="c_end">#F2FFEBCD</color>
         <color name="lrc_back">#760000ff</color>
         <color name="black">#aa000000</color>
         <color name="flingview_borad">#8A2BE2</color>

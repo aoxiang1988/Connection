@@ -50,7 +50,7 @@ public class MainService extends Service{
 	public static MainService myService;
 	private int duration;
 	private int c_duration;
-	public static List<Audio> list = null;
+	private List<Audio> mlist = null;
 	private int c_music;
 	public boolean isPause = false;
 	public static boolean isPlay = false;
@@ -88,22 +88,17 @@ public class MainService extends Service{
 		return mediaPlayer;
 	}
 
-	public static class ServiceBinder extends Binder{
-		private MainService mService = null;
-		ServiceBinder(MainService service) {
-			// TODO Auto-generated constructor stub
-			mService = service;
-		}
+	public class ServiceBinder extends Binder{
 		public MainService getService() {
 			// TODO Auto-generated method stub
-			myService = mService;
+			myService = MainService.this;
 			return myService;
 		}
 	}
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
-		return new ServiceBinder(this);
+		return new ServiceBinder();
 	}
 /* *******************************************************
  * http://blog.csdn.net/wyyother1/article/details/40091593 *
@@ -197,13 +192,18 @@ public class MainService extends Service{
 	Widget_Receiver widget_Receiver;
 	Notify_Receiver mNotifyReceiver;
 	MyReceiver myReceiver;
-	@SuppressLint("UnspecifiedRegisterReceiverFlag")
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		list = BaseListInfo.getInstance().getList();
-		MainActivity.initService(this);
+		Log.d(TAG, "onCreate");
+		if (BaseListInfo.getInstance().getList() != null) {
+			mlist = BaseListInfo.getInstance().getList();
+		} else {
+			mlist = MediaUtils.getAudioList(getApplicationContext());
+			BaseListInfo.getInstance().setList(mlist);
+		}
+		//MainActivity.initService(this);
 		scanSdCard();
 		mediaPlayer = new MediaPlayer();
 		Log.d(TAG, "onCreate MediaPlayer");
@@ -242,7 +242,7 @@ public class MainService extends Service{
 				}else if(status == 2){//all loop
 					MainActivity._inActivity.stopPlayAnim();
 					c_music++;
-					if(c_music > list.size()-1){
+					if(c_music > mlist.size()-1){
 						c_music = 0;
 					}
 					Intent intent = new Intent(UPDATE_ACTION);
@@ -250,19 +250,19 @@ public class MainService extends Service{
 					intent.putExtra("current_music", c_music);
 					intent.putExtra("duration", duration);
 					sendBroadcast(intent);
-					PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
-					playMusic(0,list.get(c_music).getPath(), false);
+					PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
+					playMusic(0,mlist.get(c_music).getPath(), false);
 				}else if(status == 3){//????
 					MainActivity._inActivity.stopPlayAnim();
 					c_music++;
-					if(c_music <= list.size()-1){
+					if(c_music <= mlist.size()-1){
 						Intent intent = new Intent(UPDATE_ACTION);
 						intent.setPackage(getPackageName());
 						intent.putExtra("current_music", c_music);
 						intent.putExtra("duration", duration);
 						sendBroadcast(intent);
-						PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
-						playMusic(0,list.get(c_music).getPath(), false);
+						PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
+						playMusic(0,mlist.get(c_music).getPath(), false);
 					} else {
 						mediaPlayer.seekTo(0);
 						c_music = 0;
@@ -274,7 +274,7 @@ public class MainService extends Service{
 					}
 				}else if(status == 4){//???????
 					MainActivity._inActivity.stopPlayAnim();
-					c_music = getRandomIndex(list.size() - 1);
+					c_music = getRandomIndex(mlist.size() - 1);
                     System.out.println("currentIndex ->" + c_music);
                     Intent sendIntent = new Intent(UPDATE_ACTION);
 					sendIntent.setPackage(getPackageName());
@@ -282,8 +282,8 @@ public class MainService extends Service{
                     sendIntent.putExtra("duration", duration);
                     // ???????????Activity????е?BroadcastReceiver?????  
                     sendBroadcast(sendIntent);  
-                    PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
-                    playMusic(0,list.get(c_music).getPath(), false);
+                    PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
+                    playMusic(0,mlist.get(c_music).getPath(), false);
 				}
 				Intent intent = new Intent(CURRENT_ID);
 				intent.setPackage(getPackageName());
@@ -310,7 +310,7 @@ public class MainService extends Service{
 	//play
 	public void play(int currentTime,int position) {
 		// TODO Auto-generated method stub
-		String path = list.get(position).getPath();
+		String path = mlist.get(position).getPath();
 		if(isPause && pause_time != 0)
 			currentTime = pause_time;
 
@@ -349,20 +349,20 @@ public class MainService extends Service{
 		});
 		t.start();
 		if(isListActivity) {
-			for (int a = 0; a < list.size(); a++) {
-				if (path.equals(list.get(a).getPath())) {
+			for (int a = 0; a < mlist.size(); a++) {
+				if (path.equals(mlist.get(a).getPath())) {
 					c_music = a;
 					intent = new Intent(UPDATE_ACTION);
 					intent.setPackage(getPackageName());
 					intent.putExtra("isplay", isPlay);
 					intent.putExtra("current_music", c_music);
-					intent.putExtra("duration", list.get(c_music).getDuration());
+					intent.putExtra("duration", mlist.get(c_music).getDuration());
 					sendBroadcast(intent);
 					break;
 				}
 			}
 		}
-		PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
+		PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
 	}
 	//pause
 	int pause_time = 0;
@@ -499,7 +499,7 @@ public class MainService extends Service{
 			String action = intent.getAction();
             if (action.equals(COLLECTION_VIEW_ACTION)) {
                 c_music = intent.getIntExtra("widget_list_item", 0);
-                playMusic(0, list.get(c_music).getPath(), false);
+                playMusic(0, mlist.get(c_music).getPath(), false);
             }
 		}
 	}
@@ -514,15 +514,15 @@ public class MainService extends Service{
 				playNext();
 				break;
 			case NOTIFY_PLAY:
-				PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
+				PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
 				isPlay = true;
 				Intent nintent = new Intent(PLAY_STATUE);
 				nintent.setPackage(getPackageName());
 				nintent.putExtra("isplay", isPlay);
 				nintent.putExtra("current_music", c_music);
-				nintent.putExtra("duration", list.get(c_music).getDuration());
+				nintent.putExtra("duration", mlist.get(c_music).getDuration());
 				sendBroadcast(nintent);
-				playMusic(0, list.get(c_music).getPath(), false);
+				playMusic(0, mlist.get(c_music).getPath(), false);
 				PlayerNotificationManager.instance().upDateControlUI();
 				break;
 			case NOTIFY_PRE:
@@ -551,8 +551,8 @@ public class MainService extends Service{
     		intent.putExtra("current_music", c_music);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
-    		playMusic(0, list.get(c_music).getPath(), false);
-    		PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
+    		playMusic(0, mlist.get(c_music).getPath(), false);
+    		PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
     	}
     	else {
     		Toast.makeText(this, "fist one", Toast.LENGTH_SHORT).show();
@@ -560,14 +560,14 @@ public class MainService extends Service{
     }
 	void playNext(){
     	c_music = c_music + 1;
-    	if(c_music <= list.size()){
+    	if(c_music <= mlist.size()){
     		Intent intent = new Intent(UPDATE_ACTION);
 			intent.setPackage(getPackageName());
     		intent.putExtra("current_music", c_music);
 			intent.putExtra("duration", duration);
 			sendBroadcast(intent);
-    		playMusic(0, list.get(c_music).getPath(), false);
-    		PlayerNotificationManager.instance().upDateCurrentName(list.get(c_music));
+    		playMusic(0, mlist.get(c_music).getPath(), false);
+    		PlayerNotificationManager.instance().upDateCurrentName(mlist.get(c_music));
     	}
     	else {
     		Toast.makeText(this, "last one", Toast.LENGTH_SHORT).show();
@@ -703,11 +703,11 @@ public class MainService extends Service{
 				count = count2 -count1;
 				if (count!=0){
 					Log.d(TAG,"需要更新list");
-					list  = MediaUtils.getAudioList(getBaseContext());
-					if(c_music >= list.size()) {
+					mlist  = MediaUtils.getAudioList(getBaseContext());
+					if(c_music >= mlist.size()) {
 						c_music = 0;
 					} else if(c_music != 0){
-						if(Objects.equals(list.get(c_music - 1).getTitle(), list.get(c_music).getTitle()))
+						if(Objects.equals(mlist.get(c_music - 1).getTitle(), mlist.get(c_music).getTitle()))
 							c_music = c_music - 1;
 					}
 					Intent intent1 = new Intent(UPDATE_LIST_ACTIVITY_ACTION);
@@ -744,6 +744,10 @@ public class MainService extends Service{
 	}
 
 	public List<Audio> getList() {
-		return list;
+		return mlist;
+	}
+
+	public int getCurrentMusic(){
+		return c_music;
 	}
 }

@@ -18,7 +18,9 @@ import android.widget.Toast;
 import com.sec.connection.BaseListInfo;
 import com.sec.connection.R;
 import com.sec.connection.MainService;
+import com.sec.connection.data.Audio;
 
+import java.util.List;
 import java.util.logging.Handler;
 
 @SuppressLint("InflateParams")
@@ -65,48 +67,96 @@ public class FlingView extends ViewGroup {
 		init();
 	}
 
-	@SuppressLint("ShowToast")
 	private void init() {
+		Log.d(TAG, "init");
 		mScroller = new Scroller(getContext());
-		final ViewConfiguration configuration = ViewConfiguration
-				.get(getContext());
+		final ViewConfiguration configuration = ViewConfiguration.get(getContext());
 		mTouchSlop = configuration.getScaledTouchSlop();
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-		try {
-			@SuppressLint("UseCompatLoadingForDrawables") Thread t = new Thread(() -> {
-				if (MainService.list == null) {
-					return;
-				}
-				int listMax = MainService.list.size();
-				Log.d(TAG, "MainService.list : " + MainService.list.size());
-				for(int i = 0; i < listMax; i++){
-					final int index = i;
-					// 切换到UI线程更新UI
-					post(() -> {
-						LayoutInflater inflater = LayoutInflater.from(getContext());
-						View view = inflater.inflate(R.layout.change_layout, null);
-						NewImageView imageView = (NewImageView) view.findViewById(R.id.imageView_change);
-						if(MainService.list.get(index).getBitmap() != null){
-							imageView.setImageBitmap(MainService.list.get(index).getBitmap());
-						}else{
-							imageView.setImageDrawable(getResources().getDrawable(R.drawable.playing_music));
-						}
 
-						imageView.setShapeType(1);
-						imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
-						imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
-						imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
-						imageView.setPressColor(getResources().getColor(R.color.flingview_press));
-						addView(view);
-					});
-				}
-			});
-			t.start();
+		loadImageViews();
+	}
 
-		} catch (NullPointerException e) {
-			Toast.makeText(getContext(),"list null",Toast.LENGTH_SHORT);
+	private int retryCount = 0;
+	private static final int MAX_RETRY_COUNT = 5;
+
+	private void loadImageViews() {
+		post(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (retryCount >= MAX_RETRY_COUNT) {
+						Log.e(TAG, "Max retry count reached");
+						return;
+					}
+
+					if (MainService.myService == null) {
+						retryCount++;
+						Log.d(TAG, "MainService is null, retrying... (" + retryCount + "/" + MAX_RETRY_COUNT + ")");
+						postDelayed(this, 1000);
+						return;
+					}
+
+					List<Audio> list = MainService.myService.getList();
+					if (list == null) {
+						retryCount++;
+						Log.d(TAG, "List is null, retrying... (" + retryCount + "/" + MAX_RETRY_COUNT + ")");
+						postDelayed(this, 1000);
+						return;
+					}
+
+					// 重置重试计数
+					retryCount = 0;
+
+					// 加载视图逻辑（同上）
+					loadViewsInternal(list);
+
+				} catch (Exception e) {
+					retryCount++;
+					Log.e(TAG, "Error loading images: " + e.getMessage());
+					if (retryCount < MAX_RETRY_COUNT) {
+						postDelayed(this, 2000);
+					}
+				}
+			}
+		});
+	}
+
+	private void loadViewsInternal(List<Audio> list) {
+		int listMax = list.size();
+		Log.d(TAG, "MainService.list : " + listMax);
+
+		removeAllViews();
+
+		for(int i = 0; i < listMax; i++) {
+			final int index = i;
+			LayoutInflater inflater = LayoutInflater.from(getContext());
+			View view = inflater.inflate(R.layout.change_layout, null);
+			NewImageView imageView = (NewImageView) view.findViewById(R.id.imageView_change);
+
+			Audio item = list.get(index);
+			if(item != null && item.getBitmap() != null) {
+				imageView.setImageBitmap(item.getBitmap());
+			} else {
+				imageView.setImageDrawable(getResources().getDrawable(R.drawable.playing_music));
+			}
+
+			imageView.setShapeType(1);
+			imageView.setBorderWidth((int) getResources().getDimension(R.dimen.image_borderwidth));
+			imageView.setStrokeWidth(getResources().getDimension(R.dimen.image_strokewidth));
+			imageView.setBorderColor(getResources().getColor(R.color.flingview_borad));
+			imageView.setPressColor(getResources().getColor(R.color.flingview_press));
+			addView(view);
 		}
 	}
+
+	/**
+	 * 重新加载并刷新所有图片视图
+	 */
+	public void refreshViews() {
+		loadImageViews();
+	}
+
 	// 保证在同一个屏幕执行一下切屏事件的一些参数
 	private int count = -1;
 	private int defaultScreen = -1;

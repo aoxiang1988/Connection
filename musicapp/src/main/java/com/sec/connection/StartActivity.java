@@ -2,12 +2,15 @@ package com.sec.connection;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -107,6 +110,23 @@ public class StartActivity extends AppCompatActivity {
 		}
 	}
 
+	private MainService mService = null;
+	private boolean isBind = false;
+	private ServiceConnection mServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+			MainService.ServiceBinder binder = (MainService.ServiceBinder) iBinder;
+			mService = binder.getService();
+			isBind = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName componentName) {
+			mService = null;
+			isBind = false;
+		}
+	};
+
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -123,6 +143,12 @@ public class StartActivity extends AppCompatActivity {
 				executorService.submit(() -> {
 					BaseListInfo.getInstance().setList(MediaUtils.getAudioList(getApplicationContext()));
 					startMainService();
+					if (!isBind) {
+						bindService(
+								new Intent(this, MainService.class), mServiceConnection,
+								BIND_ALLOW_OOM_MANAGEMENT
+						);//绑定服务
+					}
 					mHandler.sendEmptyMessageDelayed(MSG_CHECK_MUSIC, DELAY_TIME);
 				});
 			} else {
@@ -136,6 +162,9 @@ public class StartActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		mHandler.removeCallbacksAndMessages(null);
+		if(isBind) {
+			unbindService(mServiceConnection);
+		}
 	}
 
 

@@ -55,6 +55,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sec.connection.data.Audio;
+import com.sec.connection.data.MediaUtils;
 import com.sec.connection.setting.FilterSettings;
 import com.sec.connection.setting.MediaPlayerTest;
 import com.sec.connection.setting.MusicInformationActivity;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 			MainService.ServiceBinder binder = (MainService.ServiceBinder) service;
 			mService = binder.getService();
 			isBind = true;
+			mFlingView.refreshViews();
 		}
 
 		@Override
@@ -236,10 +238,12 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
-		bindService(
-				new Intent(this, MainService.class), mServiceConnection,
-				BIND_ALLOW_OOM_MANAGEMENT
-		);//绑定服务
+		if (!isBind) {
+			bindService(
+					new Intent(this, MainService.class), mServiceConnection,
+					BIND_ALLOW_OOM_MANAGEMENT
+			);//绑定服务
+		}
 		isActivity = true;
 		onMyCreate("onCreate");
 		mNotificationManager = PlayerNotificationManager.instance();
@@ -317,8 +321,10 @@ public class MainActivity extends AppCompatActivity {
 		mFlingView = new FlingView(getBaseContext());
 		if (mService != null) {
 			mList = mService.getList();
+		} else {
+			mList = MediaUtils.getAudioList(getApplicationContext());
+			BaseListInfo.getInstance().setList(mList);
 		}
-		Log.d(TAG, who);
 		mFlingView = findViewById(R.id.fling_view);
 		mFlingViewBack = findViewById(R.id.fling_view_back);
 		FindViewById();
@@ -377,6 +383,9 @@ public class MainActivity extends AppCompatActivity {
 		mFlingView.setToScreen(mListPosition, true);
 		setCurrentMusic(mListPosition);
 
+		if (mService == null) {
+			return;
+		}
 		if(!mService.isAdded){
 			try {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -495,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 			if (action.equals(UPDATE_LIST_ACTIVITY_ACTION)) {
-				mList = MainService.list;
+				mList = mService.getList();
 				mListPosition = intent.getIntExtra("current_music", 0);
 				mUserAdapter.addItems(mList);
 				mFlingView.setToScreen(mListPosition,false);
