@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <color name="playingcolor">#00BCD4</color>
+        <color name="tab_color">#00D4B4</color>
         <color name="noplaycolor">#86898b</color>
         <color name="widget_no_play">#ffffff</color>
         <color name="group_item_defult">#7aa5ff62</color>

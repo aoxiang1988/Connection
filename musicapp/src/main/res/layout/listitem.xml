@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:orientation="horizontal">
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+	android:gravity="center">
 
 	<CheckBox
 		android:id="@+id/checkBox1"
@@ -16,8 +17,8 @@
 
 	<ImageView
 		android:id="@+id/listmusicpicture"
-		android:layout_width="50dp"
-		android:layout_height="50dp"
+		android:layout_width="80dp"
+		android:layout_height="80dp"
 		android:paddingBottom="0.5sp"
 		android:src="@drawable/ic"/>
 
@@ -27,7 +28,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
 		android:orientation="vertical"
-		android:paddingLeft="5dp">
+		android:paddingLeft="10dp">
 
 		<TextView
 			android:id="@+id/musictitle"
@@ -36,7 +37,7 @@
 			android:ellipsize="marquee"
 			android:singleLine="true"
 			android:text="musictitle"
-			android:textSize="20dp"
+			android:textSize="30sp"
 			android:textStyle="bold" />
 
 		<RelativeLayout
@@ -49,7 +50,7 @@
 				android:layout_height="wrap_content"
 				android:singleLine="true"
 				android:text="musicartist"
-				android:textSize="15sp"
+				android:textSize="20sp"
 				android:textStyle="italic" />
 
 			<TextView
@@ -59,7 +60,7 @@
 				android:layout_alignParentRight="true"
 				android:layout_alignParentTop="true"
 				android:text="musictime"
-				android:textSize="15sp"
+				android:textSize="20sp"
 				android:textStyle="italic" />
 
 			<ImageView
