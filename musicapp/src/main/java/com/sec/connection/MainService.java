@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -15,6 +14,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
@@ -40,7 +40,6 @@ import com.sec.connection.view.LrcView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 
 public class MainService extends Service{
@@ -74,8 +73,6 @@ public class MainService extends Service{
 	public static final String NOTIFY_REMOVE = "com.example.action.NOTIFY_REMOVE";
 	public static final String CTL_ACTION = "com.example.action.CTL_ACTION";
 	public static final String UPDATE_LIST_ACTIVITY_ACTION = "com.example.action.UPDATE_LIST_ACTIVITY_ACTION";
-
-	private static final String FILE_PATH = "/storage/emulated/0";
 
 	private static final int UPDATE_CURRENT_TIME = 1;
 	private static final int STOP_CURRENT_TIME = 2;
@@ -488,7 +485,6 @@ public class MainService extends Service{
 
 		unregisterReceiver(widget_Receiver);
 		unregisterReceiver(mNotifyReceiver);
-		unregisterReceiver(scanSdReceiver);
 		unregisterReceiver(myReceiver);
 	}
 	
@@ -654,70 +650,27 @@ public class MainService extends Service{
 		}
 		isAdded = true;
 	}
-	/*存储监听
+	/*扫描共享存储，完成后通过回调刷新列表
 	* */
-	ScanSdReceiver scanSdReceiver;
-	@SuppressLint("UnspecifiedRegisterReceiverFlag")
-    public void scanSdCard(){
-        IntentFilter intentfilter = new IntentFilter( Intent.ACTION_MEDIA_SCANNER_STARTED);
-        intentfilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-        intentfilter.addDataScheme("file");
-		scanSdReceiver = new ScanSdReceiver();
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			registerReceiver(scanSdReceiver, intentfilter, Context.RECEIVER_NOT_EXPORTED);
-		} else {
-			registerReceiver(scanSdReceiver, intentfilter);
-		}
-        Log.d(TAG,"local storage: "+Environment.getExternalStorageDirectory().getAbsolutePath());
-//		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-//				Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath())));
+	public void scanSdCard(){
+		final String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+		Log.d(TAG,"local storage: "+root);
 		MediaScannerConnection.scanFile(getBaseContext(),
-				new String[]{
-						FILE_PATH
-				}, null, null);
-	}
-	public class ScanSdReceiver extends BroadcastReceiver {
-		private int count1;
-        private int count;
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//Log.d(TAG,"scanSdReceiver onReceive");
-			String action = intent.getAction();
-			if (Intent.ACTION_MEDIA_SCANNER_STARTED.equals(action)){
-				Cursor c1 = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-						new String[]{MediaStore.Audio.Media._ID},
-						null, null, null);
-				assert c1 != null;
-				count1 = c1.getCount();
-				System.out.println("count:"+count);
-				Log.d(TAG,"正在扫描存储卡...");
-				c1.close();
-			}else if(Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)){
-				Cursor c2 = context.getContentResolver()
-						.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-								new String[]{MediaStore.Audio.Media._ID},
-								null, null, null);
-				assert c2 != null;
-                int count2 = c2.getCount();
-				count = count2 -count1;
-				if (count!=0){
-					Log.d(TAG,"需要更新list");
-					mlist  = MediaUtils.getAudioList(getBaseContext());
-					if(c_music >= mlist.size()) {
-						c_music = 0;
-					} else if(c_music != 0){
-						if(Objects.equals(mlist.get(c_music - 1).getTitle(), mlist.get(c_music).getTitle()))
-							c_music = c_music - 1;
+				new String[]{ root }, null,
+				new MediaScannerConnection.OnScanCompletedListener() {
+					@Override
+					public void onScanCompleted(String path, Uri uri) {
+						mlist = MediaUtils.getAudioList(getBaseContext());
+						BaseListInfo.getInstance().setList(mlist);
+						if(c_music >= mlist.size()) {
+							c_music = 0;
+						}
+						Intent intent1 = new Intent(UPDATE_LIST_ACTIVITY_ACTION);
+						intent1.setPackage(getPackageName());
+						intent1.putExtra("current_music",c_music);
+						sendBroadcast(intent1);
 					}
-					Intent intent1 = new Intent(UPDATE_LIST_ACTIVITY_ACTION);
-					intent1.setPackage(getPackageName());
-					intent1.putExtra("current_music",c_music);
-					sendBroadcast(intent1);
-				}
-				c2.close();
-			}
-		}
+				});
 	}
 	private short mBassBoostPriority = 0;
 
