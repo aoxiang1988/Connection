@@ -122,17 +122,13 @@
         <activity
             android:name=".setting.MediaPlayerTest"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/OtherActivityTheme"
-            android:launchMode="singleTop"
-            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".setting.MusicInformationActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/OtherActivityTheme"
-            android:launchMode="singleTop"
-            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".setting.FilterSettings"
             android:configChanges="orientation"
